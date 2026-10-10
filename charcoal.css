@@ -1,0 +1,15 @@
+/* Shared page canvas; elevated cards and project artwork retain their colors. */
+:root{--portfolio-charcoal:#131516}
+html,body{background-color:var(--portfolio-charcoal)!important}
+.beyond-journey,.beyond-sticky,.work-sequence,.work-stage,
+footer.connect-footer,.landing-stage .hero{background-color:var(--portfolio-charcoal)!important}
+/* About's content must remain transparent over the pinned Beyond lettering. */
+.landing-about{background:transparent!important}
+.beyond-journey,.beyond-sticky{opacity:1;filter:none}
+.landing-stage .hero::after{background:none}
+.studio-tag-face{background:var(--portfolio-charcoal)}
+.landing-stage>.studio-tag .studio-tag-face{background:var(--tag-background,var(--portfolio-charcoal))}
+.connect-glow{background:linear-gradient(to bottom,var(--portfolio-charcoal) 0%,transparent 48%),radial-gradient(ellipse at 0% 110%,var(--accent) 0%,transparent 66%),radial-gradient(ellipse at 100% 110%,var(--accent) 0%,transparent 66%),linear-gradient(to bottom,var(--portfolio-charcoal) 35%,var(--accent) 100%)}
+.connect-glow::after{background:linear-gradient(var(--portfolio-charcoal) 0%,#131516e8 36%,#13151680 60%,transparent 90%)}
+body:has(.case-rail){--ink:var(--portfolio-charcoal)}
+html:not([data-theme="light"]){--hc-background:var(--portfolio-charcoal)}

@@ -1,0 +1,27 @@
+/* Layered orange light, embossed texture and a frosted lower edge. */
+footer.connect-footer{border-radius:0;padding-top:clamp(150px,20svh,220px)}
+.connect-footer{position:relative;isolation:isolate;overflow:hidden;min-height:100svh;padding:110px var(--content-gutter,50px) 0;background:#151718;color:#f4f2ed;display:flex;flex-direction:column;justify-content:flex-start;border-radius:0 0 28px 28px}
+.connect-glow,.connect-texture,.connect-glass{position:absolute;pointer-events:none}
+.connect-glow{z-index:-2;inset:0;background:linear-gradient(to bottom,#151718 0%,transparent 48%),radial-gradient(ellipse at 0% 110%,var(--accent) 0%,transparent 66%),radial-gradient(ellipse at 100% 110%,var(--accent) 0%,transparent 66%),linear-gradient(to bottom,#151718 35%,var(--accent) 100%)}
+.connect-texture{z-index:-1;inset:28% 0 0;opacity:.3;background-image:radial-gradient(ellipse at 35% 30%,transparent 35%,#ffb07b40 43%,#18080070 53%,transparent 65%);background-size:13px 18px;transform:skewY(-7deg) scale(1.12);mask-image:linear-gradient(transparent,#000);-webkit-mask-image:linear-gradient(transparent,#000)}
+.connect-links{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8vw;position:relative;z-index:2;margin-top:44px}
+.connect-label{margin:0 0 24px;font-size:14px;color:#b2ada9}
+.connect-links a{display:table;font-size:clamp(21px,2.1vw,30px);line-height:1.25;margin-bottom:14px;letter-spacing:-.035em;transition:color .3s}
+.connect-links a:hover,.connect-links a:focus-visible{color:var(--accent)}
+.connect-invitation{margin:0;font-size:clamp(20px,2.1vw,31px);line-height:1.2;letter-spacing:-.035em}
+.connect-contact .connect-invitation{color:#b2ada9;margin-bottom:14px}
+.connect-links .connect-email{font-size:clamp(21px,2.9vw,42px);overflow-wrap:anywhere}
+.connect-socials{width:70%;justify-self:end;list-style:none;padding:0;margin:0;transform:translateX(24px)}
+.connect-socials li{display:flex;align-items:baseline;gap:20px;padding:22px 0;border-top:1px solid #ffffff26;font-size:clamp(15px,1.3vw,19px)}
+.connect-number{font-size:11px;opacity:.55}
+.connect-footer .connect-socials a{display:inline;font:inherit;line-height:inherit;letter-spacing:inherit;margin:0}
+.connect-meta{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-top:auto;padding-top:140px;position:relative;z-index:2;font-size:14px;color:#bcb1aa}
+.connect-meta a{color:var(--accent);font-size:12px}
+.connect-footer .connect-word{flex:none;position:relative;z-index:0;align-self:center;width:100%;margin:90px 0 -.14em;font-family:'The Nautigal',cursive;font-weight:700;font-style:normal;font-size:clamp(70px,23vw,460px);line-height:.88;letter-spacing:.025em;text-align:center;white-space:nowrap;background:linear-gradient(170deg,#fffaf5 8%,#e6d9d2 48%,#bf8d73 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-stroke:.65px #fffaf570;paint-order:stroke fill}
+.connect-glass{z-index:1;bottom:0;left:0;right:0;height:12%;background:linear-gradient(#ff864520,#ff6b354d);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);border-top:1px solid #ffb38018}
+.connect-glow::after{content:"";position:absolute;inset:0;background:linear-gradient(#151718 0%,#151718e8 36%,#15171880 60%,transparent 90%)}
+.connect-glass{height:clamp(24px,5vw,72px)}
+.connect-footer a:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
+.connect-glass{background:color-mix(in srgb,var(--accent) 25%,transparent);border-top-color:color-mix(in srgb,var(--accent) 12%,transparent)}
+@media(max-width:700px){.connect-footer .connect-links{grid-template-columns:1fr}.connect-socials li{padding:18px 0}}
+@media(max-width:700px){.connect-footer{padding-top:72px;min-height:85svh;border-radius:0 0 18px 18px}.connect-links{grid-template-columns:1fr 1fr;gap:32px 20px}.connect-invitation{grid-column:1/-1}.connect-label{font-size:12px;margin-bottom:18px}.connect-meta{flex-wrap:wrap;font-size:11px;gap:18px;padding-top:90px}.connect-meta a{margin-left:auto}.connect-footer .connect-word{margin-top:65px;font-size:23vw}.connect-glass{height:7%}}

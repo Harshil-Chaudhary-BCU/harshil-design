@@ -1,0 +1,36 @@
+.work-sequence.magnetic-work{position:relative;height:auto;min-height:100svh;padding:clamp(80px,10svh,110px) 0 64px;background:var(--portfolio-charcoal);overflow:hidden;color:#f4f2ed}
+.work-carousel-heading{width:var(--system-content-width);margin:0 auto;text-align:center}
+.work-project-selectors{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-top:clamp(24px,4vw,48px)}
+.work-project-selectors button{min-height:44px;border:1px solid #ffffff14;border-radius:6px;background:#ffffff0b;color:#aaa8a2;padding:13px 22px;font:400 16px/1.2 'Geist',sans-serif;transition:background 200ms,color 200ms,border-radius 200ms;cursor:pointer}
+.work-project-selectors button[aria-pressed="true"]{background:#f4f2ed;color:#090909;border-radius:28px}
+.work-project-selectors button:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+@media(max-width:500px){.work-project-selectors{gap:4px}.work-project-selectors button{font-size:12px;padding:12px 14px}}
+.work-carousel-heading>p{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#aaa8a2;margin:0 0 16px}
+.work-carousel-heading h2{font:400 var(--type-heading)/1 'Geist',sans-serif;letter-spacing:-.065em;margin:0}
+.work-carousel-stage{position:relative;width:var(--system-content-width);height:clamp(510px,65svh,650px);margin:24px auto 0;touch-action:pan-y;user-select:none;cursor:grab;outline-offset:-4px}
+.work-carousel-stage.is-dragging{cursor:grabbing}
+.work-carousel-arc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;fill:none;stroke:#777;stroke-width:1;opacity:.32}
+.work-card{position:absolute;left:50%;top:50%;width:var(--work-card-width,320px);height:var(--work-card-height,480px);display:flex;flex-direction:column;align-items:center;padding:32px 24px 24px;border:1px solid #ffffff24;border-radius:26px;overflow:hidden;background:#131313;box-shadow:0 24px 60px #0006,inset 0 1px 0 #ffffff12;transform:translate(-50%,-50%) translate(var(--card-x,0px),var(--card-y,0px)) rotate(var(--card-rotation,0deg));will-change:transform;text-align:center}
+.work-card-liftlab{background:linear-gradient(150deg,#a74b2d,#532719 80%)}
+.magnetic-work .work-card{transform:translate(-50%,-50%) translate(var(--card-x,0px),var(--card-y,0px)) rotate(var(--card-rotation,0deg)) translate(var(--work-spring-x,0px),var(--work-spring-y,0px)) rotate(var(--work-spring-angle,0deg))}
+.work-card-otverse{background:linear-gradient(155deg,#202329,#101112 80%)}
+.work-card-offroad{background:linear-gradient(155deg,#263a35,#101816 80%)}
+.work-card-number{font:400 10px/1.4 'Geist',sans-serif;text-transform:uppercase;letter-spacing:.08em;color:#f4f2edb0;margin:0 0 24px}
+.work-card h3{font:400 clamp(28px,3.1vw,48px)/1 'Geist',sans-serif;letter-spacing:-.055em;margin:0;overflow-wrap:anywhere}
+.work-card-description{font:400 var(--type-paragraph)/1.35 'Geist',sans-serif;color:#f4f2edb8;margin:16px 0 0}
+.work-card-art{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;margin:18px 0}
+.work-card-art img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none}
+.work-card-otverse .work-card-art img,.work-card-offroad .work-card-art img{filter:invert(1);opacity:.85}
+.work-card .work-card-link{position:static;display:block;flex:none;font:400 12px/1.4 'Geist',sans-serif;text-transform:uppercase;letter-spacing:.06em;padding:12px 18px;background:#f4f2ed;color:#090909;border:0;border-radius:6px;margin-top:auto}
+.work-card .work-card-pending{background:#ffffff0d;color:#f4f2ed99;font-size:10px}
+.work-arc-label{display:grid;overflow:hidden;isolation:isolate}
+.work-arc-label>span{grid-area:1/1;display:block;white-space:nowrap;transform-origin:50% 160px;transition:transform 650ms cubic-bezier(.22,1,.36,1);will-change:transform}
+.work-arc-label>span:nth-child(2){transform:rotate(-60deg)}
+@media(hover:hover) and (pointer:fine){.work-arc-button:hover .work-arc-label>span:first-child{transform:rotate(60deg)}.work-arc-button:hover .work-arc-label>span:nth-child(2){transform:rotate(0deg)}}
+.work-arc-button:focus-visible .work-arc-label>span:first-child{transform:rotate(60deg)}
+.work-arc-button:focus-visible .work-arc-label>span:nth-child(2){transform:rotate(0deg)}
+@media(prefers-reduced-motion:reduce){.work-arc-label>span{transition:none;transform:none!important}.work-arc-label>span:nth-child(2){visibility:hidden}}
+.work-card a:focus-visible,.work-carousel-stage:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.work-carousel-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+@media(max-width:700px){.work-carousel-stage{height:560px;margin-top:8px}.work-card{padding:28px 20px 22px}.work-card-number{margin-bottom:20px}.work-card h3{font-size:32px}}
+@media(prefers-reduced-motion:reduce){.work-card{will-change:auto}}

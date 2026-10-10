@@ -1,0 +1,55 @@
+:root{--error-orange:#ff6b35;--error-white:#f4f2ed}
+*{box-sizing:border-box}
+html{background:#090909;color:var(--error-white)}
+body{margin:0;min-height:100svh;display:flex;flex-direction:column;font-family:'Geist',sans-serif}
+a{color:inherit;text-decoration:none}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--error-orange);outline-offset:7px}
+.error-header,.error-main,.error-footer{width:var(--system-content-width);margin-inline:auto}
+.error-header{display:flex;align-items:center;justify-content:space-between;padding-block:32px}
+.error-logo{display:flex;align-items:center;min-height:44px}
+.error-nav{display:flex;justify-content:space-between;width:75%;font-size:var(--type-nav)}
+.error-nav a::before{content:'✦';color:var(--error-orange);margin-right:10px}
+.error-nav a:hover,.error-footer a:hover{color:var(--error-orange)}
+.error-menu{display:none}
+.error-main{flex:1;padding-block:clamp(40px,7svh,90px) 64px}
+.error-eyebrow{margin:0;text-transform:uppercase;font-size:12px;letter-spacing:.1em;color:#aaa}
+.error-eyebrow span{color:var(--error-orange);margin-right:10px}
+.error-code{display:flex;align-items:center;justify-content:center;font-size:clamp(180px,29vw,430px);line-height:.93;letter-spacing:-.09em;margin:36px 0 48px;padding-right:.09em;user-select:none}
+.error-zero{position:relative;color:var(--error-orange)}
+.error-zero-face{display:block;pointer-events:none;transform-origin:50% 15%;transform:translate(var(--zero-x,0px),var(--zero-y,0px)) rotate(var(--zero-angle,0deg)) skewX(var(--zero-flex,0deg)) scaleY(var(--zero-stretch,1))}
+.error-message{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:end;border-top:1px solid #ffffff26;padding-top:32px}
+h1{font-size:var(--type-statement);font-weight:400;letter-spacing:-.05em;line-height:1.05;margin:0}
+.error-action{justify-self:end}
+.error-action p{font-size:var(--type-paragraph);line-height:1.5;color:#aaa;margin:0 0 24px}
+.error-home{display:flex;justify-content:space-between;gap:48px;align-items:center;background:var(--error-white);color:#090909;border-radius:8px;padding:18px 24px;font-size:14px;transition:background 220ms ease}
+.error-home:hover{background:var(--error-orange)}
+.error-home span:last-child{transition:transform 350ms cubic-bezier(.22,1,.36,1)}
+.error-home:hover span:last-child{transform:rotate(45deg)}
+.error-footer{padding-block:24px 32px;display:flex;justify-content:space-between;font-size:12px;color:#aaa;border-top:1px solid #ffffff26;gap:20px}
+@media(max-width:1100px){
+  .error-header{padding-block:20px}
+  .error-nav{display:none}
+  .error-menu{display:block;position:relative;z-index:2}
+  .error-menu summary{width:44px;height:44px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;list-style:none;cursor:pointer}
+  .error-menu summary::-webkit-details-marker{display:none}
+  .error-menu summary span{display:block;width:24px;height:1px;background:var(--error-white);transition:transform 250ms ease}
+  .error-menu[open] summary span:first-child{transform:translateY(3.5px) rotate(45deg)}
+  .error-menu[open] summary span:last-child{transform:translateY(-3.5px) rotate(-45deg)}
+  .error-menu nav{position:absolute;right:0;top:54px;background:#141414;border:1px solid #ffffff26;border-radius:12px;min-width:190px;padding:12px}
+  .error-menu nav a{display:block;padding:14px;font-size:16px}
+  .error-menu nav a::before{content:'✦';color:var(--error-orange);margin-right:12px}
+  .error-main{padding-block:clamp(32px,6svh,64px) 48px}
+  .error-code{font-size:clamp(160px,36vw,360px);margin-block:48px}
+  .error-message{gap:32px}
+}
+@media(max-width:600px){
+  .error-main{padding-top:36px}
+  .error-code{font-size:42vw;margin-block:48px 40px}
+  .error-message{grid-template-columns:1fr;gap:24px;padding-top:24px}
+  h1{font-size:clamp(30px,8vw,44px)}
+  .error-action{justify-self:stretch}
+  .error-action p{font-size:14px;margin-bottom:20px}
+  .error-home{padding:17px 20px}
+  .error-footer{font-size:10px;padding-bottom:24px}
+}
+@media(prefers-reduced-motion:reduce){.error-home,.error-home span:last-child,.error-menu summary span{transition:none}}

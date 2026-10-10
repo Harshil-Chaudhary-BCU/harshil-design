@@ -1,0 +1,14 @@
+/* Shared, approved foundations for portfolio and case studies. */
+:root{
+  --portfolio-charcoal:#090909;
+  --system-content-width:min(1600px,calc(100% - clamp(32px,6vw,104px)));
+  --system-edge:max(clamp(16px,3vw,52px),calc((100% - 1600px)/2));
+  --type-heading:clamp(46px,7.2vw,92px);
+  --type-statement:clamp(24px,3.2vw,48px);
+  --type-paragraph:clamp(14px,2vw,18px);
+  --type-label-small:10px;
+  --type-label:12px;
+  --type-nav:14px;
+  --system-section-space:clamp(80px,10vw,160px);
+  --system-grid-gap:clamp(24px,4vw,64px);
+}

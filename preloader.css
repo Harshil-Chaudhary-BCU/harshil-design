@@ -1,0 +1,99 @@
+/* Final preloader: six Figma frames, one 2500ms timeline. */
+.portfolio-preloader {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20000;
+  overflow: hidden;
+  pointer-events: auto;
+  --preloader-orange: #ff6b35;
+  --preloader-charcoal: var(--portfolio-charcoal, #090909);
+  --preloader-duration: 2500ms;
+  --preloader-ease: cubic-bezier(.45, 0, .2, 1);
+}
+.portfolio-preloader.is-running { display: block; }
+html.preloader-active #hc-portfolio-concept { pointer-events: none; }
+.preloader-curtain { position: absolute; inset: 0; width: 100%; height: 100%; }
+.preloader-paper { fill: var(--preloader-charcoal); }
+.preloader-backing {
+  fill: var(--preloader-charcoal);
+  animation: preloader-backing var(--preloader-duration) linear both;
+}
+.preloader-edge, .preloader-diagonal {
+  fill: none;
+  stroke: var(--preloader-orange);
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+}
+.preloader-half { will-change: transform; }
+.preloader-half--upper { animation: preloader-upper var(--preloader-duration) both; }
+.preloader-half--lower { animation: preloader-lower var(--preloader-duration) both; }
+.preloader-edge { animation: preloader-edge var(--preloader-duration) linear both; }
+.preloader-diagonal {
+  stroke-linecap: round;
+  animation: preloader-diagonal var(--preloader-duration) var(--preloader-ease) both;
+}
+.preloader-bar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(480px, 68vw);
+  height: 30px;
+  margin-top: -15px;
+  transform: translateX(-50%);
+  animation: preloader-bar var(--preloader-duration) var(--preloader-ease) both;
+  will-change: transform, opacity;
+}
+.preloader-bar svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.preloader-segment {
+  stroke: #383838;
+  stroke-width: 5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  transform: translateX(var(--segment-start)) scaleY(1);
+  animation: preloader-segment var(--preloader-duration) var(--preloader-ease) both;
+  transition: stroke 70ms ease-out;
+}
+.preloader-segment.is-filled { stroke: var(--preloader-orange); }
+
+@keyframes preloader-segment {
+  /* Close the gaps and flatten the slashes; rotation belongs to the whole bar. */
+  0%, 31.8182% { transform: translateX(var(--segment-start)) scaleY(1); }
+  52.7273%, 100% { transform: translateX(var(--segment-end)) scale(2, .001); }
+}
+@keyframes preloader-bar {
+  0%, 31.8182% { transform: translateX(-50%) rotate(0); opacity: 1; }
+  52.7273% { transform: translateX(-50%) rotate(var(--diagonal-angle, -33deg)); opacity: 1; }
+  54.5455%, 100% { transform: translateX(-50%) rotate(var(--diagonal-angle, -33deg)); opacity: 0; }
+}
+/* Extend from the centre without changing the orange stroke's thickness. */
+@keyframes preloader-diagonal {
+  0%, 52.7273% { clip-path: inset(var(--diagonal-inset, 37%)); opacity: 0; }
+  53.6364%, 54.5455% { clip-path: inset(var(--diagonal-inset, 37%)); opacity: 1; }
+  69.0908% { clip-path: inset(0%); opacity: 1; }
+  69.0909%, 100% { clip-path: inset(0%); opacity: 0; }
+}
+@keyframes preloader-edge {
+  0%, 69.0908% { opacity: 0; }
+  69.0909%, 100% { opacity: 1; }
+}
+/* One opaque surface seals the anti-aliased panel seam until the reveal. */
+@keyframes preloader-backing {
+  0%, 69.0908% { opacity: 1; }
+  69.0909%, 100% { opacity: 0; }
+}
+@keyframes preloader-upper {
+  0%, 69.0909% { transform: translateY(0); }
+  100% { transform: translateY(-102%); }
+}
+@keyframes preloader-lower {
+  0%, 69.0909% { transform: translateY(0); }
+  100% { transform: translateY(102%); }
+}
+.preloader-half {
+  transform-box: view-box;
+  animation-timing-function: cubic-bezier(.45, 0, .12, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-preloader.is-running { display: none; }
+}

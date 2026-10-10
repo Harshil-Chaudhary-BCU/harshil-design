@@ -1,0 +1,132 @@
+/* Dark landing treatment only. The rest of the portfolio keeps its original system. */
+html,body{background:#151718}
+.site-header{padding:18px 20px}
+.site-header .index-nav,.site-header .index-nav a{font-size:14px}
+.site-header .index-nav a{align-items:center}
+.nav-star{
+  display:block;
+  flex:0 0 10px;
+  width:10px;
+  height:10px;
+  background:var(--accent);
+  clip-path:polygon(50% 0%,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0% 50%,38% 38%);
+}
+.landing-stage .hero-scroll{right:20px;bottom:20px;color:#f4f2ed}
+.index-nav a.active .nav-star{background:linear-gradient(to right,var(--portfolio-charcoal,#131516) 0 var(--star-fill,0%),var(--accent) var(--star-fill,0%) 100%)}
+.landing-stage .hero{
+  background:#151718!important;
+  color:#f4f2ed!important;
+  padding:100px 20px 20px;
+}
+.studio-tag{
+  --tag-drop:40px;
+  position:absolute;
+  z-index:4;
+  top:var(--tag-drop);
+  left:50%;
+  transform:translateX(-50%);
+  width:320px;
+  max-width:calc(100% - 40px);
+  font:400 12px/1.3 'Geist',sans-serif;
+  text-transform:none;
+  white-space:nowrap;
+}
+.studio-tag-face{
+  position:relative;
+  width:100%;
+  min-height:38px;
+  height:var(--tag-height,38px);
+  padding:8px 12px;
+  border:1.5px solid var(--accent);
+  border-radius:999px;
+  background:#151718;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:6px;
+  color:#f4f2ed;
+  transform:translate3d(var(--tag-x,0px),var(--tag-y,0px),0) rotate(var(--tag-angle,0deg)) skewX(var(--tag-flex,0deg)) scaleY(var(--tag-stretch,1));
+  transform-origin:50% 50%;
+}
+.studio-tag-label{opacity:var(--tag-label-opacity,1);display:flex;align-items:center;gap:6px}
+.studio-tag-label .intro-rotator{text-align:center}
+@media(min-width:701px) and (max-width:1000px){.studio-tag-label{font-size:9px}}
+@media(max-width:700px){.studio-tag-label{font-size:10px;display:grid;grid-template-columns:auto auto;column-gap:6px;row-gap:0}.studio-tag-location{grid-column:1 / -1;text-align:center}.studio-tag-face{padding-inline:10px}}
+.landing-stage>.studio-tag{z-index:10;max-width:none;will-change:width,top}
+.landing-stage>.studio-tag .studio-tag-face{border-radius:var(--tag-radius,999px);background:var(--tag-background,#151718);will-change:height}
+.beyond-sticky{z-index:0}
+.hc-monogram-canvas{transform-origin:50% 50%}
+.studio-tag-cords{
+  position:absolute;
+  top:calc(-1 * var(--tag-drop));
+  left:0;
+  width:100%;
+  height:calc(var(--tag-drop) + 62px);
+  overflow:visible;
+  fill:none;
+  stroke:var(--accent);
+  stroke-width:1.5px;
+  pointer-events:none;
+}
+
+/* Pause the previous paper-burn layer while the landing remains charcoal. */
+.ink-transition{display:none!important}
+
+.landing-stage .hero::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 72% 42%,rgba(255,107,53,.075),transparent 24%),
+    radial-gradient(ellipse at 50% 45%,transparent 45%,rgba(0,0,0,.24) 100%);
+}
+
+.hero-mark{color:#ffffff0b!important;text-shadow:none!important}
+.hero-copy,.hero-copy h1{color:#f4f2ed!important}
+.landing-stage .hero-copy h1{font-style:italic}
+.intro-rotator{
+  display:inline-grid;
+  vertical-align:bottom;
+  overflow:hidden;
+  padding-inline:2px;
+  margin-inline:-2px;
+  perspective:500px;
+  line-height:1.3;
+}
+.intro-word{
+  color:var(--accent);
+  grid-area:1 / 1;
+  white-space:nowrap;
+  opacity:0;
+  transform:translateY(-105%) rotateX(18deg);
+  transform-origin:50% 50%;
+  transition:transform 640ms cubic-bezier(.22,1,.36,1),opacity 420ms ease;
+}
+.intro-word.is-current{opacity:1;transform:translateY(0) rotateX(0)}
+.intro-word.is-leaving{opacity:0;transform:translateY(105%) rotateX(-18deg)}
+@media(prefers-reduced-motion:reduce){.intro-word{transition:none;transform:none}}
+@media(min-width:701px){
+  .landing-stage .hero-copy{width:min(780px,100%)}
+  .landing-stage .hero-copy h1{font-size:clamp(30px,2.2vw,35px)}
+  .intro-line{display:block;white-space:nowrap}
+}
+@media(min-width:701px) and (max-width:1100px){
+  .landing-stage .hero-scroll{bottom:128px}
+}
+.site-header .meta{grid-column:-2 / -1;display:block;font-size:12px}
+.site-header [data-surface="light"],
+.site-header [data-surface="dark"],
+.site-header .index-nav[data-scene="landing"] a{
+  color:#f4f2ed!important;
+  --tracker-color:#ff6b35;
+}
+
+@media(max-width:700px){
+  .site-header{padding:12px}
+  .landing-stage .hero{padding:100px 12px 12px}
+  .landing-stage .hero-scroll{right:12px;bottom:12px}
+  .studio-tag{--tag-drop:148px;width:280px}
+  .studio-tag-face{padding:8px 12px}
+}

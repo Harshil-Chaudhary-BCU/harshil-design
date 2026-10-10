@@ -1,0 +1,19 @@
+.hc-pointer,.hc-pointer-burst{position:fixed;left:0;top:0;z-index:30000;pointer-events:none;opacity:0;will-change:transform}
+.hc-pointer-shape{display:block;width:15.2px;height:20px;overflow:visible;transform-origin:5.412px 2.74px;transform:translate(-5.412px,-2.74px) rotate(-18deg);filter:drop-shadow(0 0 .6px #fff9) drop-shadow(0 2px 2px #0004)}
+.hc-pointer-hand{transform-origin:366px 164px;transition:transform 160ms cubic-bezier(.2,.8,.2,1)}
+.hc-pointer[data-pressed="true"] .hc-pointer-hand{transform:scale(.94)}
+.hc-drag-cursor{display:none;position:absolute;width:54px;height:54px;transform:translate(-50%,-50%);border-radius:50%;background:#303030;color:#f4f2ed;align-items:center;justify-content:center;font:400 10.8px/1 'Geist',sans-serif;box-shadow:0 1.2px 10.8px #0002}
+.hc-drag-cursor::before,.hc-drag-cursor::after{content:'';position:absolute;width:4.8px;height:4.8px;border-radius:50%;background:#777;top:calc(50% - 2.4px)}
+.hc-drag-cursor::before{left:-16.8px}.hc-drag-cursor::after{right:-16.8px}
+.hc-pointer[data-mode="drag"] .hc-pointer-shape{display:none}
+.hc-pointer[data-mode="drag"] .hc-drag-cursor{display:flex}
+.hc-pointer-rays{transition:opacity 120ms ease}
+.hc-pointer[data-burst="true"] .hc-pointer-rays{opacity:0}
+.hc-pointer-burst{opacity:1}
+.hc-pointer-burst .hc-pointer-ray{animation:hc-click-ray 1000ms cubic-bezier(.22,.65,.3,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes hc-click-ray{0%{opacity:1;transform:translate(0,0) scale(1)}70%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.45)}}
+@media(hover:hover) and (pointer:fine){html.hc-pointer-active,html.hc-pointer-active *{cursor:none!important}html.hc-pointer-active .hc-pointer{opacity:1}}
+html.preloader-active,html.preloader-active *{cursor:none!important}
+html.preloader-active .hc-pointer,html.preloader-active .hc-pointer-burst{visibility:hidden}
+@media(forced-colors:active){.hc-pointer,.hc-pointer-burst{display:none}html.hc-pointer-active,html.hc-pointer-active *{cursor:auto!important}}
+@media(prefers-reduced-motion:reduce){.hc-pointer-hand,.hc-pointer-rays{transition:none}.hc-pointer-burst .hc-pointer-ray{animation:none;opacity:0}}

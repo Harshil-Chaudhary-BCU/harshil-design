@@ -1,0 +1,7 @@
+roll-text{display:inline-block;vertical-align:bottom;white-space:nowrap}
+roll-char{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:inherit}
+roll-face{position:relative;display:block;transition:transform 580ms cubic-bezier(.22,1,.36,1);transition-delay:var(--roll-delay);}
+roll-face::after{content:attr(data-copy);position:absolute;top:100%;left:0;white-space:pre}
+@media(hover:hover){.roll-target:hover roll-face{transform:translateY(-100%)}}
+.roll-target:focus-visible roll-face{transform:translateY(-100%)}
+@media(prefers-reduced-motion:reduce){roll-face{transition:none!important;transform:none!important}}

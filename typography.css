@@ -1,0 +1,7 @@
+@font-face{font-family:'Geist';src:url('./fonts/Geist-Regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:'Geist';src:url('./fonts/Geist-Italic.ttf') format('truetype');font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:'Geist';src:url('./fonts/Geist-Semibold.ttf') format('truetype');font-style:normal;font-weight:600;font-display:swap}
+/* Family-only migration: keep existing type sizes, styles, weights and contrast.
+   The HC marks and Nautigal Beyond lettering retain their own font families. */
+:root{--mono:'Geist',sans-serif;--serif:'Geist',sans-serif}
+body,.hero-copy h1,button,input,select,textarea{font-family:'Geist',sans-serif}

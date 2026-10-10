@@ -1,0 +1,27 @@
+# Local review output and operating-system metadata
+.DS_Store
+tmp/
+output/
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+
+# Original previews/export tools, not part of the public landing page
+hc-model/
+hc-svg-preview.html
+export-*.mjs
+
+# Disconnected pages remain local until their publication is requested
+liftlab.html
+liftlab.css
+liftlab.js
+case-system.css
+assets/liftlab/
+about.html
+about.css
+about.js
+navigation.css
+theme.css

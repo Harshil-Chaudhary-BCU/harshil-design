@@ -1,0 +1,32 @@
+/* Words retain natural wrapping and emphasis; all words on a line share a delay. */
+text-piece{display:inline-block}
+.line-reveal text-piece{opacity:0;clip-path:inset(0 0 100% 0)}
+.line-reveal.text-entered text-piece{animation:about-line-enter 700ms cubic-bezier(.22,1,.36,1) var(--reveal-delay,0ms) both}
+.about-services p.line-reveal.text-entered text-piece,.about-services article > span.line-reveal.text-entered text-piece{animation-duration:1200ms}
+.line-reveal.text-instant text-piece,.type-reveal.text-instant text-letter{animation:none!important;opacity:1;clip-path:none;transform:none}
+.type-reveal text-letter{opacity:0}
+.type-reveal.text-entered text-letter{animation:about-letter-enter 1ms steps(1,end) var(--reveal-delay,0ms) both}
+@keyframes about-line-enter{from{opacity:0;transform:translateY(.55em);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(-.2em -.15em -.25em -.15em)}}
+@keyframes about-letter-enter{to{opacity:1}}
+.about-services article.divider-reveal{position:relative;border-top-color:transparent}
+.about-services article.divider-reveal::before{
+  content:"";
+  position:absolute;
+  top:-1px;
+  left:0;
+  right:0;
+  height:10px;
+  background:
+    radial-gradient(circle,#ffffff8f 0 1.25px,transparent 1.5px) calc(var(--divider-heading-start,7%) - 2px) 0/4px 4px no-repeat,
+    radial-gradient(circle,#ffffff8f 0 1.25px,transparent 1.5px) calc(var(--divider-heading-end,25%) - 2px) 0/4px 4px no-repeat,
+    radial-gradient(circle,#ffffff8f 0 1.25px,transparent 1.5px) calc(var(--divider-copy-start,67%) - 2px) 0/4px 4px no-repeat,
+    radial-gradient(circle,#ffffff8f 0 1.25px,transparent 1.5px) calc(var(--divider-copy-end,99%) - 2px) 0/4px 4px no-repeat,
+    linear-gradient(to right,#ffffff4a,#ffffff4a) 50% 0/100% 1px no-repeat;
+  opacity:0;
+  pointer-events:none;
+}
+.about-services article.divider-reveal.text-entered::before{animation:about-divider-enter 1200ms cubic-bezier(.22,1,.36,1) both}
+.about-services article.divider-reveal.text-instant::before{animation:none!important;opacity:1;transform:none}
+@keyframes about-divider-enter{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.about-services article.divider-reveal::before{animation:none!important;opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.line-reveal text-piece,.type-reveal text-letter{animation:none!important;opacity:1;clip-path:none;transform:none}}
