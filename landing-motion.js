@@ -1,5 +1,3 @@
-import { mountHCLogo } from './hc-model-v2/hc-logo.js?v=responsive-logo-10';
-
 const sequence=document.querySelector('.landing-sequence');
 const reveal=document.querySelector('.beyond-sticky');
 const hero=sequence.querySelector('.hero');
@@ -13,6 +11,7 @@ let logoController=null;
 const heroCopy=hero.querySelector('.hero-copy');
 const scrollCue=hero.querySelector('.hero-scroll');
 const navigation=document.querySelector('.site-header .index-nav');
+const compactNavigation=document.querySelector('.compact-menu');
 const landingMetadata=[...document.querySelectorAll('.site-header .identity,.site-header .meta')];
 const aboutIntroduction=document.querySelector('.landing-about .about-introduction');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
@@ -292,12 +291,17 @@ addEventListener('scroll',()=>{
 },{passive:true});
 function update(){
   queued=0;
+  // Read layout once, before changing the portal/header styles. Interleaving
+  // offset reads with those writes forced multiple layouts in one scroll frame.
+  const sequenceRect=sequence.getBoundingClientRect();
+  const aboutTop=aboutIntroduction.getBoundingClientRect().top;
+  const exitBounds=new Map([...landingMetadata,navigation,heroCopy,...(scrollCue?[scrollCue]:[])].map(element=>[element,{left:element.offsetLeft,top:element.offsetTop,width:element.offsetWidth,height:element.offsetHeight}]));
   const travel=sequence.offsetHeight-innerHeight;
-  progress=reduced.matches?0:Math.max(0,Math.min(1,-sequence.getBoundingClientRect().top/Math.max(1,travel)));
+  progress=reduced.matches?0:Math.max(0,Math.min(1,-sequenceRect.top/Math.max(1,travel)));
   if(!openingScrollComplete&&progress>=.999)finishOpeningScroll();
   if(progress<.002&&!magneticFrame)magneticArmed=true;
   if(magneticInteracted&&magneticArmed&&!magneticFrame&&!touchActive&&progress>=magneticThreshold&&progress<.998){
-    snapOpening(scrollY+sequence.getBoundingClientRect().top+travel);
+    snapOpening(scrollY+sequenceRect.top+travel);
   }
   // The magnetic scroll already eases time. A second ease on the lens size
   // concentrated the expansion into a rush; map geometry evenly instead.
@@ -305,8 +309,9 @@ function update(){
   const detailsOpacity=1-ease((progress-.42)/.38);
   const exitTransform=(element,horizontal,vertical)=>{
     const amount=reduced.matches?0:ease(growth*1.35);
-    const x=horizontal<0?-(element.offsetLeft+element.offsetWidth+32):innerWidth-element.offsetLeft+32;
-    const y=vertical<0?-(element.offsetTop+element.offsetHeight+32):innerHeight-element.offsetTop+32;
+    const bounds=exitBounds.get(element);
+    const x=horizontal<0?-(bounds.left+bounds.width+32):innerWidth-bounds.left+32;
+    const y=vertical<0?-(bounds.top+bounds.height+32):innerHeight-bounds.top+32;
     return `translate3d(${x*amount}px,${y*amount}px,0)`;
   };
   landingMetadata.forEach(element=>{element.style.transform=exitTransform(element,1,-1)});
@@ -314,7 +319,7 @@ function update(){
   // The landing navigation exits completely before the next scene's entrance.
   // Reuse its links so focus, anchors and the progress tracker stay consistent.
   const arriving=reduced.matches
-    ? (sequence.getBoundingClientRect().bottom<=0?1:0)
+    ? (sequenceRect.bottom<=0?1:0)
     : Math.max(0,Math.min(1,(progress-.8)/.2));
   const entrance=arriving*arriving*(3-2*arriving);
   const departing=progress<.8 && !arriving;
@@ -327,13 +332,19 @@ function update(){
   navigation.dataset.scene=departing?'landing':'interior';
   navigation.inert=navOpacity<.05;
   navigation.style.visibility=navOpacity<.001?'hidden':'visible';
+  // Compact controls belong to the content scene, not the opening hero.
+  if(compactNavigation){
+    const ready=reduced.matches?sequenceRect.bottom<=0:progress>=.999;
+    compactNavigation.classList.toggle('is-ready',ready);
+    compactNavigation.inert=!ready;
+  }
   hero.style.pointerEvents=detailsOpacity<.03?'none':'';
   // Descend first, then let the pill become a viewport-sized portal. The same
   // geometry cuts the landing away, exposing the actual Beyond scene behind it.
   const small=innerWidth<=1100;
   const contentWidth=Math.min(1600,innerWidth-Math.max(32,Math.min(innerWidth*.06,104)));
   const baseWidth=Math.min(480,contentWidth);
-  const baseTop=small?64:40;
+  const baseTop=small?40:28;
   const descent=ease(progress/.35);
   const startCenter=baseTop+19;
   // Match the reference: finish the drop around 18% of the viewport, not 1/3.
@@ -374,13 +385,14 @@ function update(){
   hero.style.setProperty('--hc-depth-y','0px');
   hero.style.setProperty('--hc-depth-scale',String(1-depth*.35));
   logoController?.setSceneScale(1-depth*.35);
+  logoController?.setTransitionActive(progress>.005&&progress<1);
   heroCopy.style.transform=exitTransform(heroCopy,-1,1);
   if(scrollCue)scrollCue.style.transform=exitTransform(scrollCue,1,1);
   const transitionOpacity=ease((progress-.44)/.46);
   hero.inert=progress>=1;
   // Keep the word anchored behind About, then soften it as the About heading
   // enters the viewport. The incoming Work sequence covers it as it arrives.
-  const aboutProgress=Math.max(0,Math.min(1,(innerHeight-aboutIntroduction.getBoundingClientRect().top)/(innerHeight*.8)));
+  const aboutProgress=Math.max(0,Math.min(1,(innerHeight-aboutTop)/(innerHeight*.8)));
   const aboutFade=aboutProgress*aboutProgress*(3-2*aboutProgress);
   // Fade only glyph paint, never the sticky scene or its charcoal canvas.
   word.style.opacity='1';
@@ -389,15 +401,39 @@ function update(){
 function schedule(){if(!queued)queued=requestAnimationFrame(update)}
 addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pageshow',schedule);addEventListener('hashchange',()=>setTimeout(update,250));reduced.addEventListener('change',schedule);update();setTimeout(update,250);
 
-const logoHost=document.createElement('div');
-logoHost.className='hc-monogram-canvas hc-model-canvas';
-logoHost.style.transform='none';
-hero.prepend(logoHost);
-mountHCLogo(logoHost, { rotationMode: 'sway', glassEffect: true, contentMaxWidth: 1600, responsiveLogoScale: true, liquidAmplitude: .145, liquidSpeed: 1.15 }).then(controller=>{
-  logoController=controller;
-  hero.querySelector('.hero-mark').dataset.rendered='true';
-  update();
-}).catch(error=>{
-  logoHost.remove();
-  console.warn('Using static HC fallback',error);
-});
+// A static vector is the default, so touch devices never fetch Three.js or GLB.
+// maxTouchPoints also covers iPads using desktop mode or an attached trackpad.
+const staticLogo=document.createElement('div');
+staticLogo.className='hc-static-logo';
+staticLogo.setAttribute('role','img');
+staticLogo.setAttribute('aria-label','HC logo with a wavy glass finish');
+const staticAsset=new URL('./assets/hc-text-logo.svg',import.meta.url).href;
+staticLogo.innerHTML=`<svg class="hc-static-art" viewBox="0 0 1700 717" aria-hidden="true">
+  <defs><filter id="hc-static-ripple" x="-3%" y="-5%" width="106%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".008 .055" numOctaves="1" seed="8" result="ripple"/>
+    <feDisplacementMap in="SourceGraphic" in2="ripple" scale="18" xChannelSelector="R" yChannelSelector="G"/>
+  </filter></defs>
+  <image width="1700" height="717" filter="url(#hc-static-ripple)"/>
+</svg><div class="hc-static-glass" aria-hidden="true"></div>`;
+staticLogo.querySelector('image').setAttribute('href',staticAsset);
+hero.prepend(staticLogo);
+hero.querySelector('.hero-mark').dataset.rendered='true';
+const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
+async function setupDesktopLogo(){
+  if(!finePointer.matches||navigator.maxTouchPoints>0||reduced.matches)return;
+  let logoHost;
+  try{
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=hero-performance-11');
+    logoHost=document.createElement('div');
+    logoHost.className='hc-monogram-canvas hc-model-canvas';
+    logoHost.style.transform='none';
+    hero.prepend(logoHost);
+    logoController=await mountHCLogo(logoHost,{rotationMode:'sway',glassEffect:true,contentMaxWidth:1600,responsiveLogoScale:true,liquidAmplitude:.145,liquidSpeed:1.15});
+    staticLogo.hidden=true;
+    update();
+  }catch(error){
+    logoHost?.remove();
+    console.warn('Using lightweight HC fallback',error);
+  }
+}
+setupDesktopLogo();

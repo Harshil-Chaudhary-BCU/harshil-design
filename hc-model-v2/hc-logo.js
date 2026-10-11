@@ -19,7 +19,7 @@ export async function mountHCLogo(container, {
   liquidSpeed = 1,
   glowStrength = .18,
   glowDecay = 2.4,
-  pixelRatio = Math.min(1.5, globalThis.devicePixelRatio || 1),
+  pixelRatio = Math.min(matchMedia('(pointer:coarse)').matches?1:1.25, globalThis.devicePixelRatio || 1),
   pointerTarget = document,
   zIndex = 0,
   fitContainer = false,
@@ -61,11 +61,10 @@ export async function mountHCLogo(container, {
   const parts=[];
   gltf.scene.traverse(mesh=>{
     if(!mesh.isInstancedMesh)return;
-    // Tiny beads sit behind refracting glass: 80 faces retain their rounded
-    // silhouette without rendering 320 faces for each of 61,114 instances.
+    // Keep every bead, but do not subdivide its subpixel silhouette behind glass.
     mesh.geometry.computeBoundingSphere();
     const beadBounds=mesh.geometry.boundingSphere;
-    mesh.geometry=new THREE.IcosahedronGeometry(beadBounds.radius,1);
+    mesh.geometry=new THREE.IcosahedronGeometry(beadBounds.radius,0);
     mesh.geometry.translate(beadBounds.center.x,beadBounds.center.y,beadBounds.center.z);
     mesh.frustumCulled=false;mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     mesh.material=mesh.material.clone();
@@ -89,6 +88,10 @@ export async function mountHCLogo(container, {
     const wake={remaining:new Float32Array(mesh.count),cooldown:new Float32Array(mesh.count),direction:new Float32Array(mesh.count*2),burst:new Float32Array(rest.length)};
     parts.push({mesh,rest,radii,radiusShape,screenRadii,life,wake,offset:new Float32Array(rest.length),velocity:new Float32Array(rest.length),random:new Float32Array(mesh.count*6),generation:new Uint32Array(mesh.count)});
   });
+  canvas.dataset.particles=String(parts.reduce((count,part)=>count+part.mesh.count,0));
+  const beadGeometry=parts[0].mesh.geometry;
+  const trianglesPerParticle=(beadGeometry.index?.count||beadGeometry.attributes.position.count)/3;
+  canvas.dataset.trianglesPerParticle=String(trianglesPerParticle);
   let halfWidth=6.1,halfHeight=3,width=1,height=1;
   let sceneScale=1,deviceScale=1;
   let disposed=false,raf=0,lastTime=0,frames=0,simulationTime=0;
@@ -100,11 +103,16 @@ export async function mountHCLogo(container, {
   const edgeContacts={left:0,right:0,top:0,bottom:0};
   const motions=[];
   const pointer={active:false,clientX:0,clientY:0,time:0};
+  const coarse=matchMedia('(pointer:coarse)');
+  let physicsActive=false,lightActive=false,transitionActive=false,lastRendered=0;
   const swirlAxis=new THREE.Vector3(0,1,0);
   function resize(){
     const view=window.visualViewport;
-    width=Math.max(1,fitContainer?container.clientWidth:view?.width||window.innerWidth);height=Math.max(1,fitContainer?container.clientHeight:view?.height||window.innerHeight);
+    const nextWidth=Math.max(1,fitContainer?container.clientWidth:view?.width||window.innerWidth);
+    const nextHeight=Math.max(1,fitContainer?container.clientHeight:view?.height||window.innerHeight);
     canvas.style.left=(fitContainer?0:view?.offsetLeft||0)+'px';canvas.style.top=(fitContainer?0:view?.offsetTop||0)+'px';
+    if(nextWidth===width&&nextHeight===height)return;
+    width=nextWidth;height=nextHeight;
     canvas.style.width=width+'px';canvas.style.height=height+'px';
     // The optical pass fills the viewport; only the sculpture follows the cap.
     const contentWidth=contentMaxWidth?Math.min(contentMaxWidth,width-Math.max(32,Math.min(width*.06,104))):width;
@@ -116,7 +124,7 @@ export async function mountHCLogo(container, {
     deviceScale=responsiveLogoScale?1-.14*ramp(1024,1200)+.14*ramp(1512,1728)+.08*ramp(1920,2560):1;
     camera.zoom=sceneScale*deviceScale;
     camera.left=-halfWidth;camera.right=halfWidth;camera.top=halfHeight;camera.bottom=-halfHeight;camera.updateProjectionMatrix();
-    renderer.setPixelRatio(Math.min(pixelRatio,Math.sqrt(4000000/(width*height))));renderer.setSize(width,height,false);
+    renderer.setPixelRatio(Math.min(pixelRatio,coarse.matches||width<=1100?1:1.25,Math.sqrt(2000000/(width*height))));renderer.setSize(width,height,false);
     // Resizing is never treated as a mouse stroke.
     motions.length=0;pointer.active=false;pointerSpeed=motionStrength=0;
   }
@@ -178,6 +186,7 @@ export async function mountHCLogo(container, {
       }
     }
     if(!touched)return;
+    physicsActive=true;lightActive=true;
     activeMotions++;
     // Light ripples travel inside the letter while the struck beads carry a glow.
     if(simulationTime-lastLightWave>.12){
@@ -306,8 +315,13 @@ export async function mountHCLogo(container, {
   function frame(now){
     if(disposed)return;raf=requestAnimationFrame(frame);
     if(document.hidden||container.closest('[inert]')){lastTime=now;resetPointer();return;}
-    const dt=Math.min(.05,Math.max(0,(now-(lastTime||now))/1000));lastTime=now;
+    // Leave headroom for native scroll and the portal's DOM animation.
+    const interval=coarse.matches||width<=1100||transitionActive?1000/30:1000/60;
+    if(now-lastRendered<interval-1)return;
+    lastRendered=now;
+    const dt=Math.min(.033,Math.max(0,(now-(lastTime||now))/1000));lastTime=now;
     const revealing = document.documentElement.classList.contains('preloader-active');
+    if(revealing&&frames>0){resetPointer();return;}
     if (rotationMode === 'sway') {
       // Start face-on; a restrained ±5° sway never turns the lettering edge-on.
       if (!revealing) simulationTime += dt;
@@ -321,13 +335,19 @@ export async function mountHCLogo(container, {
     if (revealing) resetPointer();
     gltf.scene.updateMatrixWorld(true);
     const m=pivot.matrixWorld.elements,c=m[0],s=m[8];
-    updateScreenRadii(c,s);
     maxLiquidDisplacement=updateLiquid(parts,simulationTime,liquidAmplitude,liquidSpeed);
     activeMotions=0;lastHit=null;pointerSpeed=motionStrength=0;
     for(const motion of motions){pointerSpeed=Math.max(pointerSpeed,motion.speed);motionStrength=Math.max(motionStrength,motion.strength);applyMotion(motion,c,s);}
     motions.length=0;
-    const steps=Math.max(1,Math.ceil(dt/.012));for(let i=0;i<steps;i++)physics(dt/steps,c,s);
-    ({glowing,maxGlow}=updateInnerLight(parts,lightWaves,simulationTime,dt,glowDecay,renderer.getPixelRatio()*height/(halfHeight*2)));
+    if(physicsActive){
+      updateScreenRadii(c,s);
+      const steps=Math.max(1,Math.ceil(dt/.012));for(let i=0;i<steps;i++)physics(dt/steps,c,s);
+      physicsActive=parts.some(part=>part.offset.some(value=>value!==0)||part.velocity.some(value=>value!==0)||part.wake.remaining.some(value=>value>0)||part.wake.cooldown.some(value=>value>0));
+    }
+    if(lightActive){
+      ({glowing,maxGlow}=updateInnerLight(parts,lightWaves,simulationTime,dt,glowDecay,renderer.getPixelRatio()*height/(halfHeight*2)));
+      lightActive=lightWaves.length>0||maxGlow>=.001;
+    }
     syncParticles();
     if(glass)glass.render(scene,camera);
     else renderer.render(scene,camera);
@@ -336,6 +356,7 @@ export async function mountHCLogo(container, {
   raf=requestAnimationFrame(frame);
   return {
     canvas,
+    setTransitionActive(active){transitionActive=Boolean(active);},
     // Zoom the model before the optical pass; the full-screen glass stays fixed.
     setSceneScale(scale){
       sceneScale=Math.max(.1,Math.min(1,scale));

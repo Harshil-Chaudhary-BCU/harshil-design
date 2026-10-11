@@ -2,6 +2,7 @@
   const menu = document.querySelector('.compact-menu');
   if (!menu) return;
   const toggle = menu.querySelector('.compact-menu-toggle');
+  const home = menu.querySelector('.compact-menu-home');
   const panel = menu.querySelector('.compact-menu-panel');
   const links = [...panel.querySelectorAll('a')];
   const content = [...document.querySelectorAll('#hc-portfolio-concept > main, #hc-portfolio-concept > footer')];
@@ -29,15 +30,16 @@
     }
   };
   toggle.addEventListener('click', () => setOpen(!opened));
+  home.addEventListener('click', () => setOpen(false));
   links.forEach(link => link.addEventListener('click', () => setOpen(false)));
   document.addEventListener('keydown', event => {
     if (!opened) return;
     if (event.key === 'Escape') { event.preventDefault(); setOpen(false); }
     if (event.key === 'Tab') {
-      const targets = [toggle, ...links];
+      const targets = [home, toggle, ...links];
       const index = targets.indexOf(document.activeElement);
       if (event.shiftKey && index <= 0) { event.preventDefault(); targets.at(-1).focus(); }
-      else if (!event.shiftKey && (index === targets.length - 1 || index < 0)) { event.preventDefault(); toggle.focus(); }
+      else if (!event.shiftKey && (index === targets.length - 1 || index < 0)) { event.preventDefault(); home.focus(); }
     }
   });
   window.addEventListener('wheel', event => {

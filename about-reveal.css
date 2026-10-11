@@ -8,6 +8,12 @@ text-piece{display:inline-block}
 .type-reveal.text-entered text-letter{animation:about-letter-enter 1ms steps(1,end) var(--reveal-delay,0ms) both}
 @keyframes about-line-enter{from{opacity:0;transform:translateY(.55em);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:translateY(0);clip-path:inset(-.2em -.15em -.25em -.15em)}}
 @keyframes about-letter-enter{to{opacity:1}}
+/* Individual translate keeps the entrance separate from hover spring physics. */
+.principle-card.card-reveal{opacity:0;translate:0 32px}
+.principle-card.card-reveal.text-entered{animation:principle-card-enter 700ms cubic-bezier(.22,1,.36,1) both}
+.principle-card.card-reveal.text-instant{animation:none;opacity:1;translate:none}
+@keyframes principle-card-enter{from{opacity:0;translate:0 32px}to{opacity:1;translate:0 0}}
+@media(prefers-reduced-motion:reduce){.principle-card.card-reveal{animation:none!important;opacity:1;translate:none}}
 .about-services article.divider-reveal{position:relative;border-top-color:transparent}
 .about-services article.divider-reveal::before{
   content:"";

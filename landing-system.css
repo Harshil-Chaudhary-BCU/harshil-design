@@ -111,7 +111,18 @@ footer.connect-footer{padding-top:clamp(150px,20svh,220px)}
 @media(max-width:1100px){
   .site-header .index-nav,.site-header .meta{display:none}
   .site-header::before{display:block}
-  .compact-menu{display:block;position:fixed;inset:0;z-index:15000;pointer-events:none}
+  /* Compact navigation needs full-width blur, not the desktop's clear side edges. */
+  .site-header:has(.index-nav[data-scene="interior"])::before{
+    left:0;right:0;
+    -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 46%,transparent 100%);
+    mask-image:linear-gradient(to bottom,#000 0%,#000 46%,transparent 100%);
+    -webkit-mask-composite:source-over;mask-composite:add;
+  }
+  .compact-menu{display:block;position:fixed;inset:0;z-index:15000;pointer-events:none;opacity:0;visibility:hidden;transition:opacity 350ms ease,visibility 0s 350ms}
+  .compact-menu.is-ready{opacity:1;visibility:visible;transition:opacity 350ms ease,visibility 0s}
+  .compact-menu-home{position:absolute;top:max(16px,env(safe-area-inset-top));left:var(--system-edge);z-index:2;display:flex;align-items:center;justify-content:center;width:48px;height:44px;pointer-events:auto}
+  .compact-menu-home img{display:block;width:48px;height:28px;object-fit:contain}
+  .compact-menu-home:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
   .compact-menu-toggle{position:absolute;top:max(16px,env(safe-area-inset-top));right:var(--system-edge);z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px;width:44px;height:44px;padding:0;border:0;background:transparent;color:#f4f2ed;pointer-events:auto}
   .compact-menu-toggle span{display:block;width:24px;height:1px;background:currentColor;transition:transform 650ms cubic-bezier(.22,1,.36,1);transform-origin:center}
   .compact-menu.is-open .compact-menu-toggle span:first-child{transform:translateY(3.5px) rotate(45deg)}
@@ -131,4 +142,4 @@ footer.connect-footer{padding-top:clamp(150px,20svh,220px)}
   .landing-stage .hero-scroll>span:first-child{display:none}
   .landing-stage .hero-scroll-line{--line-height:48px}
 }
-@media(prefers-reduced-motion:reduce){.compact-menu-panel,.compact-menu-toggle span{transition:none}}
+@media(prefers-reduced-motion:reduce){.compact-menu,.compact-menu-panel,.compact-menu-toggle span{transition:none}}

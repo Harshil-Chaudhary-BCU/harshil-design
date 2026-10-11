@@ -11,6 +11,7 @@
       if (!record.isIntersecting) continue;
       for (const entry of entries.filter(item => item.trigger === record.target)) {
         measure(entry);
+        if(entry.element.classList.contains('divider-reveal'))setDividerAnchors(entry.element);
         entry.element.classList.add('text-entered');
       }
     }
@@ -46,7 +47,12 @@
     const articleBox = article.getBoundingClientRect();
     const textBounds = element => {
       const pieces = element ? element.querySelectorAll('text-piece,text-letter') : [];
-      const boxes = Array.from(pieces, piece => piece.getBoundingClientRect()).filter(box => box.width > 0);
+      // Measure the laid-out text, not its full-width paragraph container.
+      const boxes = Array.from(pieces, piece => {
+        const range=document.createRange();
+        range.selectNodeContents(piece);
+        return Array.from(range.getClientRects());
+      }).flat().filter(box => box.width > 0);
       if (!boxes.length) return element ? element.getBoundingClientRect() : null;
       return {
         left: Math.min(...boxes.map(box => box.left)),
@@ -55,13 +61,16 @@
     };
     const heading = textBounds(article.querySelector('h3'));
     const copy = textBounds(article.querySelector('p'));
+    // Keep the complete 4px marker within the divider, including near-full
+    // wrapped lines on narrow screens. No extra padding beyond the text edge.
+    const anchor=x=>`${Math.max(2,Math.min(articleBox.width-2,x-articleBox.left))}px`;
     if (heading) {
-      article.style.setProperty('--divider-heading-start', `${heading.left - articleBox.left}px`);
-      article.style.setProperty('--divider-heading-end', `${heading.right - articleBox.left + 3}px`);
+      article.style.setProperty('--divider-heading-start', anchor(heading.left));
+      article.style.setProperty('--divider-heading-end', anchor(heading.right));
     }
     if (copy) {
-      article.style.setProperty('--divider-copy-start', `${copy.left - articleBox.left}px`);
-      article.style.setProperty('--divider-copy-end', `${copy.right - articleBox.left + 3}px`);
+      article.style.setProperty('--divider-copy-start', anchor(copy.left));
+      article.style.setProperty('--divider-copy-end', anchor(copy.right));
     }
   }
 
@@ -102,7 +111,16 @@
 
   document.fonts.ready.then(() => {
     if (reduced.matches) return;
-    root.querySelectorAll('.about-introduction h2,.landing-about-copy p,.about-services p,.principles h2,.principles blockquote,.principle-card h3').forEach(el => prepare(el, false));
+    root.querySelectorAll('.about-introduction h2,.landing-about-copy p,.about-services p,.principles h2,.principles blockquote').forEach(el => prepare(el, false));
+    root.querySelectorAll('.principle-card').forEach(card => {
+      // Reveal the complete card; its heading and copy remain plain text.
+      card.classList.add('card-reveal');
+      entries.push({element:card,pieces:[],typing:false,trigger:card});
+      const bounds=card.getBoundingClientRect();
+      if(scrollY>0&&bounds.top<innerHeight&&bounds.bottom>0)card.classList.add('text-entered','text-instant');
+      observer.observe(card);
+      exitObserver.observe(card);
+    });
     root.querySelectorAll('.about-services h3').forEach(el => prepare(el, true));
     root.querySelectorAll('.about-services article').forEach(article => {
       const number = article.querySelector(':scope > span');
@@ -115,6 +133,11 @@
         entries.push({element: article, pieces: [], typing: false, trigger: paragraph});
       }
     });
+    if(typeof ResizeObserver!=='undefined'){
+      const dividerObserver=new ResizeObserver(records=>records.forEach(record=>setDividerAnchors(record.target)));
+      root.querySelectorAll('.about-services article').forEach(article=>dividerObserver.observe(article));
+    }
+    document.fonts.addEventListener('loadingdone',()=>root.querySelectorAll('.about-services article').forEach(setDividerAnchors));
   });
   let resizeFrame;
   addEventListener('resize', () => {

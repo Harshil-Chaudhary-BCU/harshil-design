@@ -58,3 +58,12 @@
 .is-vertical .resume-entry ul{margin-top:20px}
 .is-vertical .resume-entry{text-align:left}
 .is-vertical .resume-entry ul{padding-left:17px;padding-right:0;direction:ltr}
+/* Unlike hidden, clip does not turn body into a competing sticky scroll root. */
+@supports(overflow:clip){body{overflow-x:clip}}
+@media(max-width:1100px) and (max-height:559px){
+  .is-animated .resume-stage{padding-top:24px}
+  .is-animated .resume-heading{flex-direction:row;align-items:center;gap:16px}
+  .is-animated .resume-heading h2{font-size:34px}
+  .is-animated .resume-kicker{margin-bottom:6px}
+  .is-animated .resume-guide{bottom:12px;font-size:10px}
+}

@@ -36,8 +36,8 @@
   }
   function tick(time){
     frame=0;
-    const progress=Math.min(1,(time-animationStart)/650);
-    const ease=1-Math.pow(1-progress,3);
+    const progress=Math.min(1,(time-animationStart)/450);
+    const ease=progress*progress*(3-2*progress);
     position=animationFrom+(target-animationFrom)*ease;
     if(progress===1){position=target;render();return;}
     render();frame=requestAnimationFrame(tick);
@@ -75,28 +75,38 @@
     render();
   }
   stage.addEventListener('pointerdown',event=>{
-    if(!event.isPrimary||event.button!==0)return;
-    pointer=event.pointerId;startX=event.clientX;startY=event.clientY;startPosition=Math.round(target);moved=false;dragging=false;
+    if(!event.isPrimary||event.button!==0||pointer!==null)return;
+    cancelAnimationFrame(frame);frame=0;
+    // Continue from the visible position, including an interrupted button animation.
+    target=position;
+    pointer=event.pointerId;startX=event.clientX;startY=event.clientY;startPosition=position;moved=false;dragging=false;
+    stage.setPointerCapture(pointer);
   });
   stage.addEventListener('pointermove',event=>{
     if(event.pointerId!==pointer)return;
     const dx=event.clientX-startX,dy=event.clientY-startY;
     if(!dragging){
-      if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>8){pointer=null;return;}
+      if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>8){
+        const id=pointer;pointer=null;
+        if(stage.hasPointerCapture(id))stage.releasePointerCapture(id);
+        return;
+      }
       if(Math.abs(dx)<6)return;
-      dragging=true;moved=true;stage.setPointerCapture(pointer);stage.classList.add('is-dragging');
-      cancelAnimationFrame(frame);frame=0;
+      dragging=true;moved=true;stage.classList.add('is-dragging');
     }
-    position=startPosition-Math.max(-1,Math.min(1,dx/step));render();
+    position=startPosition-Math.max(-1,Math.min(1,dx/step));target=position;render();
   });
   function release(event){
     if(event.pointerId!==pointer)return;
-    pointer=null;stage.classList.remove('is-dragging');
+    const id=pointer;pointer=null;stage.classList.remove('is-dragging');
+    if(stage.hasPointerCapture(id))stage.releasePointerCapture(id);
     if(dragging){
       suppressClick=event.type==='pointerup'&&moved;dragging=false;
-      // A deliberate drag advances one slot without a magnetic halfway threshold.
-      const direction=Math.sign(startX-event.clientX);
-      settle(event.type==='pointerup'?startPosition+direction:startPosition);
+      // A swipe selects exactly one adjacent position. No nearest-slot magnet,
+      // velocity threshold, resistance, or spring competes with the pointer.
+      const distance=(startPosition-position)*step;
+      const completed=event.type==='pointerup'&&Math.abs(distance)>=24;
+      settle(Math.round(startPosition)+(completed?(distance<0?1:-1):0));
     }
   }
   stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);
