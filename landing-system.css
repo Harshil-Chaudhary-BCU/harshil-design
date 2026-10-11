@@ -135,10 +135,10 @@ footer.connect-footer{padding-top:clamp(150px,20svh,220px)}
   .compact-menu-panel a.active::before{opacity:1}
   .compact-menu-panel a.active .nav-star{background:linear-gradient(to right,var(--portfolio-charcoal) 0 var(--star-fill,0%),var(--accent) var(--star-fill,0%) 100%)}
   .compact-menu-toggle:focus-visible,.compact-menu-panel a:focus-visible{outline:2px solid var(--accent);outline-offset:6px}
-  .landing-stage .hero{padding-bottom:max(24px,env(safe-area-inset-bottom));align-items:end}
+  .landing-stage .hero{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));align-items:end}
   .landing-stage .hero-copy{width:calc(100% - 48px);max-width:100%;padding:0}
   .landing-stage .hero-copy h1{font-size:clamp(20px,3.2vw,36px);max-width:none}
-  .landing-stage .hero-scroll{right:var(--system-edge);bottom:max(24px,env(safe-area-inset-bottom));width:32px;min-height:48px;justify-content:center;gap:0}
+  .landing-stage .hero-scroll{right:var(--system-edge);bottom:calc(24px + env(safe-area-inset-bottom,0px));width:32px;min-height:48px;justify-content:center;gap:0}
   .landing-stage .hero-scroll>span:first-child{display:none}
   .landing-stage .hero-scroll-line{--line-height:48px}
 }
