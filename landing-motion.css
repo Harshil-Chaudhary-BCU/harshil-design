@@ -11,6 +11,10 @@
 .hc-monogram-canvas{position:absolute;inset:0;pointer-events:none;transform-origin:0% 100%;transform:translate3d(var(--hc-depth-x,0px),var(--hc-depth-y,0px),0) scale(var(--hc-depth-scale,1));will-change:transform}
 .hc-monogram-canvas canvas{width:100%;height:100%;display:block}
 .hc-model-canvas{inset:0;z-index:0;pointer-events:none}
+.hc-static-logo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.hc-static-logo[hidden]{display:none}
+.hc-static-art{position:absolute;left:50%;top:50%;width:min(64%,1000px);height:auto;overflow:visible;transform:translate(-50%,-50%) scale(var(--hc-depth-scale,1));transform-origin:center}
+.hc-static-glass{position:absolute;inset:0;background:repeating-linear-gradient(145deg,transparent 0 15px,#00000018 16px,#ffffff08 17px,transparent 19px)}
 .landing-stage .hero{background:#F9F8F4;isolation:isolate}
 .landing-stage .hero::after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(to right,#7154370a,transparent 9% 91%,#7154370a),linear-gradient(to bottom,#7154370a,transparent 10% 90%,#7154370a),radial-gradient(ellipse at center,transparent 62%,#63492f08 100%)}
 .landing-stage .hero-copy{z-index:3}

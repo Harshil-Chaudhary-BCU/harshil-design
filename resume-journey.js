@@ -16,7 +16,7 @@
   let frame=0,width=0,rowHeight=0,maxX=0,endX=0,length=0,topLength=0,turnLength=0;
   let vertical=false,animated=false,maxY=0,educationStart=0;
   let verticalBreakStart=0,verticalBreakEnd=0;
-  let educationLength=0;
+  let educationLength=0,measureFrame=0;
   function update(){
     frame=0;if(!animated)return;
     if(guide&&contact){
@@ -26,7 +26,7 @@
       guide.setAttribute('aria-hidden',String(opacity===0));
     }
     const start=section.getBoundingClientRect().top+scrollY;
-    const p=clamp((scrollY-start)/(section.offsetHeight-stage.offsetHeight));
+    const p=clamp((scrollY-start)/Math.max(1,section.offsetHeight-stage.offsetHeight));
     // Activate vertical entries at the visual middle, below the fixed controls.
     const entryTop=parseFloat(section.style.getPropertyValue('--resume-entry-top'))||0;
     const clipTop=parseFloat(section.style.getPropertyValue('--resume-clip-top'))||210;
@@ -71,9 +71,9 @@
   }
   function measure(){
     vertical=innerWidth<=1100;
-    // A pinned header cannot leave enough reading space in short landscape
-    // windows. Use the accessible normal-flow layout there, as for reduced motion.
-    animated=media.matches&&innerHeight>=560;
+    // Browser chrome and rotation can shorten a touch viewport. They must not
+    // switch off the pinned journey halfway through a scroll.
+    animated=media.matches;
     section.classList.toggle('is-animated',animated);
     section.classList.toggle('is-vertical',animated&&vertical);
     educationDraw.style.display=animated&&vertical?'':'none';
@@ -84,8 +84,9 @@
     const pad=edgeFade+20;
     if(vertical){
       const heading=section.querySelector('.resume-heading');
-      const clipTop=Math.max(210,heading.offsetTop+heading.offsetHeight+20);
-      const entryTop=clipTop+48;
+      const shortViewport=stage.offsetHeight<560;
+      const clipTop=Math.max(shortViewport?120:210,heading.offsetTop+heading.offsetHeight+20);
+      const entryTop=clipTop+(shortViewport?32:48);
       width=Math.min(600,Math.max(160,contentWidth-pad-edgeFade-36));
       section.style.setProperty('--resume-card-width',`${width}px`);
       section.style.setProperty('--resume-clip-top',`${clipTop}px`);
@@ -159,6 +160,24 @@
     update();
   }
   function schedule(){if(!frame)frame=requestAnimationFrame(update);}
-  addEventListener('scroll',schedule,{passive:true});addEventListener('resize',measure);media.addEventListener('change',measure);
-  document.fonts.ready.then(measure);measure();
+  function scheduleMeasure(){
+    if(!measureFrame)measureFrame=requestAnimationFrame(()=>{measureFrame=0;measure();});
+  }
+  addEventListener('scroll',schedule,{passive:true});
+  addEventListener('resize',scheduleMeasure);
+  addEventListener('pageshow',scheduleMeasure);
+  media.addEventListener('change',scheduleMeasure);
+  // Mobile browser bars and returning from the back-forward cache can change
+  // the reading area without a fresh page load.
+  window.visualViewport?.addEventListener('resize',scheduleMeasure);
+  if(typeof ResizeObserver!=='undefined'){
+    let previousSize='';
+    const observer=new ResizeObserver(()=>{
+      const size=`${stage.clientWidth}:${stage.clientHeight}:${section.querySelector('.resume-heading').offsetHeight}`;
+      if(size!==previousSize){previousSize=size;scheduleMeasure();}
+    });
+    observer.observe(stage);
+    observer.observe(section.querySelector('.resume-heading'));
+  }
+  document.fonts.ready.then(scheduleMeasure);measure();
 })();
