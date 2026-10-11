@@ -24,11 +24,14 @@ export async function mountHCLogo(container, {
   zIndex = 0,
   fitContainer = false,
   contentMaxWidth = null,
-  responsiveLogoScale = false
+  responsiveLogoScale = false,
+  interactive = true,
+  particleStride = 1,
+  maxFPS = 60
 } = {}) {
   if (!(container instanceof HTMLElement)) throw new TypeError('An HTML mount element is required.');
   const scene = new THREE.Scene();
-  const renderer = new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
+  const renderer = new THREE.WebGLRenderer({alpha:true,antialias:interactive,powerPreference:interactive?'high-performance':'low-power'});
   renderer.setClearColor(0x000000,0);
   renderer.outputColorSpace=THREE.SRGBColorSpace;
   renderer.toneMapping=THREE.NoToneMapping;
@@ -36,7 +39,7 @@ export async function mountHCLogo(container, {
   // A body-level viewport layer escapes clipping/overflow on the mount element.
   canvas.style.cssText=`position:fixed;left:0;top:0;display:block;background:transparent;pointer-events:none;z-index:${zIndex};`;
   canvas.setAttribute('role','img');
-  canvas.setAttribute('aria-label',`${rotationMode === 'sway' ? 'Gently swaying' : 'Automatically rotating'} HC logo with gently flowing particles and soft light. Hold the left mouse button and drag through the letters to distort them. Release to let the particles return.`);
+  canvas.setAttribute('aria-label',`${rotationMode === 'sway' ? 'Gently swaying' : 'Automatically rotating'} HC logo with gently flowing particles and soft light.${interactive?' Hold the left mouse button and drag through the letters to distort them. Release to let the particles return.':''}`);
   container.appendChild(canvas);
   canvas.style.position='absolute';
   const glass=glassEffect?createGlass(renderer):null;
@@ -61,6 +64,13 @@ export async function mountHCLogo(container, {
   const parts=[];
   gltf.scene.traverse(mesh=>{
     if(!mesh.isInstancedMesh)return;
+    // Touch keeps the original letter shape/motion with half the rendered beads.
+    const stride=Math.max(1,Math.floor(particleStride));
+    if(stride>1){
+      const matrix=mesh.instanceMatrix.array,count=Math.ceil(mesh.count/stride);
+      for(let i=0;i<count;i++)matrix.copyWithin(i*16,i*stride*16,i*stride*16+16);
+      mesh.count=count;
+    }
     // Keep every bead, but do not subdivide its subpixel silhouette behind glass.
     mesh.geometry.computeBoundingSphere();
     const beadBounds=mesh.geometry.boundingSphere;
@@ -92,6 +102,7 @@ export async function mountHCLogo(container, {
   const beadGeometry=parts[0].mesh.geometry;
   const trianglesPerParticle=(beadGeometry.index?.count||beadGeometry.attributes.position.count)/3;
   canvas.dataset.trianglesPerParticle=String(trianglesPerParticle);
+  canvas.dataset.interactive=String(interactive);
   let halfWidth=6.1,halfHeight=3,width=1,height=1;
   let sceneScale=1,deviceScale=1;
   let disposed=false,raf=0,lastTime=0,frames=0,simulationTime=0;
@@ -166,12 +177,17 @@ export async function mountHCLogo(container, {
     recordMove(event);
   }
   function leaveDocument(event){if(event.relatedTarget==null)resetPointer();}
-  pointerTarget.addEventListener('pointermove',movePointer,true);
-  pointerTarget.addEventListener('pointerdown',beginDrag,true);
-  pointerTarget.addEventListener('pointerup',resetPointer,true);
-  pointerTarget.addEventListener('pointercancel',resetPointer,true);
-  document.documentElement.addEventListener('pointerleave',leaveDocument);
-  window.addEventListener('blur',resetPointer);
+  if(interactive){
+    pointerTarget.addEventListener('pointermove',movePointer,true);
+    pointerTarget.addEventListener('pointerdown',beginDrag,true);
+    pointerTarget.addEventListener('pointerup',resetPointer,true);
+    pointerTarget.addEventListener('pointercancel',resetPointer,true);
+    document.documentElement.addEventListener('pointerleave',leaveDocument);
+    window.addEventListener('blur',resetPointer);
+  }
+  let visible=true;
+  const visibilityObserver=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;});
+  visibilityObserver.observe(container);
   function segmentPoint(x,y,motion){
     const dx=motion.bx-motion.ax,dy=motion.by-motion.ay;
     return THREE.MathUtils.clamp(((x-motion.ax)*dx+(y-motion.ay)*dy)/(dx*dx+dy*dy||1),0,1);
@@ -316,9 +332,9 @@ export async function mountHCLogo(container, {
   }
   function frame(now){
     if(disposed)return;raf=requestAnimationFrame(frame);
-    if(document.hidden||container.closest('[inert]')){lastTime=now;resetPointer();return;}
+    if(document.hidden||!visible||container.closest('[inert]')){lastTime=now;resetPointer();return;}
     // Leave headroom for native scroll and the portal's DOM animation.
-    const interval=coarse.matches||width<=1100||transitionActive?1000/30:1000/60;
+    const interval=1000/Math.min(maxFPS,coarse.matches||width<=1100||transitionActive?30:60);
     if(now-lastRendered<interval-1)return;
     lastRendered=now;
     const dt=Math.min(.033,Math.max(0,(now-(lastTime||now))/1000));lastTime=now;
@@ -393,6 +409,7 @@ export async function mountHCLogo(container, {
       return {quality:'HD',interaction:'movement-only',motionStyle:'directional-wake',wakeDurationMs:wakeDuration*1000,wakeParticles,wakeAlignment:wakeAlignment/Math.max(1,wakeParticles),wakeForwardSpeed:wakeForwardSpeed/Math.max(1,wakeParticles),wakeLateralSpeed:wakeLateralSpeed/Math.max(1,wakeParticles),releasedParticles,releasedLateralSpeed:releasedLateralSpeed/Math.max(1,releasing),idleMotion:'liquid',innerLight:true,glowStrength,liquidAmplitude,maxLiquidDisplacement,liquidSamples,glowing,maxGlow,lightWaves:lightWaves.length,fullViewport:true,edgePaddingPixels:0,edgeGapPixels,edgeContacts:{...edgeContacts},viewport:[width,height],bounds:[halfWidth,halfHeight],pixelRatio:renderer.getPixelRatio(),renderSize:[canvas.width,canvas.height],trianglesPerParticle:parts[0].mesh.geometry.index.count/3,strokeId,particles:parts.reduce((n,p)=>n+p.mesh.count,0),displaced,maxDisplacement,boundaryHits,outsideViewport,pointerSpeed,motionStrength,activeMotions,hit:lastHit,rotation:pivot.quaternion.toArray(),clipTime:action.time,frames,transparent:renderer.getClearAlpha()===0,drawCalls:renderer.info.render.calls,colors:parts.map(p=>({name:p.mesh.name,hex:'#'+p.mesh.material.color.getHexString()}))};
     },
     dispose(){
+      visibilityObserver.disconnect();
       if(disposed)return;disposed=true;cancelAnimationFrame(raf);
       window.removeEventListener('resize',resize);window.visualViewport?.removeEventListener('resize',resize);window.visualViewport?.removeEventListener('scroll',resize);window.removeEventListener('blur',resetPointer);
       pointerTarget.removeEventListener('pointermove',movePointer,true);pointerTarget.removeEventListener('pointerdown',beginDrag,true);pointerTarget.removeEventListener('pointerup',resetPointer,true);pointerTarget.removeEventListener('pointercancel',resetPointer,true);document.documentElement.removeEventListener('pointerleave',leaveDocument);

@@ -416,8 +416,7 @@ function schedule(){if(!queued)queued=requestAnimationFrame(update)}
 visualViewport?.addEventListener('resize',schedule,{passive:true});
 addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pageshow',schedule);addEventListener('hashchange',()=>setTimeout(update,250));reduced.addEventListener('change',schedule);update();setTimeout(update,250);
 
-// A static vector is the default, so touch devices never fetch Three.js or GLB.
-// maxTouchPoints also covers iPads using desktop mode or an attached trackpad.
+// Keep a lightweight fallback while the model loads or for reduced motion.
 const staticLogo=document.createElement('div');
 staticLogo.className='hc-static-logo';
 staticLogo.setAttribute('role','img');
@@ -434,8 +433,9 @@ staticLogo.querySelector('image').setAttribute('href',staticAsset);
 hero.prepend(staticLogo);
 hero.querySelector('.hero-mark').dataset.rendered='true';
 const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
-async function setupDesktopLogo(){
-  if(!finePointer.matches||navigator.maxTouchPoints>0||reduced.matches){
+async function setupHeroLogo(){
+  const touch=!finePointer.matches||navigator.maxTouchPoints>0;
+  if(reduced.matches){
     try{
       const {renderTouchGlass}=await import('./touch-hc-glass.js?v=diagonal-refraction-1');
       await renderTouchGlass(staticLogo,staticAsset);
@@ -444,12 +444,12 @@ async function setupDesktopLogo(){
   }
   let logoHost;
   try{
-    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=zoom-aware-boundaries-12');
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=touch-idle-model-13');
     logoHost=document.createElement('div');
     logoHost.className='hc-monogram-canvas hc-model-canvas';
     logoHost.style.transform='none';
     hero.prepend(logoHost);
-    logoController=await mountHCLogo(logoHost,{rotationMode:'sway',glassEffect:true,contentMaxWidth:1600,responsiveLogoScale:true,liquidAmplitude:.145,liquidSpeed:1.15});
+    logoController=await mountHCLogo(logoHost,{rotationMode:'sway',glassEffect:true,contentMaxWidth:1600,responsiveLogoScale:true,liquidAmplitude:.145,liquidSpeed:1.15,interactive:!touch,particleStride:touch?2:1,maxFPS:touch?30:60,...(touch?{pixelRatio:1}:{})});
     staticLogo.hidden=true;
     update();
   }catch(error){
@@ -457,4 +457,4 @@ async function setupDesktopLogo(){
     console.warn('Using lightweight HC fallback',error);
   }
 }
-setupDesktopLogo();
+setupHeroLogo();
