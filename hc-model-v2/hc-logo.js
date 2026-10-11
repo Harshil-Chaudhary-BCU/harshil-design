@@ -143,8 +143,10 @@ export async function mountHCLogo(container, {
     const pixelX=event.clientX-pointer.clientX,pixelY=event.clientY-pointer.clientY;
     if(Math.hypot(pixelX,pixelY)<.15)return;
     const rect=canvas.getBoundingClientRect();
-    const ax=((pointer.clientX-rect.left)/rect.width*2-1)*halfWidth,ay=(1-(pointer.clientY-rect.top)/rect.height*2)*halfHeight;
-    const bx=((event.clientX-rect.left)/rect.width*2-1)*halfWidth,by=(1-(event.clientY-rect.top)/rect.height*2)*halfHeight;
+    // Orthographic zoom changes the visible world, not the canvas dimensions.
+    const viewHalfWidth=halfWidth/camera.zoom,viewHalfHeight=halfHeight/camera.zoom;
+    const ax=((pointer.clientX-rect.left)/rect.width*2-1)*viewHalfWidth,ay=(1-(pointer.clientY-rect.top)/rect.height*2)*viewHalfHeight;
+    const bx=((event.clientX-rect.left)/rect.width*2-1)*viewHalfWidth,by=(1-(event.clientY-rect.top)/rect.height*2)*viewHalfHeight;
     const dt=THREE.MathUtils.clamp((event.timeStamp-pointer.time)/1000,.004,.08);
     const distance=Math.hypot(bx-ax,by-ay),speed=distance/dt;
     const strength=Math.pow(THREE.MathUtils.clamp((speed-.12)/22,0,3),1.1);
@@ -271,7 +273,7 @@ export async function mountHCLogo(container, {
         let wx=c*(a[j]+ox+f[j])+s*(a[j+2]+oz+f[j+2]),wy=a[j+1]+oy+f[j+1],wz=-s*(a[j]+ox+f[j])+c*(a[j+2]+oz+f[j+2]);
         let wvx=c*vx+s*vz,wvz=-s*vx+c*vz;
         // No viewport inset: the bead's outer surface can touch the actual edge.
-        const limitX=halfWidth-part.screenRadii[i*2],limitY=halfHeight-part.screenRadii[i*2+1];
+        const limitX=halfWidth/camera.zoom-part.screenRadii[i*2],limitY=halfHeight/camera.zoom-part.screenRadii[i*2+1];
         let collided=false;
         if(wx>limitX){wx=limitX;wvx=-Math.abs(wvx)*boundaryRestitution;collided=true;edgeContacts.right++;}
         else if(wx<-limitX){wx=-limitX;wvx=Math.abs(wvx)*boundaryRestitution;collided=true;edgeContacts.left++;}
@@ -345,7 +347,7 @@ export async function mountHCLogo(container, {
       physicsActive=parts.some(part=>part.offset.some(value=>value!==0)||part.velocity.some(value=>value!==0)||part.wake.remaining.some(value=>value>0)||part.wake.cooldown.some(value=>value>0));
     }
     if(lightActive){
-      ({glowing,maxGlow}=updateInnerLight(parts,lightWaves,simulationTime,dt,glowDecay,renderer.getPixelRatio()*height/(halfHeight*2)));
+      ({glowing,maxGlow}=updateInnerLight(parts,lightWaves,simulationTime,dt,glowDecay,renderer.getPixelRatio()*height*camera.zoom/(halfHeight*2)));
       lightActive=lightWaves.length>0||maxGlow>=.001;
     }
     syncParticles();
@@ -368,16 +370,17 @@ export async function mountHCLogo(container, {
     getState(){
       const m=pivot.matrixWorld.elements;let outsideViewport=0;
       let wakeParticles=0,wakeAlignment=0,wakeForwardSpeed=0,wakeLateralSpeed=0,releasedLateralSpeed=0,releasing=0;
-      const edgeGapPixels={left:Infinity,right:Infinity,top:Infinity,bottom:Infinity},pixelsX=width/(2*halfWidth),pixelsY=height/(2*halfHeight);
+      const viewHalfWidth=halfWidth/camera.zoom,viewHalfHeight=halfHeight/camera.zoom;
+      const edgeGapPixels={left:Infinity,right:Infinity,top:Infinity,bottom:Infinity},pixelsX=width/(2*viewHalfWidth),pixelsY=height/(2*viewHalfHeight);
       for(const part of parts){
         const a=part.rest,o=part.offset,f=part.life.flow,r=part.screenRadii;
         for(let i=0;i<part.mesh.count;i++){
           const j=i*3,x=m[0]*(a[j]+o[j]+f[j])+m[8]*(a[j+2]+o[j+2]+f[j+2]),y=a[j+1]+o[j+1]+f[j+1],rx=r[i*2],ry=r[i*2+1];
-          if(Math.abs(x)>halfWidth-rx+.001||Math.abs(y)>halfHeight-ry+.001)outsideViewport++;
-          edgeGapPixels.left=Math.min(edgeGapPixels.left,(halfWidth+x-rx)*pixelsX);
-          edgeGapPixels.right=Math.min(edgeGapPixels.right,(halfWidth-x-rx)*pixelsX);
-          edgeGapPixels.top=Math.min(edgeGapPixels.top,(halfHeight-y-ry)*pixelsY);
-          edgeGapPixels.bottom=Math.min(edgeGapPixels.bottom,(halfHeight+y-ry)*pixelsY);
+          if(Math.abs(x)>viewHalfWidth-rx+.001||Math.abs(y)>viewHalfHeight-ry+.001)outsideViewport++;
+          edgeGapPixels.left=Math.min(edgeGapPixels.left,(viewHalfWidth+x-rx)*pixelsX);
+          edgeGapPixels.right=Math.min(edgeGapPixels.right,(viewHalfWidth-x-rx)*pixelsX);
+          edgeGapPixels.top=Math.min(edgeGapPixels.top,(viewHalfHeight-y-ry)*pixelsY);
+          edgeGapPixels.bottom=Math.min(edgeGapPixels.bottom,(viewHalfHeight+y-ry)*pixelsY);
           if(part.wake.remaining[i]>0||part.wake.cooldown[i]>0){
             const v=part.velocity,wx=m[0]*v[j]+m[8]*v[j+2],wy=v[j+1],wz=-m[8]*v[j]+m[0]*v[j+2];
             const forward=wx*part.wake.direction[i*2]+wy*part.wake.direction[i*2+1],speed2=wx*wx+wy*wy+wz*wz,lateral=Math.sqrt(Math.max(0,speed2-forward*forward));
