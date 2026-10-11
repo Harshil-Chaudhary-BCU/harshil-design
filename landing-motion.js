@@ -15,6 +15,19 @@ const compactNavigation=document.querySelector('.compact-menu');
 const landingMetadata=[...document.querySelectorAll('.site-header .identity,.site-header .meta')];
 const aboutIntroduction=document.querySelector('.landing-about .about-introduction');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let heroViewportHeight=innerHeight;
+let appliedHeroViewportHeight=0;
+function syncHeroViewport(){
+  const viewport=visualViewport;
+  // Browser chrome can overlay the layout viewport. Do not resize for pinch zoom.
+  if(viewport&&Math.abs(viewport.scale-1)>.01)return;
+  const height=Math.round(Math.min(innerHeight,viewport?.height||innerHeight));
+  if(height<=0||height===appliedHeroViewportHeight)return;
+  appliedHeroViewportHeight=height;
+  heroViewportHeight=height;
+  document.documentElement.style.setProperty('--hero-viewport-height',`${height}px`);
+}
+syncHeroViewport();
 // Center the actual letter outlines, including the script's long d flourish,
 // rather than its advance-width box. Give SVG paint bounds generous breathing room.
 const word=reveal.querySelector(':scope > span');
@@ -68,13 +81,13 @@ function stopContentScroll(){
   contentScrollTarget=scrollY;
 }
 function contentBoundary(){
-  return scrollY+sequence.getBoundingClientRect().top+Math.max(1,sequence.offsetHeight-innerHeight);
+  return scrollY+sequence.getBoundingClientRect().top+Math.max(1,sequence.offsetHeight-heroViewportHeight);
 }
 function animateContentScroll(now){
   const dt=Math.min(64,Math.max(1,now-contentScrollPrevious));
   contentScrollPrevious=now;
   const boundary=contentBoundary();
-  const maximum=Math.max(boundary,document.documentElement.scrollHeight-innerHeight);
+  const maximum=Math.max(boundary,document.documentElement.scrollHeight-heroViewportHeight);
   contentScrollTarget=Math.max(boundary,Math.min(maximum,contentScrollTarget));
   const distance=contentScrollTarget-scrollY;
   // About a second of soft settling, with the same response at 60/120Hz.
@@ -86,7 +99,7 @@ function animateContentScroll(now){
   if(contentScrollTarget<=boundary+.5&&next<=boundary+.6&&distance<0){
     contentScrollFrame=0;
     scrollTo({top:boundary,behavior:'instant'});
-    snapOpening(boundary-Math.max(1,sequence.offsetHeight-innerHeight),true);
+    snapOpening(boundary-Math.max(1,sequence.offsetHeight-heroViewportHeight),true);
     return;
   }
   if(Math.abs(contentScrollTarget-next)>.5)contentScrollFrame=requestAnimationFrame(animateContentScroll);
@@ -103,10 +116,10 @@ function smoothContentWheel(event){
   });
   if(nested)return;
   event.preventDefault();
-  const unit=event.deltaMode===1?16:event.deltaMode===2?innerHeight:1;
+  const unit=event.deltaMode===1?16:event.deltaMode===2?heroViewportHeight:1;
   if(!contentScrollFrame){contentScrollTarget=scrollY;contentScrollPrevious=performance.now()}
   const boundary=contentBoundary();
-  const maximum=Math.max(boundary,document.documentElement.scrollHeight-innerHeight);
+  const maximum=Math.max(boundary,document.documentElement.scrollHeight-heroViewportHeight);
   // Keep normal scroll distance. Smooth the motion, not the amount of travel.
   contentScrollTarget=Math.max(boundary,Math.min(maximum,contentScrollTarget+event.deltaY*unit));
   if(!contentScrollFrame)contentScrollFrame=requestAnimationFrame(animateContentScroll);
@@ -130,7 +143,7 @@ function snapOpening(destination,lockReturn=false){
   returnLocked=lockReturn;
   magneticArmed=false;
   const start=scrollY, distance=destination-start;
-  const travel=Math.max(1,sequence.offsetHeight-innerHeight);
+  const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
   const returnStop=destination+travel*magneticThreshold;
   const sequenceStart=scrollY+sequence.getBoundingClientRect().top;
   const lowerStop=sequenceStart+travel*magneticThreshold;
@@ -179,7 +192,7 @@ function settleOpening(){
   if(reduced.matches||magneticFrame||touchActive||!magneticInteracted)return;
   magneticIdle=setTimeout(()=>{
     const start=scrollY+sequence.getBoundingClientRect().top;
-    const travel=Math.max(1,sequence.offsetHeight-innerHeight);
+    const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
     const p=(scrollY-start)/travel;
     if(p>.002&&p<.998)snapOpening(start+(magneticArmed&&p>=magneticThreshold?travel:0));
   },420);
@@ -207,7 +220,7 @@ function smoothOpeningWheel(event){
   magneticInteracted=true;
   if(!reduced.matches&&!magneticFrame&&event.deltaY>0){
     const start=scrollY+sequence.getBoundingClientRect().top;
-    const travel=Math.max(1,sequence.offsetHeight-innerHeight);
+    const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
     if(scrollY>=start&&scrollY<start+travel*magneticThreshold){
       event.preventDefault();
       cancelMagnet();
@@ -217,7 +230,7 @@ function smoothOpeningWheel(event){
   }
   if(openingScrollComplete&&!reduced.matches&&event.deltaY<0){
     const start=scrollY+sequence.getBoundingClientRect().top;
-    const end=start+Math.max(1,sequence.offsetHeight-innerHeight);
+    const end=start+Math.max(1,sequence.offsetHeight-heroViewportHeight);
     if(scrollY>start&&scrollY<=end+1){
       event.preventDefault();
       cancelMagnet();
@@ -235,10 +248,10 @@ function smoothOpeningWheel(event){
   }
   if(reduced.matches||event.ctrlKey)return;
   if(openingScrollComplete&&scrollY>=contentBoundary()-1){smoothContentWheel(event);return}
-  const travel=Math.max(1,sequence.offsetHeight-innerHeight);
+  const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
   if(scrollY>=travel-1){finishOpeningScroll();return}
   event.preventDefault();
-  const unit=event.deltaMode===1?16:event.deltaMode===2?innerHeight:1;
+  const unit=event.deltaMode===1?16:event.deltaMode===2?heroViewportHeight:1;
   openingScrollTarget=Math.max(0,Math.min(travel,openingScrollTarget+event.deltaY*unit*openingScrollScale));
   if(!openingScrollFrame)openingScrollFrame=requestAnimationFrame(animateOpeningScroll);
   if(openingScrollTarget>=travel&&scrollY>=travel-2)finishOpeningScroll();
@@ -251,7 +264,7 @@ addEventListener('touchmove',event=>{
   if(returnLocked||descentLocked){event.preventDefault();return}
   const y=event.touches[0]?.clientY;
   const start=scrollY+sequence.getBoundingClientRect().top;
-  const travel=Math.max(1,sequence.offsetHeight-innerHeight);
+  const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
   if(!reduced.matches&&!magneticFrame&&y<openingTouchY-4&&scrollY>=start&&scrollY<start+travel*magneticThreshold){
     event.preventDefault();cancelMagnet();snapOpening(start+travel);
   }
@@ -271,7 +284,7 @@ let lastOpeningScrollY=scrollY;
 addEventListener('scroll',()=>{
   const current=scrollY;
   const start=current+sequence.getBoundingClientRect().top;
-  const end=start+Math.max(1,sequence.offsetHeight-innerHeight);
+  const end=start+Math.max(1,sequence.offsetHeight-heroViewportHeight);
   if(!returnLocked&&!magneticFrame&&openingScrollComplete&&!reduced.matches&&
      magneticInteracted&&current<lastOpeningScrollY&&lastOpeningScrollY>=end-1&&current<end){
     cancelMagnet();
@@ -291,12 +304,13 @@ addEventListener('scroll',()=>{
 },{passive:true});
 function update(){
   queued=0;
+  syncHeroViewport();
   // Read layout once, before changing the portal/header styles. Interleaving
   // offset reads with those writes forced multiple layouts in one scroll frame.
   const sequenceRect=sequence.getBoundingClientRect();
   const aboutTop=aboutIntroduction.getBoundingClientRect().top;
   const exitBounds=new Map([...landingMetadata,navigation,heroCopy,...(scrollCue?[scrollCue]:[])].map(element=>[element,{left:element.offsetLeft,top:element.offsetTop,width:element.offsetWidth,height:element.offsetHeight}]));
-  const travel=sequence.offsetHeight-innerHeight;
+  const travel=sequence.offsetHeight-heroViewportHeight;
   progress=reduced.matches?0:Math.max(0,Math.min(1,-sequenceRect.top/Math.max(1,travel)));
   if(!openingScrollComplete&&progress>=.999)finishOpeningScroll();
   if(progress<.002&&!magneticFrame)magneticArmed=true;
@@ -311,7 +325,7 @@ function update(){
     const amount=reduced.matches?0:ease(growth*1.35);
     const bounds=exitBounds.get(element);
     const x=horizontal<0?-(bounds.left+bounds.width+32):innerWidth-bounds.left+32;
-    const y=vertical<0?-(bounds.top+bounds.height+32):innerHeight-bounds.top+32;
+    const y=vertical<0?-(bounds.top+bounds.height+32):heroViewportHeight-bounds.top+32;
     return `translate3d(${x*amount}px,${y*amount}px,0)`;
   };
   landingMetadata.forEach(element=>{element.style.transform=exitTransform(element,1,-1)});
@@ -348,12 +362,12 @@ function update(){
   const descent=ease(progress/.35);
   const startCenter=baseTop+19;
   // Match the reference: finish the drop around 18% of the viewport, not 1/3.
-  const destination=Math.max(startCenter,innerHeight*.178);
-  const center=startCenter+(destination-startCenter)*descent+(innerHeight/2-destination)*growth;
+  const destination=Math.max(startCenter,heroViewportHeight*.178);
+  const center=startCenter+(destination-startCenter)*descent+(heroViewportHeight/2-destination)*growth;
   const initialWidth=baseWidth*(1+.05*descent);
   const width=initialWidth+(innerWidth*1.12-initialWidth)*growth;
-  const height=38+2*descent+(innerHeight*1.16-40)*growth;
-  const radius=Math.min(height/2,23+(Math.min(innerWidth,innerHeight)*.18-23)*Math.sin(Math.PI*growth));
+  const height=38+2*descent+(heroViewportHeight*1.16-40)*growth;
+  const radius=Math.min(height/2,23+(Math.min(innerWidth,heroViewportHeight)*.18-23)*Math.sin(Math.PI*growth));
   const top=center-height/2;
   const left=(innerWidth-width)/2;
   const transitioning=progress>.005&&!reduced.matches;
@@ -375,7 +389,7 @@ function update(){
   if(progress>.38&&!reduced.matches){
     const right=left+width,bottom=top+height,r=radius;
     const hole=`M ${left+r} ${top} H ${right-r} Q ${right} ${top} ${right} ${top+r} V ${bottom-r} Q ${right} ${bottom} ${right-r} ${bottom} H ${left+r} Q ${left} ${bottom} ${left} ${bottom-r} V ${top+r} Q ${left} ${top} ${left+r} ${top} Z`;
-    hero.style.clipPath=`path(evenodd, "M 0 0 H ${innerWidth} V ${innerHeight} H 0 Z ${hole}")`;
+    hero.style.clipPath=`path(evenodd, "M 0 0 H ${innerWidth} V ${heroViewportHeight} H 0 Z ${hole}")`;
   }else hero.style.clipPath='none';
   hero.style.transform='none';
   hero.style.filter='none';
@@ -392,13 +406,14 @@ function update(){
   hero.inert=progress>=1;
   // Keep the word anchored behind About, then soften it as the About heading
   // enters the viewport. The incoming Work sequence covers it as it arrives.
-  const aboutProgress=Math.max(0,Math.min(1,(innerHeight-aboutTop)/(innerHeight*.8)));
+  const aboutProgress=Math.max(0,Math.min(1,(heroViewportHeight-aboutTop)/(heroViewportHeight*.8)));
   const aboutFade=aboutProgress*aboutProgress*(3-2*aboutProgress);
   // Fade only glyph paint, never the sticky scene or its charcoal canvas.
   word.style.opacity='1';
   word.style.setProperty('--beyond-letter-opacity',String(transitionOpacity*(1-aboutFade*.92)));
 }
 function schedule(){if(!queued)queued=requestAnimationFrame(update)}
+visualViewport?.addEventListener('resize',schedule,{passive:true});
 addEventListener('scroll',schedule,{passive:true});addEventListener('resize',schedule);addEventListener('pageshow',schedule);addEventListener('hashchange',()=>setTimeout(update,250));reduced.addEventListener('change',schedule);update();setTimeout(update,250);
 
 // A static vector is the default, so touch devices never fetch Three.js or GLB.
@@ -420,10 +435,16 @@ hero.prepend(staticLogo);
 hero.querySelector('.hero-mark').dataset.rendered='true';
 const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
 async function setupDesktopLogo(){
-  if(!finePointer.matches||navigator.maxTouchPoints>0||reduced.matches)return;
+  if(!finePointer.matches||navigator.maxTouchPoints>0||reduced.matches){
+    try{
+      const {renderTouchGlass}=await import('./touch-hc-glass.js?v=diagonal-refraction-1');
+      await renderTouchGlass(staticLogo,staticAsset);
+    }catch(error){console.warn('Using vector HC fallback',error);}
+    return;
+  }
   let logoHost;
   try{
-    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=hero-performance-11');
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=zoom-aware-boundaries-12');
     logoHost=document.createElement('div');
     logoHost.className='hc-monogram-canvas hc-model-canvas';
     logoHost.style.transform='none';
