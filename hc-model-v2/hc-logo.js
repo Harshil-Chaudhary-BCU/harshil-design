@@ -142,6 +142,9 @@ export async function mountHCLogo(container, {
   window.addEventListener('resize',resize);
   window.visualViewport?.addEventListener('resize',resize);
   window.visualViewport?.addEventListener('scroll',resize);
+  // Follow the stable hero box, rather than independently tracking browser UI.
+  const containerResize=fitContainer?new ResizeObserver(resize):null;
+  containerResize?.observe(container);
   resize();
   function resetPointer(){pointer.active=false;motions.length=0;pointerSpeed=motionStrength=0;}
   function initializePointer(event){pointer.active=true;pointer.clientX=event.clientX;pointer.clientY=event.clientY;pointer.time=event.timeStamp;}
@@ -410,6 +413,7 @@ export async function mountHCLogo(container, {
     },
     dispose(){
       visibilityObserver.disconnect();
+      containerResize?.disconnect();
       if(disposed)return;disposed=true;cancelAnimationFrame(raf);
       window.removeEventListener('resize',resize);window.visualViewport?.removeEventListener('resize',resize);window.visualViewport?.removeEventListener('scroll',resize);window.removeEventListener('blur',resetPointer);
       pointerTarget.removeEventListener('pointermove',movePointer,true);pointerTarget.removeEventListener('pointerdown',beginDrag,true);pointerTarget.removeEventListener('pointerup',resetPointer,true);pointerTarget.removeEventListener('pointercancel',resetPointer,true);document.documentElement.removeEventListener('pointerleave',leaveDocument);

@@ -17,12 +17,19 @@ const aboutIntroduction=document.querySelector('.landing-about .about-introducti
 const reduced=matchMedia('(prefers-reduced-motion: reduce)');
 let heroViewportHeight=innerHeight;
 let appliedHeroViewportHeight=0;
+let appliedHeroViewportWidth=0;
+const touchHero=navigator.maxTouchPoints>0||!matchMedia('(hover:hover) and (pointer:fine)').matches;
 function syncHeroViewport(){
   const viewport=visualViewport;
   // Browser chrome can overlay the layout viewport. Do not resize for pinch zoom.
   if(viewport&&Math.abs(viewport.scale-1)>.01)return;
   const height=Math.round(Math.min(innerHeight,viewport?.height||innerHeight));
-  if(height<=0||height===appliedHeroViewportHeight)return;
+  if(height<=0||(height===appliedHeroViewportHeight&&innerWidth===appliedHeroViewportWidth))return;
+  // Toolbar collapse is not an orientation change. Freeze the scene geometry
+  // from the first swipe until the user returns to the top of the hero.
+  if(touchHero&&appliedHeroViewportHeight&&innerWidth===appliedHeroViewportWidth&&
+     (touchActive||sequence.getBoundingClientRect().top<-1))return;
+  appliedHeroViewportWidth=innerWidth;
   appliedHeroViewportHeight=height;
   heroViewportHeight=height;
   document.documentElement.style.setProperty('--hero-viewport-height',`${height}px`);
@@ -444,12 +451,12 @@ async function setupHeroLogo(){
   }
   let logoHost;
   try{
-    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=touch-idle-model-13');
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=stable-touch-viewport-14');
     logoHost=document.createElement('div');
     logoHost.className='hc-monogram-canvas hc-model-canvas';
     logoHost.style.transform='none';
     hero.prepend(logoHost);
-    logoController=await mountHCLogo(logoHost,{rotationMode:'sway',glassEffect:true,contentMaxWidth:1600,responsiveLogoScale:true,liquidAmplitude:.145,liquidSpeed:1.15,interactive:!touch,particleStride:touch?2:1,maxFPS:touch?30:60,...(touch?{pixelRatio:1}:{})});
+    logoController=await mountHCLogo(logoHost,{rotationMode:'sway',glassEffect:true,contentMaxWidth:1600,responsiveLogoScale:true,liquidAmplitude:.145,liquidSpeed:1.15,interactive:!touch,particleStride:touch?2:1,maxFPS:touch?30:60,...(touch?{pixelRatio:1,fitContainer:true}:{})});
     staticLogo.hidden=true;
     update();
   }catch(error){
