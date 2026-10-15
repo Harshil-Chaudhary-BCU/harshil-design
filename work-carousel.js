@@ -117,9 +117,13 @@
   stage.addEventListener('dragstart',event=>event.preventDefault());
   stage.addEventListener('click',event=>{
     if(suppressClick){event.preventDefault();event.stopPropagation();suppressClick=false;return;}
-    // Let actionable controls on the active card keep their native behaviour.
-    // The drag guard above still suppresses the click generated after a swipe.
-    if(event.target.closest('a,button'))return;
+    const action=event.target.closest('a[href]');
+    if(action&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
+      event.preventDefault();
+      location.assign(action.href);
+      return;
+    }
+    if(event.target.closest('button'))return;
     const card=event.target.closest('.work-card');
     if(!card)return;
     const index=cards.indexOf(card),slot=mod(index-position+1.5,3)-1.5;
