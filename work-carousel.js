@@ -75,7 +75,7 @@
     render();
   }
   stage.addEventListener('pointerdown',event=>{
-    if(!event.isPrimary||event.button!==0||pointer!==null)return;
+    if(!event.isPrimary||event.button!==0||pointer!==null)return;\n    // Do not capture pointers that start on actionable controls; pointer\n    // capture would retarget the click to the carousel and cancel navigation.\n    if(event.target.closest('a,button'))return;
     cancelAnimationFrame(frame);frame=0;
     // Continue from the visible position, including an interrupted button animation.
     target=position;
