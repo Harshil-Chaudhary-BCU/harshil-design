@@ -75,7 +75,10 @@
     render();
   }
   stage.addEventListener('pointerdown',event=>{
-    if(!event.isPrimary||event.button!==0||pointer!==null)return;\n    // Do not capture pointers that start on actionable controls; pointer\n    // capture would retarget the click to the carousel and cancel navigation.\n    if(event.target.closest('a,button'))return;
+    if(!event.isPrimary||event.button!==0||pointer!==null)return;
+    // Do not capture pointers that start on actionable controls; pointer
+    // capture would retarget the click to the carousel and cancel navigation.
+    if(event.target.closest('a,button'))return;
     cancelAnimationFrame(frame);frame=0;
     // Continue from the visible position, including an interrupted button animation.
     target=position;
@@ -114,7 +117,14 @@
   stage.addEventListener('dragstart',event=>event.preventDefault());
   stage.addEventListener('click',event=>{
     if(suppressClick){event.preventDefault();event.stopPropagation();suppressClick=false;return;}
-    const action=event.target.closest('a[href]');\n    if(action&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){\n      event.preventDefault();\n      location.assign(action.href);\n      return;\n    }\n    if(event.target.closest('button'))return;\n    const card=event.target.closest('.work-card');
+    const action=event.target.closest('a[href]');
+    if(action&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
+      event.preventDefault();
+      location.assign(action.href);
+      return;
+    }
+    if(event.target.closest('button'))return;
+    const card=event.target.closest('.work-card');
     if(!card)return;
     const index=cards.indexOf(card),slot=mod(index-position+1.5,3)-1.5;
     if(Math.abs(slot)>.1)event.preventDefault();
