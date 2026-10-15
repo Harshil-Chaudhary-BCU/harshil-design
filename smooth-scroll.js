@@ -84,7 +84,8 @@
     const start = scrollY;
     const isChapterLink = control.closest('.case-rail') || control.closest('.process-track h3');
     const anchor = isChapterLink ? destination.closest('.chapter') || destination : destination;
-    const finish = Math.max(0, Math.min(documentTop(anchor), document.documentElement.scrollHeight - innerHeight));
+    const inset = parseFloat(getComputedStyle(anchor).scrollMarginTop) || 0;
+    const finish = Math.max(0, Math.min(documentTop(anchor) - inset, document.documentElement.scrollHeight - innerHeight));
     const distance = finish - start;
 
     if (href?.startsWith('#')) history.pushState(null, '', href);
