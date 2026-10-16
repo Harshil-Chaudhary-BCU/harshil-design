@@ -7,11 +7,12 @@
 .hc-drag-cursor::before{left:-16.8px}.hc-drag-cursor::after{right:-16.8px}
 .hc-pointer[data-mode="drag"] .hc-pointer-shape{display:none}
 .hc-pointer[data-mode="drag"] .hc-drag-cursor{display:flex}
-.hc-pointer-rays{transition:opacity 120ms ease}
+.hc-pointer-rays{transition:opacity 120ms ease;filter:drop-shadow(0 0 1.5px #000) drop-shadow(0 0 2px #fff)}
 .hc-pointer[data-burst="true"] .hc-pointer-rays{opacity:0}
 .hc-pointer-burst{opacity:1}
-.hc-pointer-burst .hc-pointer-ray{animation:hc-click-ray 1000ms cubic-bezier(.22,.65,.3,1) both;transform-box:fill-box;transform-origin:center}
-@keyframes hc-click-ray{0%{opacity:1;transform:translate(0,0) scale(1)}70%{opacity:.85}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.45)}}
+.hc-pointer-burst .hc-pointer-shape{width:30.4px;height:40px;transform:translate(-10.824px,-5.48px) rotate(-18deg);filter:drop-shadow(0 0 2px #000) drop-shadow(0 0 3px #fff)}
+.hc-pointer-burst .hc-pointer-ray{stroke-width:24;animation:hc-click-ray 760ms cubic-bezier(.12,.72,.24,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes hc-click-ray{0%{opacity:1;transform:translate(0,0) scale(1.25)}55%{opacity:.92}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.65)}}
 @media(hover:hover) and (pointer:fine){html.hc-pointer-active,html.hc-pointer-active *{cursor:none!important}html.hc-pointer-active .hc-pointer{opacity:1}}
 html.preloader-active,html.preloader-active *{cursor:none!important}
 html.preloader-active .hc-pointer,html.preloader-active .hc-pointer-burst{visibility:hidden}

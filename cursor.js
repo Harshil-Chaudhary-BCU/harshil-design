@@ -6,10 +6,10 @@
   cursor.setAttribute('aria-hidden','true');
   cursor.innerHTML=`<svg class="hc-pointer-shape" viewBox="220 90 410 540" xmlns="http://www.w3.org/2000/svg">
     <g class="hc-pointer-rays" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round">
-      <path class="hc-pointer-ray" style="--dx:-540px;--dy:0px" d="M269.5 198H304"/>
-      <path class="hc-pointer-ray" style="--dx:-390px;--dy:-390px" d="m297.5 128.5 25.5 25.5"/>
-      <path class="hc-pointer-ray" style="--dx:390px;--dy:-390px" d="m438.5 128.5-25.5 25.5"/>
-      <path class="hc-pointer-ray" style="--dx:540px;--dy:0px" d="M432 198h34.5"/>
+      <path class="hc-pointer-ray" style="--dx:-220px;--dy:0px" d="M269.5 198H304"/>
+      <path class="hc-pointer-ray" style="--dx:-155px;--dy:-155px" d="m297.5 128.5 25.5 25.5"/>
+      <path class="hc-pointer-ray" style="--dx:155px;--dy:-155px" d="m438.5 128.5-25.5 25.5"/>
+      <path class="hc-pointer-ray" style="--dx:220px;--dy:0px" d="M432 198h34.5"/>
     </g>
     <g class="hc-pointer-hand">
       <path fill="#f0effc" d="M332 425V199c0-46 68-46 68 0v166-44c0-46 68-46 68 7v52-35c0-54 68-54 68 6v47-35c0-55 68-55 68 0v86c0 88-71 159-159 159-49 0-94-22-125-64l-76-103c-29-39 15-77 47-49z"/>

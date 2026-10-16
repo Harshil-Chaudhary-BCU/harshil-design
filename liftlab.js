@@ -22,12 +22,14 @@
   addEventListener('scroll', update, { passive: true });
   addEventListener('resize', update, { passive: true });
   update();
-  if (reduced) { reveals.forEach(el => el.classList.add('is-visible')); return; }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
-  }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
-  reveals.forEach(el => observer.observe(el));
-  if (journeyCurve) {
+  if (reduced) reveals.forEach(el => el.classList.add('is-visible'));
+  if (!reduced) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
+    reveals.forEach(el => observer.observe(el));
+  }
+  if (journeyCurve && !reduced) {
     const journeyDuration = 3.2;
     const setJourneyPathLength = () => {
       const path = journeyCurve.querySelector('path');
@@ -61,5 +63,178 @@
       });
     }, { threshold: .12 });
     journeyObserver.observe(journeyCurve);
+  }
+
+  const galleryImages = [...document.querySelectorAll('main img')].filter(image =>
+    !image.closest('.competitor-brand') && !image.hasAttribute('data-lightbox-ignore')
+  );
+  if (galleryImages.length) {
+    const viewer = document.createElement('div');
+    viewer.className = 'case-lightbox';
+    viewer.setAttribute('role', 'dialog');
+    viewer.setAttribute('aria-modal', 'true');
+    viewer.setAttribute('aria-hidden', 'true');
+    viewer.innerHTML = `
+      <button class="case-lightbox__backdrop" type="button" aria-label="Close image viewer"></button>
+      <div class="case-lightbox__panel" role="document">
+        <header class="case-lightbox__header">
+          <div class="case-lightbox__heading"><p class="case-lightbox__context"></p><p class="case-lightbox__title"></p></div>
+          <button class="case-lightbox__close" type="button" aria-label="Close image viewer"><span aria-hidden="true"></span></button>
+        </header>
+        <div class="case-lightbox__stage"><img alt=""><div class="case-lightbox__lens" aria-hidden="true"></div></div>
+        <footer class="case-lightbox__controls">
+          <button class="case-lightbox__previous" type="button" aria-label="Previous image"><span aria-hidden="true">←</span></button>
+          <p class="case-lightbox__count" aria-live="polite"></p>
+          <button class="case-lightbox__next" type="button" aria-label="Next image"><span aria-hidden="true">→</span></button>
+          <button class="case-lightbox__magnifier" type="button" aria-label="Turn magnifier on" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.75"></circle><path d="m15 15 5 5M10.5 8v5M8 10.5h5"></path></svg></button>
+        </footer>
+      </div>`;
+    document.body.append(viewer);
+    const viewedImage = viewer.querySelector('.case-lightbox__stage img');
+    const stage = viewer.querySelector('.case-lightbox__stage');
+    const lens = viewer.querySelector('.case-lightbox__lens');
+    const context = viewer.querySelector('.case-lightbox__context');
+    const title = viewer.querySelector('.case-lightbox__title');
+    const count = viewer.querySelector('.case-lightbox__count');
+    const closeButton = viewer.querySelector('.case-lightbox__close');
+    const previousButton = viewer.querySelector('.case-lightbox__previous');
+    const nextButton = viewer.querySelector('.case-lightbox__next');
+    const magnifierButton = viewer.querySelector('.case-lightbox__magnifier');
+    let activeIndex = 0;
+    let lastFocus = null;
+    let holdTimer = 0;
+    let openedByHold = false;
+    let magnifierEnabled = false;
+    let clearImageTimer = 0;
+    let revealPanelTimer = 0;
+    let hideViewerTimer = 0;
+    const imageTitle = image => {
+      const caption = image.closest('figure')?.querySelector('figcaption');
+      return caption?.innerText.trim().replace(/\s+/g, ' ') || image.alt || 'LiftLab project image';
+    };
+    const imageContext = image => {
+      if (image.closest('#competitor-analysis')) return 'Competitor analysis';
+      if (image.closest('#feature-mapping')) return 'Feature mapping';
+      if (image.closest('#information-architecture')) return 'Information architecture';
+      if (image.closest('#core-flows')) return 'User flow';
+      if (image.closest('.fidelity-stage--sketches')) return 'Sketch exploration';
+      if (image.closest('.fidelity-stage--iterations')) return 'Early design iteration';
+      if (image.closest('.fidelity-stage--wireframes')) return 'Low-fidelity wireframe';
+      if (image.closest('#final-interface')) return 'Final interface';
+      if (image.closest('#feedback-iteration')) return 'Feedback-led iteration';
+      if (image.closest('#accessibility')) return 'Accessibility concept';
+      if (image.closest('#usability-testing') || image.closest('#sus-results')) return 'Usability evaluation';
+      if (image.closest('.hero')) return 'LiftLab product overview';
+      return 'LiftLab case study';
+    };
+    const renderImage = index => {
+      activeIndex = (index + galleryImages.length) % galleryImages.length;
+      const source = galleryImages[activeIndex];
+      viewedImage.src = source.currentSrc || source.src;
+      viewedImage.alt = source.alt || imageTitle(source);
+      context.textContent = imageContext(source);
+      title.textContent = imageTitle(source);
+      count.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(galleryImages.length).padStart(2, '0')}`;
+      lens.style.backgroundImage = `url("${viewedImage.src.replace(/"/g, '%22')}")`;
+      lens.classList.remove('is-visible');
+    };
+    const openViewer = (image, fromHold = false) => {
+      const index = galleryImages.indexOf(image);
+      if (index < 0) return;
+      openedByHold = fromHold;
+      lastFocus = document.activeElement;
+      clearTimeout(clearImageTimer);
+      clearTimeout(revealPanelTimer);
+      clearTimeout(hideViewerTimer);
+      renderImage(index);
+      viewer.classList.remove('is-ready');
+      viewer.classList.add('is-open');
+      viewer.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('case-lightbox-open');
+      revealPanelTimer = window.setTimeout(() => {
+        viewer.classList.add('is-ready');
+        closeButton.focus({ preventScroll: true });
+      }, 90);
+    };
+    const closeViewer = () => {
+      clearTimeout(revealPanelTimer);
+      clearTimeout(hideViewerTimer);
+      viewer.classList.remove('is-ready');
+      viewer.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('case-lightbox-open');
+      lens.classList.remove('is-visible');
+      hideViewerTimer = window.setTimeout(() => viewer.classList.remove('is-open'), 180);
+      clearImageTimer = window.setTimeout(() => {
+        if (!viewer.classList.contains('is-open')) viewedImage.removeAttribute('src');
+      }, 360);
+      if (lastFocus instanceof HTMLElement) lastFocus.focus({ preventScroll: true });
+    };
+    const setMagnifier = enabled => {
+      magnifierEnabled = enabled;
+      viewer.classList.toggle('is-magnifier-enabled', enabled);
+      magnifierButton.setAttribute('aria-pressed', String(enabled));
+      magnifierButton.setAttribute('aria-label', enabled ? 'Turn magnifier off' : 'Turn magnifier on');
+      if (!enabled) lens.classList.remove('is-visible');
+    };
+    const moveLens = event => {
+      if (!magnifierEnabled || !viewedImage.src) return;
+      const stageRect = stage.getBoundingClientRect();
+      const imageRect = viewedImage.getBoundingClientRect();
+      if (event.clientX < imageRect.left || event.clientX > imageRect.right || event.clientY < imageRect.top || event.clientY > imageRect.bottom) {
+        lens.classList.remove('is-visible');
+        return;
+      }
+      const x = event.clientX - imageRect.left;
+      const y = event.clientY - imageRect.top;
+      const lensSize = lens.offsetWidth || 180;
+      const zoom = 2.25;
+      lens.style.left = `${event.clientX - stageRect.left}px`;
+      lens.style.top = `${event.clientY - stageRect.top}px`;
+      lens.style.backgroundSize = `${imageRect.width * zoom}px ${imageRect.height * zoom}px`;
+      lens.style.backgroundPosition = `${lensSize / 2 - x * zoom}px ${lensSize / 2 - y * zoom}px`;
+      lens.classList.add('is-visible');
+    };
+    galleryImages.forEach(image => {
+      image.classList.add('case-lightbox-trigger');
+      image.tabIndex = 0;
+      image.setAttribute('role', 'button');
+      image.setAttribute('aria-label', `Open image: ${imageTitle(image)}`);
+      image.addEventListener('click', event => {
+        event.preventDefault();
+        if (openedByHold) { openedByHold = false; return; }
+        openViewer(image);
+      });
+      image.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openViewer(image); }
+      });
+      image.addEventListener('pointerdown', event => {
+        if (event.button !== 0) return;
+        openedByHold = false;
+        holdTimer = window.setTimeout(() => openViewer(image, true), 420);
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(type => image.addEventListener(type, () => clearTimeout(holdTimer)));
+      image.addEventListener('dragstart', event => event.preventDefault());
+    });
+    closeButton.addEventListener('click', closeViewer);
+    viewer.querySelector('.case-lightbox__backdrop').addEventListener('click', closeViewer);
+    previousButton.addEventListener('click', () => renderImage(activeIndex - 1));
+    nextButton.addEventListener('click', () => renderImage(activeIndex + 1));
+    magnifierButton.addEventListener('click', () => setMagnifier(!magnifierEnabled));
+    stage.addEventListener('pointermove', moveLens);
+    stage.addEventListener('pointerdown', moveLens);
+    stage.addEventListener('pointerleave', () => lens.classList.remove('is-visible'));
+    viewer.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeViewer();
+      if (event.key === 'ArrowLeft') renderImage(activeIndex - 1);
+      if (event.key === 'ArrowRight') renderImage(activeIndex + 1);
+      if (event.key === 'Tab') {
+        const controls = [closeButton, previousButton, magnifierButton, nextButton];
+        const edge = event.shiftKey ? controls[0] : controls.at(-1);
+        if (document.activeElement === edge) {
+          event.preventDefault();
+          controls[event.shiftKey ? controls.length - 1 : 0].focus();
+        }
+      }
+    });
   }
 })();
