@@ -179,7 +179,19 @@
     const moveLens = event => {
       if (!magnifierEnabled || !viewedImage.src) return;
       const stageRect = stage.getBoundingClientRect();
-      const imageRect = viewedImage.getBoundingClientRect();
+      const naturalWidth = viewedImage.naturalWidth || 1;
+      const naturalHeight = viewedImage.naturalHeight || 1;
+      const imageScale = Math.min(stageRect.width / naturalWidth, stageRect.height / naturalHeight);
+      const renderedWidth = naturalWidth * imageScale;
+      const renderedHeight = naturalHeight * imageScale;
+      const imageRect = {
+        left: stageRect.left + (stageRect.width - renderedWidth) / 2,
+        top: stageRect.top + (stageRect.height - renderedHeight) / 2,
+        right: stageRect.left + (stageRect.width + renderedWidth) / 2,
+        bottom: stageRect.top + (stageRect.height + renderedHeight) / 2,
+        width: renderedWidth,
+        height: renderedHeight
+      };
       if (event.clientX < imageRect.left || event.clientX > imageRect.right || event.clientY < imageRect.top || event.clientY > imageRect.bottom) {
         lens.classList.remove('is-visible');
         return;
@@ -237,4 +249,75 @@
       }
     });
   }
+
+  document.querySelectorAll('[data-phone-carousel]').forEach(carousel => {
+    const slides = [...carousel.querySelectorAll('[data-phone-slide]')];
+    const article = carousel.closest('article');
+    const previous = carousel.querySelector('[data-phone-prev]');
+    const next = carousel.querySelector('[data-phone-next]');
+    const current = carousel.querySelector('[data-phone-current]');
+    const total = carousel.querySelector('[data-phone-total]');
+    const screenTitle = article?.querySelector('[data-phone-title]');
+    const screenDescription = article?.querySelector('[data-phone-description]');
+    let active = 0;
+
+    const getScrollTarget = slide => slide?.querySelector('[data-phone-scroll]') || slide;
+
+    const resetSlidePosition = slide => {
+      const target = getScrollTarget(slide);
+      if (!target) return;
+      target.scrollTop = 0;
+      target.scrollLeft = 0;
+      target.scrollTo?.({ top: 0, left: 0, behavior: 'auto' });
+    };
+
+    const settleSlideAtTop = slide => {
+      if (!slide) return;
+      const scrollTarget = slide.querySelector('[data-phone-scroll]');
+      if (scrollTarget) scrollTarget.classList.add('is-resetting');
+      resetSlidePosition(slide);
+      requestAnimationFrame(() => {
+        resetSlidePosition(slide);
+        requestAnimationFrame(() => {
+          resetSlidePosition(slide);
+          if (scrollTarget) scrollTarget.classList.remove('is-resetting');
+          resetSlidePosition(slide);
+        });
+      });
+      window.setTimeout(() => {
+        if (scrollTarget) scrollTarget.classList.remove('is-resetting');
+        resetSlidePosition(slide);
+      }, 120);
+      window.setTimeout(() => resetSlidePosition(slide), 320);
+    };
+
+    const render = index => {
+      if (!slides.length) return;
+      active = (index + slides.length) % slides.length;
+      slides.forEach((slide, slideIndex) => {
+        resetSlidePosition(slide);
+        const isActive = slideIndex === active;
+        const slideTitle = slide.dataset.title || 'Interface screen';
+        slide.setAttribute('role', 'group');
+        slide.setAttribute('aria-roledescription', 'slide');
+        slide.setAttribute('aria-label', `${slideIndex + 1} of ${slides.length}: ${slideTitle}`);
+        slide.classList.toggle('is-active', isActive);
+        slide.setAttribute('aria-hidden', String(!isActive));
+      });
+      const activeSlide = slides[active];
+      settleSlideAtTop(activeSlide);
+      activeSlide.querySelector('img')?.addEventListener('load', () => settleSlideAtTop(activeSlide), { once: true });
+      current.textContent = String(active + 1);
+      total.textContent = String(slides.length);
+      if (screenTitle) screenTitle.textContent = slides[active].dataset.title || '';
+      if (screenDescription) screenDescription.textContent = slides[active].dataset.description || '';
+      const hasMultipleScreens = slides.length > 1;
+      previous.disabled = !hasMultipleScreens;
+      next.disabled = !hasMultipleScreens;
+    };
+
+    previous.addEventListener('click', () => render(active - 1));
+    next.addEventListener('click', () => render(active + 1));
+    render(0);
+  });
 })();

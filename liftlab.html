@@ -12,13 +12,13 @@
   <link rel="icon" type="image/svg+xml" sizes="any" href="./assets/hc-mark-20261010.svg">
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/hc-touch-20261010.png">
   <link rel="mask-icon" href="./assets/hc-pinned-20261010.svg" color="#ff6b35">
-  <link rel="stylesheet" href="./liftlab.css?v=remove-placeholder-images-24">
+  <link rel="stylesheet" href="./liftlab.css?v=case-end-compact-88">
   <link rel="stylesheet" href="./cursor.css?v=instant-click-rays-9">
   <link rel="stylesheet" href="./charcoal.css?v=unified-1">
   <link rel="stylesheet" href="./design-system.css?v=shared-1">
-  <link rel="stylesheet" href="./case-system.css?v=spread-sketch-columns-84">
+  <link rel="stylesheet" href="./case-system.css?v=chapter-accents-86">
 </head>
-<body data-smooth-scroll-scale="0.60" data-smooth-scroll-content>
+<body>
   <div class="case-progress" aria-hidden="true"><span></span></div>
   <aside class="case-rail" aria-label="Case study chapters">
     <a class="case-rail__back" href="./index.html" aria-label="Back to main portfolio">
@@ -31,7 +31,7 @@
       <a href="#research" data-rail-target="research"><i></i><span>Research</span></a>
       <a href="#synthesis" data-rail-target="synthesis"><i></i><span>Synthesis</span></a>
       <a href="#ideation" data-rail-target="ideation"><i></i><span>Ideation</span></a>
-      <a href="#design" data-rail-target="design"><i></i><span>Design</span></a>
+      <a href="#design" data-rail-target="design"><i></i><span>Design Development</span></a>
       <a href="#evaluation" data-rail-target="evaluation"><i></i><span>Evaluation</span></a>
     </nav>
   </aside>
@@ -44,7 +44,7 @@
         <p class="hero__dek">A research-led mobile experience for powerlifting, recovery and progression.</p>
       </div>
       <div class="hero__demo reveal">
-        <img src="./assets/liftlab/artifacts/final-interface.jpg" alt="LiftLab final interface overview">
+        <img src="./assets/liftlab/artifacts/final-interface.jpg" alt="LiftLab final interface overview" width="1404" height="993">
         <div class="hero__demo-label"><span>Product demo</span><span>Video coming next</span></div>
       </div>
     </section>
@@ -83,7 +83,7 @@
         <article><b>1</b><h3><a href="#research">Research</a></h3><ul><li><a href="#research-survey">Survey research</a></li><li><a href="#competitor-analysis">Competitor analysis</a></li><li><a href="#emerging-problems">Emerging problems</a></li><li><a href="#problem-definition">Problem definition</a></li></ul></article>
         <article><b>2</b><h3><a href="#synthesis">Synthesis</a></h3><ul><li><a href="#composite-persona">Composite persona</a></li><li><a href="#journey-scenario">User journey</a></li></ul></article>
         <article><b>3</b><h3><a href="#ideation">Ideation</a></h3><ul><li><a href="#card-sorting">Card sorting</a></li><li><a href="#feature-mapping">Feature mapping</a></li><li><a href="#information-architecture">Information architecture</a></li><li><a href="#core-flows">Product flows</a></li><li><a href="#early-iteration">Early iteration</a></li><li><a href="#low-fidelity">Low fidelity</a></li></ul></article>
-        <article><b>4</b><h3><a href="#design">Design Development</a></h3><ul><li><a href="#design-principles">Design principles</a></li><li><a href="#final-interface">Final interface</a></li><li><a href="#feedback-iteration">Feedback-led iteration</a></li><li><a href="#accessibility">Accessibility</a></li></ul></article>
+        <article><b>4</b><h3><a href="#design">Design Development</a></h3><ul><li><a href="#design-transition">Low-fi to high-fi</a></li><li><a href="#design-principles">Principles in practice</a></li><li><a href="#feedback-iteration">Feedback-led iteration</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#final-interface">Final interface</a></li></ul></article>
         <article><b>5</b><h3><a href="#evaluation">Evaluation</a></h3><ul><li><a href="#usability-testing">Usability testing</a></li><li><a href="#key-learnings">Key learnings</a></li><li><a href="#evidence-boundaries">Evidence boundaries</a></li><li><a href="#next-steps">Next steps</a></li></ul></article>
       </div>
     </section>
@@ -129,8 +129,8 @@
             <p class="competitor-takeaway"><span>For LiftLab</span>Make structured training approachable, with guidance that supports the task rather than competing for attention.</p>
             <div class="competitor-annotations" aria-label="Annotated review of the Nike Training Club experience">
               <p class="eyebrow">Annotated interface review</p>
-              <figure><img src="./assets/liftlab/artifacts/nike-annotation-01.jpg" alt="Annotations of the Nike Training Club loading, workout landing, account and settings screens" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/nike-annotation-02.jpg" alt="Annotations of the Nike Training Club guidance, home and recommended workout screens" loading="lazy"></figure>
+              <figure role="group" aria-label="Annotations of the Nike Training Club loading, workout landing, account and settings screens"><img src="./assets/liftlab/artifacts/nike-annotation-01.jpg" alt="Annotations of the Nike Training Club loading, workout landing, account and settings screens" loading="lazy" width="1650" height="387"></figure>
+              <figure role="group" aria-label="Annotations of the Nike Training Club guidance, home and recommended workout screens"><img src="./assets/liftlab/artifacts/nike-annotation-02.jpg" alt="Annotations of the Nike Training Club guidance, home and recommended workout screens" loading="lazy" width="1635" height="381"></figure>
             </div>
           </article>
           <article><div class="competitor-brand"><img src="./assets/competitor-prehab.jpg" alt="Prehab app icon" width="100" height="100"><div><h4>Prehab</h4><p class="competitor-focus">Recovery, injury prevention and personalised rehabilitation.</p></div></div>
@@ -139,8 +139,8 @@
             <p class="competitor-takeaway"><span>For LiftLab</span>Connect clear recovery guidance with visible progress and a coherent return-to-training experience.</p>
             <div class="competitor-annotations" aria-label="Annotated review of the Prehab experience">
               <p class="eyebrow">Annotated interface review</p>
-              <figure><img src="./assets/liftlab/artifacts/prehab-annotation-01.jpg" alt="Annotations of the Prehab home, alert, paid plan and account screens" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/prehab-annotation-02.jpg" alt="Annotations of the Prehab programme and filter screens" loading="lazy"></figure>
+              <figure role="group" aria-label="Annotations of the Prehab home, alert, paid plan and account screens"><img src="./assets/liftlab/artifacts/prehab-annotation-01.jpg" alt="Annotations of the Prehab home, alert, paid plan and account screens" loading="lazy" width="1655" height="393"></figure>
+              <figure role="group" aria-label="Annotations of the Prehab programme and filter screens"><img src="./assets/liftlab/artifacts/prehab-annotation-02.jpg" alt="Annotations of the Prehab programme and filter screens" loading="lazy" width="1655" height="381"></figure>
             </div>
           </article>
           <article><div class="competitor-brand"><img src="./assets/competitor-strava.jpg" alt="Strava app icon" width="100" height="100"><div><h4>Strava</h4><p class="competitor-focus">Activity analytics, live tracking and social fitness.</p></div></div>
@@ -149,8 +149,8 @@
             <p class="competitor-takeaway"><span>For LiftLab</span>Make lifting progression meaningful, while using community to support motivation—not replace training guidance.</p>
             <div class="competitor-annotations" aria-label="Annotated review of the Strava experience">
               <p class="eyebrow">Annotated interface review</p>
-              <figure><img src="./assets/liftlab/artifacts/strava-annotation-01.jpg" alt="Annotations of Strava progress tracking and community activity" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/strava-annotation-02.jpg" alt="Annotations of Strava group challenges, route personalisation and workout tracking" loading="lazy"></figure>
+              <figure role="group" aria-label="Annotations of Strava progress tracking and community activity"><img src="./assets/liftlab/artifacts/strava-annotation-01.jpg" alt="Annotations of Strava progress tracking and community activity" loading="lazy" width="1650" height="387"></figure>
+              <figure role="group" aria-label="Annotations of Strava group challenges, route personalisation and workout tracking"><img src="./assets/liftlab/artifacts/strava-annotation-02.jpg" alt="Annotations of Strava group challenges, route personalisation and workout tracking" loading="lazy" width="1663" height="381"></figure>
             </div>
           </article>
         </div>
@@ -254,27 +254,27 @@
 
       <section class="ideation-block reveal" id="feature-mapping" aria-labelledby="feature-mapping-heading">
         <div class="ideation-block__intro"><p class="eyebrow">Pain point to feature mapping</p><h3 id="feature-mapping-heading">Research and card sorting shaped a focused feature set for Lisa.</h3><p>I brought Lisa’s needs together with the wider research patterns, then used the card-sorting groups to decide which ideas to take forward. The resulting features support recovery, safer training, visible progress and motivation. The mapping below shows the pain point each feature was designed to address.</p></div>
-        <figure class="mapping-artifact"><img src="./assets/liftlab/artifacts/pain-point-feature-mapping.jpg?v=1" alt="Pain points connected to the LiftLab features designed to address them" loading="lazy"></figure>
+        <figure class="mapping-artifact" role="group" aria-label="Pain points connected to the LiftLab features designed to address them"><img src="./assets/liftlab/artifacts/pain-point-feature-mapping.jpg?v=1" alt="Pain points connected to the LiftLab features designed to address them" loading="lazy" width="2615" height="1529"></figure>
       </section>
 
       <section class="ideation-block reveal" id="information-architecture" aria-labelledby="information-architecture-heading">
         <div class="ideation-block__intro"><p class="eyebrow">Ideation</p><h3 id="information-architecture-heading">Information Architecture</h3><p>I organised LiftLab into six main areas—Onboarding, Home, Recovery, Workout, Community and Menu/Profile—to show where each screen, function and piece of information would live.</p></div>
         <div class="architecture-gallery" aria-label="LiftLab information architecture across six product areas">
-          <figure><img src="./assets/liftlab/artifacts/information-architecture-01.jpg" alt="Information architecture for LiftLab onboarding" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/information-architecture-02.jpg" alt="Information architecture for the LiftLab home page" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/information-architecture-03.jpg" alt="Information architecture for LiftLab recovery" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/information-architecture-04.jpg" alt="Information architecture for LiftLab workouts" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/information-architecture-05.jpg" alt="Information architecture for the LiftLab community" loading="lazy"></figure>
-          <figure class="architecture-gallery__wide"><img src="./assets/liftlab/artifacts/information-architecture-06.jpg" alt="Information architecture for the LiftLab menu, profile, preferences and support" loading="lazy"></figure>
+          <figure role="group" aria-label="Information architecture for LiftLab onboarding"><img src="./assets/liftlab/artifacts/information-architecture-01.jpg" alt="Information architecture for LiftLab onboarding" loading="lazy" width="1701" height="2350"></figure>
+          <figure role="group" aria-label="Information architecture for the LiftLab home page"><img src="./assets/liftlab/artifacts/information-architecture-02.jpg" alt="Information architecture for the LiftLab home page" loading="lazy" width="1785" height="2239"></figure>
+          <figure role="group" aria-label="Information architecture for LiftLab recovery"><img src="./assets/liftlab/artifacts/information-architecture-03.jpg" alt="Information architecture for LiftLab recovery" loading="lazy" width="1970" height="2029"></figure>
+          <figure role="group" aria-label="Information architecture for LiftLab workouts"><img src="./assets/liftlab/artifacts/information-architecture-04.jpg" alt="Information architecture for LiftLab workouts" loading="lazy" width="1460" height="2739"></figure>
+          <figure role="group" aria-label="Information architecture for the LiftLab community"><img src="./assets/liftlab/artifacts/information-architecture-05.jpg" alt="Information architecture for the LiftLab community" loading="lazy" width="1535" height="2605"></figure>
+          <figure class="architecture-gallery__wide" role="group" aria-label="Information architecture for the LiftLab menu, profile, preferences and support"><img src="./assets/liftlab/artifacts/information-architecture-06.jpg" alt="Information architecture for the LiftLab menu, profile, preferences and support" loading="lazy" width="2361" height="1694"></figure>
         </div>
       </section>
 
       <section class="ideation-block reveal" id="core-flows" aria-labelledby="core-flows-heading">
         <div class="ideation-block__intro"><p class="eyebrow">Ideation</p><h3 id="core-flows-heading">User Flows</h3><p>I mapped the paths users could take through LiftLab, including the decisions and alternative routes they might encounter while starting recovery, planning a workout or joining the community.</p></div>
         <div class="user-flow-images" aria-label="Three LiftLab user flows showing key actions and decisions">
-          <figure><img src="./assets/liftlab/artifacts/user-flow-recovery.png" alt="Recovery flow from account decision to beginning a recovery routine" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/user-flow-workout.png" alt="Workout flow from account creation through experience selection to starting a workout" loading="lazy"></figure>
-          <figure><img src="./assets/liftlab/artifacts/user-flow-community.png" alt="Community flow from account creation through injury selection to joining the community" loading="lazy"></figure>
+          <figure role="group" aria-label="Recovery flow from account decision to beginning a recovery routine"><img src="./assets/liftlab/artifacts/user-flow-recovery.png" alt="Recovery flow from account decision to beginning a recovery routine" loading="lazy" width="1948" height="392"></figure>
+          <figure role="group" aria-label="Workout flow from account creation through experience selection to starting a workout"><img src="./assets/liftlab/artifacts/user-flow-workout.png" alt="Workout flow from account creation through experience selection to starting a workout" loading="lazy" width="2374" height="430"></figure>
+          <figure role="group" aria-label="Community flow from account creation through injury selection to joining the community"><img src="./assets/liftlab/artifacts/user-flow-community.png" alt="Community flow from account creation through injury selection to joining the community" loading="lazy" width="2400" height="382"></figure>
         </div>
         <aside class="evidence ideation-evidence"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2 22 20.5H2L12 3.2Z"/><path d="M12 8.2v6.2M12 17.8v.1"/></svg><div><span>Evidence boundary</span><p>The recovery flow was a product concept for organising guidance. It was not a clinically validated pathway, diagnosis or treatment plan.</p></div></aside>
       </section>
@@ -285,23 +285,23 @@
           <div class="fidelity-stage__intro"><p class="eyebrow">01 / Sketches</p><h4>Exploring the structure on paper.</h4><p>Quick sketches helped compare layouts, navigation patterns and the sequence of key tasks before the screens became more defined.</p></div>
           <div class="sketch-gallery" aria-label="Selected LiftLab app sketches">
             <div class="sketch-column">
-              <figure><img src="./assets/liftlab/enhancement-review/sketch-08-enhanced.png" alt="Workout screen sketch showing weeks, days and exercises" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-05.jpg" alt="Community groups screen sketch" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-04.jpg" alt="Recovery-plan and recovery-start sketches" loading="lazy"></figure>
+              <figure role="group" aria-label="Workout screen sketch showing weeks, days and exercises"><img src="./assets/liftlab/enhancement-review/sketch-08-enhanced.png" alt="Workout screen sketch showing weeks, days and exercises" loading="lazy" width="936" height="1681"></figure>
+              <figure role="group" aria-label="Community groups screen sketch"><img src="./assets/liftlab/artifacts/sketch-05.jpg" alt="Community groups screen sketch" loading="lazy" width="405" height="375"></figure>
+              <figure role="group" aria-label="Recovery-plan and recovery-start sketches"><img src="./assets/liftlab/artifacts/sketch-04.jpg" alt="Recovery-plan and recovery-start sketches" loading="lazy" width="671" height="404"></figure>
             </div>
             <div class="sketch-column">
-              <figure><img src="./assets/liftlab/enhancement-review/sketch-10-enhanced.png" alt="Workout experience-level selection sketch" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-02.jpg" alt="Two early home-screen concepts" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-01.jpg" alt="Early sketches exploring the workout setup flow" loading="lazy"></figure>
+              <figure role="group" aria-label="Workout experience-level selection sketch"><img src="./assets/liftlab/enhancement-review/sketch-10-enhanced.png" alt="Workout experience-level selection sketch" loading="lazy" width="958" height="1641"></figure>
+              <figure role="group" aria-label="Two early home-screen concepts"><img src="./assets/liftlab/artifacts/sketch-02.jpg" alt="Two early home-screen concepts" loading="lazy" width="531" height="423"></figure>
+              <figure role="group" aria-label="Early sketches exploring the workout setup flow"><img src="./assets/liftlab/artifacts/sketch-01.jpg" alt="Early sketches exploring the workout setup flow" loading="lazy" width="763" height="670"></figure>
             </div>
             <div class="sketch-column">
-              <figure><img src="./assets/liftlab/enhancement-review/sketch-06-enhanced.png" alt="Notebook sketches exploring progress and interface elements" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-09.jpg" alt="Workout-day selection sketch using dropdown controls" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/artifacts/sketch-03.jpg" alt="Later home-screen layout iterations" loading="lazy"></figure>
+              <figure role="group" aria-label="Notebook sketches exploring progress and interface elements"><img src="./assets/liftlab/enhancement-review/sketch-06-enhanced.png" alt="Notebook sketches exploring progress and interface elements" loading="lazy" width="1123" height="1400"></figure>
+              <figure role="group" aria-label="Workout-day selection sketch using dropdown controls"><img src="./assets/liftlab/artifacts/sketch-09.jpg" alt="Workout-day selection sketch using dropdown controls" loading="lazy" width="519" height="533"></figure>
+              <figure role="group" aria-label="Later home-screen layout iterations"><img src="./assets/liftlab/artifacts/sketch-03.jpg" alt="Later home-screen layout iterations" loading="lazy" width="531" height="423"></figure>
             </div>
             <div class="sketch-column">
-              <figure><img src="./assets/liftlab/enhancement-review/sketch-11-enhanced.png" alt="Injury-selection screen sketch" loading="lazy"></figure>
-              <figure><img src="./assets/liftlab/enhancement-review/sketch-07-enhanced.png" alt="Notebook sketch exploring home-page progress and recovery content" loading="lazy"></figure>
+              <figure role="group" aria-label="Injury-selection screen sketch"><img src="./assets/liftlab/enhancement-review/sketch-11-enhanced.png" alt="Injury-selection screen sketch" loading="lazy" width="906" height="1737"></figure>
+              <figure role="group" aria-label="Notebook sketch exploring home-page progress and recovery content"><img src="./assets/liftlab/enhancement-review/sketch-07-enhanced.png" alt="Notebook sketch exploring home-page progress and recovery content" loading="lazy" width="1085" height="1450"></figure>
             </div>
           </div>
         </div>
@@ -311,25 +311,25 @@
             <article>
               <div class="sketch-iteration__copy"><span>01</span><h5>Make experience choices visible</h5><p>The scrollable experience selector hid a small set of choices. The next version displayed all four options together and described experience through time, making the choice easier to compare.</p></div>
               <div class="sketch-iteration__visual">
-                <figure><img src="./assets/liftlab/artifacts/iteration-01-before.jpg" alt="Initial workout experience screen using a scrollable selector" loading="lazy"><figcaption>Before</figcaption></figure>
+                <figure role="group" aria-label="Initial workout experience screen using a scrollable selector"><img src="./assets/liftlab/artifacts/iteration-01-before.jpg" alt="Initial workout experience screen using a scrollable selector" loading="lazy" width="423" height="456"><figcaption>Before</figcaption></figure>
                 <i aria-hidden="true">→</i>
-                <figure><img src="./assets/liftlab/enhancement-review/iteration-01-after-enhanced.png" alt="Revised workout experience screen showing four visible duration-based choices" loading="lazy"><figcaption>After</figcaption></figure>
+                <figure role="group" aria-label="Revised workout experience screen showing four visible duration-based choices"><img src="./assets/liftlab/enhancement-review/iteration-01-after-enhanced.png" alt="Revised workout experience screen showing four visible duration-based choices" loading="lazy" width="958" height="1642"><figcaption>After</figcaption></figure>
               </div>
             </article>
             <article>
               <div class="sketch-iteration__copy"><span>02</span><h5>Simplify workout-day selection</h5><p>The first concept used an Apple Watch-inspired arrangement of days. It was replaced with three clear dropdown fields, making the selected schedule easier to read and change.</p></div>
               <div class="sketch-iteration__visual">
-                <figure><img src="./assets/liftlab/enhancement-review/iteration-02-before-enhanced.png" alt="Initial workout-day selector using a circular arrangement" loading="lazy"><figcaption>Before</figcaption></figure>
+                <figure role="group" aria-label="Initial workout-day selector using a circular arrangement"><img src="./assets/liftlab/enhancement-review/iteration-02-before-enhanced.png" alt="Initial workout-day selector using a circular arrangement" loading="lazy" width="919" height="1712"><figcaption>Before</figcaption></figure>
                 <i aria-hidden="true">→</i>
-                <figure><img src="./assets/liftlab/artifacts/iteration-02-after.jpg" alt="Revised workout-day selector using three dropdown fields" loading="lazy"><figcaption>After</figcaption></figure>
+                <figure role="group" aria-label="Revised workout-day selector using three dropdown fields"><img src="./assets/liftlab/artifacts/iteration-02-after.jpg" alt="Revised workout-day selector using three dropdown fields" loading="lazy" width="519" height="533"><figcaption>After</figcaption></figure>
               </div>
             </article>
             <article>
               <div class="sketch-iteration__copy"><span>03</span><h5>Bring the workout into one view</h5><p>Warm-ups and other workout elements initially sat on separate screens. The revised overview brought warm-ups and main lifts together to reduce unnecessary navigation and improve readability.</p></div>
               <div class="sketch-iteration__visual">
-                <figure><img src="./assets/liftlab/enhancement-review/iteration-03-before-enhanced.png" alt="Initial separate warm-up screen" loading="lazy"><figcaption>Before</figcaption></figure>
+                <figure role="group" aria-label="Initial separate warm-up screen"><img src="./assets/liftlab/enhancement-review/iteration-03-before-enhanced.png" alt="Initial separate warm-up screen" loading="lazy" width="913" height="1722"><figcaption>Before</figcaption></figure>
                 <i aria-hidden="true">→</i>
-                <figure><img src="./assets/liftlab/enhancement-review/iteration-03-after-enhanced.png" alt="Revised workout overview combining progress, warm-ups and main lifts" loading="lazy"><figcaption>After</figcaption></figure>
+                <figure role="group" aria-label="Revised workout overview combining progress, warm-ups and main lifts"><img src="./assets/liftlab/enhancement-review/iteration-03-after-enhanced.png" alt="Revised workout overview combining progress, warm-ups and main lifts" loading="lazy" width="936" height="1681"><figcaption>After</figcaption></figure>
               </div>
             </article>
           </div>
@@ -337,59 +337,232 @@
         <div class="fidelity-stage fidelity-stage--wireframes">
           <div class="fidelity-stage__intro"><p class="eyebrow">03 / Low fidelity</p><h4>Turning the sketches into testable screens.</h4><p>The selected low-fidelity wireframes show how the strongest ideas were translated into clearer screen hierarchy, navigation and task sequences.</p></div>
           <div class="lofi-wide-gallery" aria-label="Low-fidelity multi-screen flows">
-            <figure><img src="./assets/liftlab/artifacts/lofi-02.jpg" alt="Low-fidelity onboarding and workout setup sequence" loading="lazy"><figcaption>Onboarding and workout setup</figcaption></figure>
-            <figure><img src="./assets/liftlab/artifacts/lofi-05.jpg" alt="Low-fidelity account onboarding sequence" loading="lazy"><figcaption>Account onboarding</figcaption></figure>
-            <figure><img src="./assets/liftlab/artifacts/lofi-06.jpg" alt="Low-fidelity injury, notification and workout onboarding screens" loading="lazy"><figcaption>Injury and workout onboarding</figcaption></figure>
-            <figure><img src="./assets/liftlab/artifacts/lofi-07.jpg" alt="Low-fidelity workout, home, menu and recovery screens" loading="lazy"><figcaption>Core feature screens</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity onboarding and workout setup sequence"><img src="./assets/liftlab/artifacts/lofi-02.jpg" alt="Low-fidelity onboarding and workout setup sequence" loading="lazy" width="1220" height="348"><figcaption>Onboarding and workout setup</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity account onboarding sequence"><img src="./assets/liftlab/artifacts/lofi-05.jpg" alt="Low-fidelity account onboarding sequence" loading="lazy" width="1592" height="596"><figcaption>Account onboarding</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity injury, notification and workout onboarding screens"><img src="./assets/liftlab/artifacts/lofi-06.jpg" alt="Low-fidelity injury, notification and workout onboarding screens" loading="lazy" width="1539" height="635"><figcaption>Injury and workout onboarding</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity workout, home, menu and recovery screens"><img src="./assets/liftlab/artifacts/lofi-07.jpg" alt="Low-fidelity workout, home, menu and recovery screens" loading="lazy" width="1573" height="785"><figcaption>Core feature screens</figcaption></figure>
           </div>
           <div class="lofi-gallery lofi-gallery--remaining" aria-label="Additional LiftLab low-fidelity screens">
-            <figure><img src="./assets/liftlab/enhancement-review/lofi-08-enhanced.png" alt="Low-fidelity recovery workout player" loading="lazy"><figcaption>Recovery workout</figcaption></figure>
-            <figure><img src="./assets/liftlab/enhancement-review/lofi-09-enhanced.png" alt="Low-fidelity community feed" loading="lazy"><figcaption>Community feed</figcaption></figure>
-            <figure><img src="./assets/liftlab/enhancement-review/lofi-10-enhanced.png" alt="Low-fidelity community groups screen" loading="lazy"><figcaption>Community groups</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity recovery workout player"><img src="./assets/liftlab/enhancement-review/lofi-08-enhanced.png" alt="Low-fidelity recovery workout player" loading="lazy" width="852" height="1847"><figcaption>Recovery workout</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity community feed"><img src="./assets/liftlab/enhancement-review/lofi-09-enhanced.png" alt="Low-fidelity community feed" loading="lazy" width="851" height="1847"><figcaption>Community feed</figcaption></figure>
+            <figure role="group" aria-label="Low-fidelity community groups screen"><img src="./assets/liftlab/enhancement-review/lofi-10-enhanced.png" alt="Low-fidelity community groups screen" loading="lazy" width="851" height="1847"><figcaption>Community groups</figcaption></figure>
           </div>
         </div>
       </section>
     </section>
 
     <section class="chapter chapter--dark chapter--design" data-chapter="05">
-      <header class="chapter-head reveal" id="design"><p class="eyebrow">05 / Design development</p><h2>From structure to a polished interface.</h2><p>I developed the interface from documented low-fidelity work into the verified high-fidelity prototype, using clarity, hierarchy, support and accessibility to guide refinement.</p></header>
-      <div class="principles reveal" id="design-principles">
-        <article class="accent"><b>Minimalism</b><p>Show only what users need for the immediate task.</p></article><article><b>System status</b><p>Make progress and multi-step states visible.</p></article><article><b>Consistency</b><p>Repeat familiar labels, icons and patterns.</p></article><article><b>Contextual help</b><p>Reveal guidance without cluttering the main task.</p></article>
-      </div>
-      <div id="final-interface" aria-hidden="true"></div>
-      <div class="iteration-grid iteration-grid--copy-only reveal" id="feedback-iteration">
-        <div><p class="eyebrow">Feedback-led iteration</p><h3>Users said the community feed felt too similar to Instagram.</h3><p>I returned to an earlier direction and refined the layout. I also addressed readability, overlap, excessive clicks and complexity.</p></div>
-      </div>
-      <div class="iteration-grid iteration-grid--copy-only reveal" id="accessibility">
-        <div><p class="eyebrow">Accessibility</p><h3>Colour preferences became configurable.</h3><p>Users could choose primary and secondary interface colours they were more comfortable distinguishing. The selection affected the wider interface rather than a single screen.</p><aside class="evidence"><span>Evidence boundary</span><p>This concept should not be presented as WCAG compliance.</p></aside></div>
-      </div>
+      <header class="chapter-head reveal" id="design"><p class="eyebrow">05 / Design development</p><h2>From a tested structure to one connected interface.</h2><p>The low-fidelity screens established the hierarchy and core content. During design development, I retained that structure while introducing clearer emphasis, meaningful imagery and a consistent visual language—turning a functional wireframe into an interface that felt easier to scan and understand.</p></header>
+      <section class="design-transition reveal" id="design-transition" aria-labelledby="design-transition-heading">
+        <h3 class="visually-hidden" id="design-transition-heading">Low-fidelity to high-fidelity comparison</h3>
+        <div class="design-transition__comparison" aria-label="Comparison of the LiftLab home screen from low fidelity to high fidelity">
+          <figure role="group" aria-label="Low-fidelity LiftLab home screen showing the progress chart and recovery card">
+            <div class="design-transition__image"><img src="./assets/liftlab/design-development/home-lofi-enhanced.png" alt="Low-fidelity LiftLab home screen showing the progress chart and recovery card" loading="lazy" width="1149" height="1369"></div>
+            <figcaption><span>Before</span><strong>Low-fidelity structure</strong></figcaption>
+          </figure>
+          <i aria-hidden="true">→</i>
+          <figure role="group" aria-label="High-fidelity LiftLab home screen showing the refined progress chart and recovery card">
+            <div class="design-transition__image"><img src="./assets/liftlab/design-development/home-hifi-enhanced.png" alt="High-fidelity LiftLab home screen showing the refined progress chart and recovery card" loading="lazy" width="1024" height="1536"></div>
+            <figcaption><span>After</span><strong>High-fidelity interface</strong></figcaption>
+          </figure>
+        </div>
+      </section>
+      <section class="principles-practice reveal" id="design-principles" aria-labelledby="principles-practice-heading">
+        <header class="principles-practice__intro">
+          <p class="eyebrow">02 / Principles in practice</p>
+          <h3 id="principles-practice-heading">The principles became interface decisions.</h3>
+          <p>Rather than treating usability principles and screen refinement as separate stages, I used them together. Each decision simplified information, clarified progress or made guidance available at the moment it was needed.</p>
+        </header>
+        <div class="principles-practice__grid">
+          <article>
+            <div class="principles-practice__visual principles-practice__visual--focus" aria-label="High-fidelity home screen demonstrating a focused hierarchy">
+              <img src="./assets/liftlab/design-development/principle-01-home-enhanced.png" alt="Minimal LiftLab home screen prioritising progress and recovery" loading="lazy" width="865" height="1819">
+            </div>
+            <div class="principles-practice__copy"><span>Minimalism</span><h4>Reduce cognitive load</h4><p>The focused home and recovery screens showed only what users needed for the immediate task, reducing visual overload while keeping progress and the next useful action clear.</p></div>
+          </article>
+          <article>
+            <div class="principles-practice__visual principles-practice__visual--status" aria-label="Workout player demonstrating progress and consistent controls"><img src="./assets/liftlab/design-development/principle-02-workout-enhanced.png" alt="LiftLab workout screen showing time remaining, set progress and consistent exercise controls" loading="lazy" width="867" height="1815"></div>
+            <div class="principles-practice__copy"><span>System status + consistency</span><h4>Keep users oriented</h4><p>Timers and progress indicators made multi-step states visible, while familiar labels, icons and repeated controls kept movement between workout steps predictable.</p></div>
+          </article>
+          <article>
+            <div class="principles-practice__visual principles-practice__visual--help" aria-label="Exercise player demonstrating contextual help"><img src="./assets/liftlab/design-development/principle-03-contextual-help.png" alt="LiftLab workout screen shown before and after opening its contextual help panel" loading="lazy" width="1536" height="1024"></div>
+            <div class="principles-practice__copy"><span>Contextual help</span><h4>Support users in context</h4><p>Optional guidance remained available inside the exercise experience when needed, without cluttering or interrupting the main task.</p></div>
+          </article>
+        </div>
+      </section>
+      <section class="refinement-bento reveal" id="feedback-iteration" aria-labelledby="refinement-bento-heading">
+        <header class="refinement-bento__intro">
+          <p class="eyebrow">03 / Refinement through feedback</p>
+          <h3 id="refinement-bento-heading">Feedback improved both clarity and inclusion.</h3>
+          <p>The community layout changed in response to feedback, while configurable colour preferences extended accessibility thinking across the wider interface.</p>
+        </header>
+        <div class="refinement-bento__grid">
+          <article class="refinement-bento__feedback">
+            <div class="refinement-bento__comparison refinement-bento__comparison--combined" aria-label="Community feed before and after feedback-led refinement">
+              <img src="./assets/liftlab/design-development/feedback-community-before-after-combined.png" alt="Initial and refined LiftLab community feeds shown together as a before-and-after comparison" loading="lazy" decoding="async" width="1536" height="1024">
+            </div>
+            <div class="refinement-bento__copy"><span>Feedback-led refinement</span><h4>The community became more distinctly LiftLab.</h4><p>The first high-fidelity feed felt too similar to Instagram. I returned to an earlier direction and refined the feed so the community experience better matched LiftLab’s own product structure.</p></div>
+          </article>
+          <article class="refinement-bento__accessibility" id="accessibility">
+            <div class="refinement-bento__accessibility-visual"><img src="./assets/liftlab/design-development/accessibility-colour-choice-enhanced.png" alt="LiftLab accessibility screen offering configurable primary and secondary interface colour palettes" loading="lazy" decoding="async" width="882" height="1784"></div>
+            <div class="refinement-bento__copy"><span>Accessibility choice</span><h4>Colour preferences became configurable.</h4><p>To support users with colour-vision differences, the interface offered primary and secondary colour choices they could distinguish more comfortably. The selected palette updated the wider app rather than one isolated screen.</p></div>
+          </article>
+        </div>
+      </section>
+      <section class="final-showcase reveal" id="final-interface" aria-labelledby="final-showcase-heading">
+        <header class="final-showcase__intro">
+          <p class="eyebrow">04 / Final high-fidelity interface</p>
+          <h3 id="final-showcase-heading">Four connected experiences brought the product together.</h3>
+          <p>The final interface connected onboarding, progress-led home features, guided workouts and community into one consistent product experience. Each screen set will be shown inside its own iPhone mockup so the key flows remain easy to compare and understand.</p>
+        </header>
+        <div class="final-showcase__grid" aria-label="Final LiftLab interface screen groups">
+          <article data-phone-carousel role="region" aria-roledescription="carousel" aria-label="LiftLab onboarding interface screens">
+            <div class="final-showcase__phone" aria-label="Onboarding high-fidelity screen carousel">
+              <span class="final-showcase__island" aria-hidden="true"><i></i></span><i class="final-showcase__side final-showcase__side--left" aria-hidden="true"></i><i class="final-showcase__side final-showcase__side--right" aria-hidden="true"></i>
+              <div class="final-showcase__screen">
+                <div class="final-showcase__slide is-active" data-phone-slide data-title="Start the recovery journey" data-description="A focused opening screen introduces LiftLab and gives users one clear action to begin."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-01-enhanced.png" alt="LiftLab recovery journey welcome screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Choose how to continue" data-description="Account options are presented together without interrupting the motivating recovery message."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-02-enhanced.png" alt="LiftLab account sign-in options" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Verify the account" data-description="A compact verification step confirms the user’s email before personalisation begins."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-03-enhanced.png" alt="LiftLab email verification code screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Introduce the user" data-description="Basic profile details begin shaping an experience that feels personal rather than generic."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-04-enhanced.png" alt="LiftLab name and age onboarding screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Personalise the experience" data-description="An optional identity question supports personalisation while allowing users to skip it."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-05-enhanced.png" alt="LiftLab gender identity selection screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Identify the recovery focus" data-description="Visual injury choices help users select the area most relevant to their recovery journey."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-06-enhanced.png" alt="LiftLab injury selection screen with lower back selected" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Choose notification support" data-description="Users can opt into community updates, activity prompts and workout reminders—or continue without them."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-07-enhanced.png" alt="LiftLab notification preference screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Select a planning route" data-description="Users can begin with a prepared workout plan or create one around their own needs."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-08-enhanced.png" alt="LiftLab pre-made or custom workout plan selection" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Set the experience level" data-description="Four visible choices make training experience quick to compare and easy to change."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-09-enhanced.png" alt="LiftLab workout experience level selection" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Choose training days" data-description="A simple three-day schedule keeps weekly planning readable and manageable."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-10-enhanced.png" alt="LiftLab workout day selection screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Add current strength markers" data-description="One-rep maximums provide a starting point for squat, deadlift and bench-press planning."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-11-enhanced.png" alt="LiftLab one-rep maximum entry screen" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide" data-phone-slide data-title="Confirm the plan" data-description="A clear completion state closes onboarding and confirms that the workout plan is ready."><img src="./assets/liftlab/design-development/final-onboarding/onboarding-12-enhanced.png" alt="LiftLab workout plan successfully created confirmation" loading="lazy" decoding="async" width="851" height="1847"></div>
+              </div>
+            </div>
+            <h4 data-phone-title>Start the recovery journey</h4>
+            <p data-phone-description>A focused opening screen introduces LiftLab and gives users one clear action to begin.</p>
+            <div class="final-showcase__controls"><button type="button" data-phone-prev aria-label="Previous onboarding screen">←</button><span aria-live="polite"><b data-phone-current>1</b> / <b data-phone-total>12</b></span><button type="button" data-phone-next aria-label="Next onboarding screen">→</button></div>
+          </article>
+          <article data-phone-carousel role="region" aria-roledescription="carousel" aria-label="LiftLab home and profile interface screens">
+            <div class="final-showcase__phone" aria-label="Home high-fidelity screen carousel">
+              <span class="final-showcase__island" aria-hidden="true"><i></i></span><i class="final-showcase__side final-showcase__side--left" aria-hidden="true"></i><i class="final-showcase__side final-showcase__side--right" aria-hidden="true"></i>
+              <div class="final-showcase__screen">
+                <div class="final-showcase__slide final-showcase__slide--scrollable is-active" data-phone-slide data-title="See progress at a glance" data-description="The home screen brings strength progress, recovery and useful next actions into one vertically browsable view."><div class="final-showcase__viewport" data-phone-scroll><img src="./assets/liftlab/design-development/final-home/home-01-enhanced.png" alt="Scrollable LiftLab home screen showing bench-press progress, recovery and injury-prevention content" loading="lazy" decoding="async" width="734" height="2142"></div></div>
+                <div class="final-showcase__slide final-showcase__slide--scrollable" data-phone-slide data-title="Manage the experience" data-description="Profile settings keep accessibility, notifications, workout plans, measurements and support together in one clear list."><div class="final-showcase__viewport" data-phone-scroll><img src="./assets/liftlab/design-development/final-home/home-02-enhanced.png" alt="Scrollable LiftLab profile and settings screen" loading="lazy" decoding="async" width="725" height="2170"></div></div>
+              </div>
+            </div>
+            <h4 data-phone-title>See progress at a glance</h4>
+            <p data-phone-description>The home screen brings strength progress, recovery and useful next actions into one vertically browsable view.</p>
+            <div class="final-showcase__controls"><button type="button" data-phone-prev aria-label="Previous home screen">←</button><span aria-live="polite"><b data-phone-current>1</b> / <b data-phone-total>2</b></span><button type="button" data-phone-next aria-label="Next home screen">→</button></div>
+          </article>
+          <article data-phone-carousel role="region" aria-roledescription="carousel" aria-label="LiftLab recovery workout interface screens">
+            <div class="final-showcase__phone" aria-label="Workout high-fidelity screen carousel">
+              <span class="final-showcase__island" aria-hidden="true"><i></i></span><i class="final-showcase__side final-showcase__side--left" aria-hidden="true"></i><i class="final-showcase__side final-showcase__side--right" aria-hidden="true"></i>
+              <div class="final-showcase__screen">
+                <div class="final-showcase__slide final-showcase__slide--static is-active" data-phone-slide data-title="Review the recovery session" data-description="A structured overview keeps the current recovery week, training day and exercise sequence visible before the session begins."><img src="./assets/liftlab/design-development/final-workout/workout-01-enhanced.png" alt="LiftLab recovery workout overview with weekly progress and exercise list" loading="lazy" decoding="async" width="852" height="1846"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Access guidance during the task" data-description="The exercise timer remains visible while contextual guidance explains how to perform the movement safely."><img src="./assets/liftlab/design-development/final-workout/workout-02-enhanced.png" alt="LiftLab exercise timer with contextual Pilates guidance" loading="lazy" decoding="async" width="851" height="1847"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Follow the guided exercise" data-description="Full-screen imagery, time remaining and consistent controls keep attention on the active recovery exercise."><img src="./assets/liftlab/design-development/final-workout/workout-03-enhanced.png" alt="LiftLab guided Pilates exercise with timer and controls" loading="lazy" decoding="async" width="853" height="1844"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Open help without leaving" data-description="An in-context information panel provides additional technique guidance without taking the user away from the exercise."><img src="./assets/liftlab/design-development/final-workout/workout-04-enhanced.png" alt="LiftLab guided Pilates exercise with contextual help panel" loading="lazy" decoding="async" width="853" height="1844"></div>
+              </div>
+            </div>
+            <h4 data-phone-title>Review the recovery session</h4>
+            <p data-phone-description>A structured overview keeps the current recovery week, training day and exercise sequence visible before the session begins.</p>
+            <div class="final-showcase__controls"><button type="button" data-phone-prev aria-label="Previous workout screen">←</button><span aria-live="polite"><b data-phone-current>1</b> / <b data-phone-total>4</b></span><button type="button" data-phone-next aria-label="Next workout screen">→</button></div>
+          </article>
+          <article data-phone-carousel role="region" aria-roledescription="carousel" aria-label="LiftLab community interface screens">
+            <div class="final-showcase__phone" aria-label="Community high-fidelity screen carousel">
+              <span class="final-showcase__island" aria-hidden="true"><i></i></span><i class="final-showcase__side final-showcase__side--left" aria-hidden="true"></i><i class="final-showcase__side final-showcase__side--right" aria-hidden="true"></i>
+              <div class="final-showcase__screen">
+                <div class="final-showcase__slide final-showcase__slide--static is-active" data-phone-slide data-title="Browse the community feed" data-description="A shared feed brings member updates, photographs and lightweight social actions into one familiar view."><img src="./assets/liftlab/design-development/final-community/community-01-enhanced.png" alt="LiftLab community feed with member photo posts" loading="lazy" decoding="async" width="784" height="2006"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Focus on one conversation" data-description="The single-post view keeps the selected update and its responses together for easier reading."><img src="./assets/liftlab/design-development/final-community/community-02-enhanced.png" alt="LiftLab single community post and responses" loading="lazy" decoding="async" width="784" height="2006"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Review personal posts" data-description="A visual gallery lets members revisit their own food, training and recovery updates at a glance."><img src="./assets/liftlab/design-development/final-community/community-03-enhanced.png" alt="LiftLab My Posts gallery" loading="lazy" decoding="async" width="784" height="2006"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Find relevant groups" data-description="Suggested and joined groups help members discover people with similar training and recovery interests."><img src="./assets/liftlab/design-development/final-community/community-04-enhanced.png" alt="LiftLab community groups screen" loading="lazy" decoding="async" width="789" height="1994"></div>
+                <div class="final-showcase__slide final-showcase__slide--static" data-phone-slide data-title="Recognise progress" data-description="Unlocked and upcoming achievements make participation and progress visible without overwhelming the experience."><img src="./assets/liftlab/design-development/final-community/community-05-enhanced.png" alt="LiftLab achievements screen with unlocked and locked awards" loading="lazy" decoding="async" width="851" height="1847"></div>
+              </div>
+            </div>
+            <h4 data-phone-title>Browse the community feed</h4>
+            <p data-phone-description>A shared feed brings member updates, photographs and lightweight social actions into one familiar view.</p>
+            <div class="final-showcase__controls"><button type="button" data-phone-prev aria-label="Previous community screen">←</button><span aria-live="polite"><b data-phone-current>1</b> / <b data-phone-total>5</b></span><button type="button" data-phone-next aria-label="Next community screen">→</button></div>
+          </article>
+        </div>
+      </section>
     </section>
 
-    <section class="chapter chapter--light" data-chapter="06">
-      <header class="chapter-head reveal" id="evaluation"><p class="eyebrow">06 / Evaluation</p><h2>A useful prototype signal—not proof of real-world effectiveness.</h2><p>I evaluated the prototype through responses from seven participants, who completed the 10-question System Usability Scale after interacting with three core flows.</p></header>
-      <div class="evaluation-metrics reveal" id="usability-testing"><article class="accent"><strong>7</strong><span>Participants</span></article><article><strong>10</strong><span>SUS questions</span></article><article><strong>3</strong><span>Prototype flows</span></article><article class="score"><small>Reported average</small><strong>71.8</strong><span>SUS score</span></article></div>
-      <div class="learning-grid reveal" id="key-learnings"><article><span>What it supports</span><p>Prototype usability was tested. Feedback informed at least one traceable redesign. Iteration focused on clarity and reduced complexity.</p></article><article class="warning" id="evidence-boundaries"><span>What it does not prove</span><p>No formal A/B test, statistical significance, clinical validation, real-world health outcomes or compliance claim.</p></article></div>
-      <blockquote class="closing-quote reveal">I could not claim the product was effective in the real world. I could show that the concept was testable, understandable and ready for a more rigorous next round.</blockquote>
-    </section>
-
-    <section class="chapter chapter--dark" id="next-steps" aria-labelledby="next-steps-heading">
-      <header class="chapter-head reveal">
-        <p class="eyebrow">Next steps</p>
-        <h2 id="next-steps-heading">Next steps</h2>
-        <p>Content to be added.</p>
+    <section class="chapter chapter--evaluation" data-chapter="06">
+      <header class="chapter-head reveal" id="evaluation">
+        <p class="eyebrow">06 / Evaluation</p>
+        <h2>The finished prototype was ready for pilot testing.</h2>
+        <p>With the final product design in place, I moved into pilot evaluation to understand how clearly and consistently the experience worked. The review focused on whether people could follow the guidance, recognise system states, move between tasks efficiently and use the interface with confidence.</p>
+        <div class="evaluation-criteria" aria-label="Pilot evaluation criteria">
+          <p class="eyebrow">What the pilot considered</p>
+          <div><span>Clarity</span><span>Consistency</span><span>Guidance</span><span>Accessibility</span><span>Learnability</span><span>Efficiency</span><span>User confidence</span></div>
+        </div>
       </header>
+
+      <section class="evaluation-study reveal" id="usability-testing" aria-labelledby="evaluation-study-heading">
+        <header class="evaluation-section-intro">
+          <p class="eyebrow">01 / SUS testing</p>
+          <h3 id="evaluation-study-heading">A shared usability measure across three core flows.</h3>
+          <p>To create a consistent pilot measure, seven participants explored three representative prototype flows and then completed the 10-question System Usability Scale (SUS). This produced one comparable usability score for the finished concept.</p>
+        </header>
+        <div class="evaluation-study__grid" aria-label="Evaluation study setup">
+          <article><span>Participants</span><strong>7</strong><p>A small formative sample used to identify usability signals—not population-level proof.</p></article>
+          <article><span>Core journeys</span><strong>3</strong><p>Recovery, workout planning and community represented the product’s central experience.</p></article>
+          <article><span>Questionnaire</span><strong>10</strong><p>Every participant completed the standard ten-item SUS questionnaire after the prototype tasks.</p></article>
+        </div>
+      </section>
+
+      <section class="sus-results reveal" aria-labelledby="sus-results-heading">
+        <header class="evaluation-section-intro evaluation-section-intro--compact">
+          <p class="eyebrow">02 / Results</p>
+          <h3 id="sus-results-heading">The average was <span class="sus-results__accent">71.8,</span> individual scores varied.</h3>
+          <p>Scores ranged from 62.5 to 95. Showing the distribution alongside the average keeps the strongest and weakest responses visible instead of allowing one number to flatten the result.</p>
+        </header>
+        <div class="sus-chart" role="img" aria-label="System Usability Scale scores for seven participants: 95, 62.5, 70, 62.5, 70, 80 and 62.5. Reported average 71.8.">
+          <div class="sus-chart__plot">
+            <span class="sus-chart__line sus-chart__line--100">100</span><span class="sus-chart__line sus-chart__line--75">75</span><span class="sus-chart__line sus-chart__line--50">50</span><span class="sus-chart__line sus-chart__line--25">25</span><span class="sus-chart__line sus-chart__line--0">0</span>
+            <div class="sus-chart__bars">
+              <div style="--score:95"><b>95</b><i></i><span>U1</span></div><div style="--score:62.5"><b>62.5</b><i></i><span>U2</span></div><div style="--score:70"><b>70</b><i></i><span>U3</span></div><div style="--score:62.5"><b>62.5</b><i></i><span>U4</span></div><div style="--score:70"><b>70</b><i></i><span>U5</span></div><div style="--score:80"><b>80</b><i></i><span>U6</span></div><div style="--score:62.5"><b>62.5</b><i></i><span>U7</span></div>
+            </div>
+          </div>
+          <aside class="sus-chart__average"><span>Reported average</span><strong>71.8</strong><p>Across seven prototype participants.</p></aside>
+        </div>
+      </section>
+
+      <section class="evaluation-learning reveal" id="key-learnings" aria-labelledby="evaluation-learning-heading">
+        <header class="evaluation-section-intro">
+          <p class="eyebrow">03 / Reading the evidence</p>
+          <h3 id="evaluation-learning-heading">Useful evidence is also honest about its boundaries.</h3>
+          <p>The result provides direction for another design cycle, but it does not validate every feature—or the product’s real-world health impact.</p>
+        </header>
+        <div class="evaluation-learning__grid">
+          <article><span>What the study supports</span><h4>A testable, understandable concept</h4><p>The core prototype journeys were usable enough to generate structured SUS responses and actionable feedback. That feedback also informed a traceable redesign of the community experience.</p></article>
+          <article class="evaluation-learning__boundary" id="evidence-boundaries"><span>What it does not prove</span><h4>Effectiveness beyond the prototype</h4><p>Seven responses cannot establish statistical significance, formal comparative performance, clinical validity, sustained behaviour change or real-world recovery outcomes.</p></article>
+        </div>
+      </section>
+
+      <section class="evaluation-next reveal" id="next-steps" aria-labelledby="next-steps-heading">
+        <header class="evaluation-section-intro">
+          <p class="eyebrow">04 / Next steps</p>
+          <h3 id="next-steps-heading">Next: test real user behaviour.</h3>
+          <p>A stronger evaluation would expand the participant group, observe task performance directly and review recovery content with qualified subject-matter experts.</p>
+        </header>
+        <div class="evaluation-next__grid">
+          <article><b>01</b><span>Broaden the sample</span><p>Recruit beginners, experienced lifters and people returning from injury to compare needs across different levels of familiarity and confidence.</p></article>
+          <article><b>02</b><span>Measure task performance</span><p>Record completion, errors, hesitation and time on task across the recovery, workout and community journeys.</p></article>
+          <article><b>03</b><span>Validate recovery content</span><p>Review health-related language and guidance with appropriately qualified professionals before any real-world trial.</p></article>
+        </div>
+      </section>
+
+      <blockquote class="evaluation-closing reveal"><span>Evaluation takeaway</span>I could not claim that LiftLab was effective in the real world. I could show that the concept was understandable, testable and ready for a more rigorous next round.</blockquote>
     </section>
 
     <section class="case-end" id="case-end">
-      <p class="eyebrow">End of case study</p><h2>LiftLab</h2><p>Research, structure and feedback brought recovery, training and progression into one coherent experience.</p>
+      <p class="eyebrow">End of case study</p><h2>LiftLab</h2>
       <nav class="case-pagination" aria-label="More case studies">
-        <a href="./index.html#project-03"><span>← Previous case study</span><strong>OffRoad Vision</strong></a>
-        <a href="./index.html#project-02"><span>Next case study →</span><strong>OTVerse</strong></a>
+        <a class="case-pagination__button case-pagination__button--previous" href="./index.html#project-03" aria-label="Previous case study: OffRoad Vision"><i aria-hidden="true">←</i><span><small>Previous</small><strong>OffRoad</strong></span></a>
+        <p>Research, structure and feedback brought recovery, training and progression into one coherent experience.</p>
+        <a class="case-pagination__button case-pagination__button--next" href="./index.html#project-02" aria-label="Next case study: OTVerse"><span><small>Next</small><strong>OTVerse</strong></span><i aria-hidden="true">→</i></a>
       </nav>
     </section>
   </main>
-  <script src="./smooth-scroll.js?v=anchor-inset-3"></script>
-  <script src="./liftlab.js?v=magnifier-right-22"></script>
+  <script src="./smooth-scroll.js?v=native-content-scroll-4"></script>
+  <script src="./liftlab.js?v=accessible-media-68"></script>
   <script src="./cursor.js?v=compact-click-rays-10"></script>
 </body>
 </html>
