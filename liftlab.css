@@ -162,6 +162,7 @@ main{width:100%;margin-left:0}
 /* Evaluation follows the portfolio's charcoal canvas from introduction through results. */
 .chapter--evaluation{background:var(--ink);color:var(--white);--eval-line:#ffffff24;--eval-muted:#aaa69f;--eval-card:#0d0f0e;--eval-green:#55d7a0}
 .chapter--evaluation .chapter-head .eyebrow,.chapter--evaluation .evaluation-section-intro .eyebrow{color:var(--section-label)}
+.chapter--evaluation .chapter-head>.eyebrow{color:var(--orange);opacity:1}
 .chapter--evaluation .chapter-head>p:nth-of-type(2){grid-column:2;max-width:680px;margin:30px 0 0;color:var(--eval-muted);font-size:17px;opacity:1}
 .evaluation-criteria{grid-column:2;width:100%;margin-top:34px;padding:0;border:0}
 .evaluation-criteria>.eyebrow{color:var(--section-label)}
