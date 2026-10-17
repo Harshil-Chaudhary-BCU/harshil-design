@@ -28,7 +28,7 @@ body{font-size:var(--type-paragraph)}
 .case-pagination{width:100%}
 .hero__halo{max-width:1600px}
 .chapter-head{gap:var(--system-grid-gap);margin-bottom:clamp(48px,7vw,112px)}
-.chapter-head>.eyebrow{color:var(--orange)}
+.chapter-head>.eyebrow{color:var(--orange);opacity:1}
 .editorial-grid{gap:var(--system-grid-gap)}
 .chapter-head>p:last-child{width:100%;max-width:none}
 .composite-profile{display:grid;grid-template-columns:minmax(290px,34%) minmax(0,1fr);width:100%;max-width:1200px;overflow:hidden;border:1px solid #ffffff40;border-radius:20px;background:transparent}
