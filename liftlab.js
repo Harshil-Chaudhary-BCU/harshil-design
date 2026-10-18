@@ -22,6 +22,39 @@
   addEventListener('scroll', update, { passive: true });
   addEventListener('resize', update, { passive: true });
   update();
+  const processTrack = document.querySelector('.process-track');
+  const processSlider = document.querySelector('#process-slider-control');
+  const processOutput = document.querySelector('.process-slider output');
+  if (processTrack && processSlider && processOutput) {
+    const processSteps = [...processTrack.querySelectorAll('article')];
+    let sliderIsActive = false;
+    const processMaximum = () => Math.max(0, processTrack.scrollWidth - processTrack.clientWidth);
+    const updateProcessSlider = () => {
+      if (sliderIsActive) return;
+      const maximum = processMaximum();
+      const progress = maximum ? processTrack.scrollLeft / maximum : 0;
+      const percentage = Math.round(progress * 100);
+      const step = Math.min(processSteps.length, Math.max(1, Math.round(progress * (processSteps.length - 1)) + 1));
+      processSlider.value = String(percentage);
+      processSlider.style.setProperty('--process-progress', `${percentage}%`);
+      processOutput.value = `${step} / ${processSteps.length}`;
+    };
+    processSlider.addEventListener('pointerdown', () => { sliderIsActive = true; });
+    processSlider.addEventListener('input', () => {
+      const percentage = Number(processSlider.value);
+      processSlider.style.setProperty('--process-progress', `${percentage}%`);
+      processTrack.scrollLeft = processMaximum() * percentage / 100;
+      const step = Math.min(processSteps.length, Math.max(1, Math.round(percentage / 100 * (processSteps.length - 1)) + 1));
+      processOutput.value = `${step} / ${processSteps.length}`;
+    });
+    const releaseProcessSlider = () => { sliderIsActive = false; updateProcessSlider(); };
+    processSlider.addEventListener('pointerup', releaseProcessSlider);
+    processSlider.addEventListener('pointercancel', releaseProcessSlider);
+    processSlider.addEventListener('change', releaseProcessSlider);
+    processTrack.addEventListener('scroll', updateProcessSlider, { passive: true });
+    addEventListener('resize', updateProcessSlider, { passive: true });
+    updateProcessSlider();
+  }
   if (reduced) reveals.forEach(el => el.classList.add('is-visible'));
   if (!reduced) {
     const observer = new IntersectionObserver(entries => {
