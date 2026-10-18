@@ -50,16 +50,27 @@
   }
   function measure(){
     const compact=innerWidth<=1100;
-    const previousWidth=compact?Math.min(330,stage.clientWidth*.72):Math.min(400,stage.clientWidth*.25);
-    const width=compact?Math.min(340,stage.clientWidth*.74):previousWidth*1.3;
-    const height=compact?Math.min(540,Math.max(400,innerHeight*.56)):Math.min(520,Math.max(420,innerHeight*.52))*1.35;
+    const shortLandscape=compact&&innerWidth>innerHeight&&innerHeight<=520;
+    const previousWidth=shortLandscape
+      ?Math.min(230,stage.clientWidth*.28)
+      :compact?Math.min(330,stage.clientWidth*.72):Math.min(400,stage.clientWidth*.25);
+    const width=shortLandscape
+      ?Math.min(240,stage.clientWidth*.29)
+      :compact?Math.min(340,stage.clientWidth*.74):previousWidth*1.3;
+    const height=shortLandscape
+      ?Math.min(350,Math.max(300,innerHeight*.78))
+      :compact?Math.min(540,Math.max(400,innerHeight*.56)):Math.min(520,Math.max(420,innerHeight*.52))*1.35;
     stage.style.setProperty('--work-card-width',`${width}px`);
     stage.style.setProperty('--work-card-height',`${height}px`);
-    // Triple the original clear gap, independently of the enlarged card width.
-    step=width+previousWidth*(compact?.12:.2)*3;
+    // Short landscape screens need all three cards inset from the safe edges.
+    // Other viewports retain the larger circular composition.
+    const rotatedVisualWidth=width*Math.cos(slotAngle)+height*Math.sin(slotAngle);
+    step=shortLandscape
+      ?Math.max(width*.82,(stage.clientWidth-rotatedVisualWidth)/2-12)
+      :width+previousWidth*(compact?.12:.2)*3;
     radius=step/Math.sin(slotAngle);
     const drop=radius*(1-Math.cos(slotAngle));
-    stage.style.height=`${height+Math.max(170,drop*2+80)}px`;
+    stage.style.height=`${shortLandscape?height+96:height+Math.max(170,drop*2+80)}px`;
     // The tick marks share the exact same radius and centre as the cards.
     arc.setAttribute('viewBox',`0 0 ${stage.clientWidth} ${stage.clientHeight}`);
     arc.replaceChildren();
