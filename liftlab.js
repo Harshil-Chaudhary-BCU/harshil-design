@@ -59,7 +59,9 @@
   if (!reduced) {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } });
-    }, { rootMargin: '0px 0px -10% 0px', threshold: .08 });
+    // Tall mobile galleries can never place 8% of their full area inside one
+    // phone viewport. Reveal as soon as a small, meaningful edge is visible.
+    }, { rootMargin: '0px 0px -10% 0px', threshold: .01 });
     reveals.forEach(el => observer.observe(el));
   }
   if (journeyCurve && !reduced) {
