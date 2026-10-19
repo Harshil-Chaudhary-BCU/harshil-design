@@ -24,8 +24,7 @@
     return slash;
   });
   const root = document.documentElement;
-  // Keep the branded reveal, but do not hold an already-rendered page behind it.
-  const duration = 1100;
+  const duration = 2500;
   overlay.style.setProperty('--preloader-duration', `${duration}ms`);
   const angle = () => {
     const lineLength = Math.min(480, innerWidth * .68) * ((count - 1) * 8 + 8) / 500 + 5;
