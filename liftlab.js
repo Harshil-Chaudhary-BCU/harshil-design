@@ -177,6 +177,17 @@
     let clearImageTimer = 0;
     let revealPanelTimer = 0;
     let hideViewerTimer = 0;
+    const coarsePointer = matchMedia('(pointer: coarse)');
+    const touchPointers = new Map();
+    let touchScale = 1;
+    let touchPanX = 0;
+    let touchPanY = 0;
+    let gestureScale = 1;
+    let gesturePanX = 0;
+    let gesturePanY = 0;
+    let gestureDistance = 0;
+    let gestureMidpoint = null;
+    let singlePoint = null;
     const imageTitle = image => {
       const caption = image.closest('figure')?.querySelector('figcaption');
       return caption?.innerText.trim().replace(/\s+/g, ' ') || image.alt || 'LiftLab project image';
@@ -206,6 +217,7 @@
       count.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(galleryImages.length).padStart(2, '0')}`;
       lens.style.backgroundImage = `url("${viewedImage.src.replace(/"/g, '%22')}")`;
       lens.classList.remove('is-visible');
+      resetTouchZoom();
     };
     const openViewer = (image, fromHold = false) => {
       const index = galleryImages.indexOf(image);
@@ -232,18 +244,126 @@
       viewer.setAttribute('aria-hidden', 'true');
       document.documentElement.classList.remove('case-lightbox-open');
       lens.classList.remove('is-visible');
+      resetTouchZoom();
       hideViewerTimer = window.setTimeout(() => viewer.classList.remove('is-open'), 180);
       clearImageTimer = window.setTimeout(() => {
         if (!viewer.classList.contains('is-open')) viewedImage.removeAttribute('src');
       }, 360);
       if (lastFocus instanceof HTMLElement) lastFocus.focus({ preventScroll: true });
     };
+    const clampTouchPan = () => {
+      const stageRect = stage.getBoundingClientRect();
+      const naturalWidth = viewedImage.naturalWidth || stageRect.width || 1;
+      const naturalHeight = viewedImage.naturalHeight || stageRect.height || 1;
+      const imageScale = Math.min(stageRect.width / naturalWidth, stageRect.height / naturalHeight);
+      const renderedWidth = naturalWidth * imageScale * touchScale;
+      const renderedHeight = naturalHeight * imageScale * touchScale;
+      const maxX = Math.max(0, (renderedWidth - stageRect.width) / 2);
+      const maxY = Math.max(0, (renderedHeight - stageRect.height) / 2);
+      touchPanX = Math.max(-maxX, Math.min(maxX, touchPanX));
+      touchPanY = Math.max(-maxY, Math.min(maxY, touchPanY));
+    };
+    const paintTouchZoom = (panning = false) => {
+      touchScale = Math.max(1, Math.min(4, touchScale));
+      clampTouchPan();
+      stage.style.setProperty('--touch-scale', touchScale.toFixed(3));
+      stage.style.setProperty('--touch-pan-x', `${touchPanX.toFixed(1)}px`);
+      stage.style.setProperty('--touch-pan-y', `${touchPanY.toFixed(1)}px`);
+      stage.classList.toggle('is-touch-zoomed', touchScale > 1.001);
+      stage.classList.toggle('is-touch-panning', panning && touchScale > 1.001);
+      viewer.classList.toggle('is-touch-zoom-enabled', touchScale > 1.001);
+      if (coarsePointer.matches) {
+        const enabled = touchScale > 1.001;
+        magnifierButton.setAttribute('aria-pressed', String(enabled));
+        magnifierButton.setAttribute('aria-label', enabled ? 'Reset image zoom' : 'Zoom image in');
+      }
+    };
+    function resetTouchZoom() {
+      touchPointers.clear();
+      touchScale = 1;
+      touchPanX = 0;
+      touchPanY = 0;
+      gestureDistance = 0;
+      gestureMidpoint = null;
+      singlePoint = null;
+      stage.classList.remove('is-touch-zoomed', 'is-touch-panning');
+      viewer.classList.remove('is-touch-zoom-enabled');
+      stage.style.removeProperty('--touch-scale');
+      stage.style.removeProperty('--touch-pan-x');
+      stage.style.removeProperty('--touch-pan-y');
+      if (coarsePointer.matches) {
+        magnifierButton.setAttribute('aria-pressed', 'false');
+        magnifierButton.setAttribute('aria-label', 'Zoom image in');
+      }
+    }
     const setMagnifier = enabled => {
+      if (coarsePointer.matches) {
+        magnifierEnabled = false;
+        viewer.classList.remove('is-magnifier-enabled');
+        lens.classList.remove('is-visible');
+        if (enabled) {
+          touchScale = 2.25;
+          touchPanX = 0;
+          touchPanY = 0;
+          paintTouchZoom();
+        } else resetTouchZoom();
+        return;
+      }
       magnifierEnabled = enabled;
       viewer.classList.toggle('is-magnifier-enabled', enabled);
       magnifierButton.setAttribute('aria-pressed', String(enabled));
       magnifierButton.setAttribute('aria-label', enabled ? 'Turn magnifier off' : 'Turn magnifier on');
       if (!enabled) lens.classList.remove('is-visible');
+    };
+    const touchDistance = points => Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+    const touchMidpoint = points => ({ x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 });
+    const beginTouchGesture = () => {
+      const points = [...touchPointers.values()];
+      gestureScale = touchScale;
+      gesturePanX = touchPanX;
+      gesturePanY = touchPanY;
+      if (points.length >= 2) {
+        gestureDistance = touchDistance(points);
+        gestureMidpoint = touchMidpoint(points);
+        singlePoint = null;
+      } else {
+        gestureDistance = 0;
+        gestureMidpoint = null;
+        singlePoint = points[0] || null;
+      }
+    };
+    const touchPointerDown = event => {
+      if (!coarsePointer.matches || event.pointerType !== 'touch') return;
+      event.preventDefault();
+      stage.setPointerCapture?.(event.pointerId);
+      touchPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      beginTouchGesture();
+    };
+    const touchPointerMove = event => {
+      if (!touchPointers.has(event.pointerId)) return;
+      event.preventDefault();
+      touchPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+      const points = [...touchPointers.values()];
+      if (points.length >= 2 && gestureDistance > 0 && gestureMidpoint) {
+        const midpoint = touchMidpoint(points);
+        touchScale = gestureScale * touchDistance(points) / gestureDistance;
+        touchPanX = gesturePanX + midpoint.x - gestureMidpoint.x;
+        touchPanY = gesturePanY + midpoint.y - gestureMidpoint.y;
+        paintTouchZoom(true);
+      } else if (points.length === 1 && singlePoint && touchScale > 1.001) {
+        touchPanX = gesturePanX + points[0].x - singlePoint.x;
+        touchPanY = gesturePanY + points[0].y - singlePoint.y;
+        paintTouchZoom(true);
+      }
+    };
+    const touchPointerEnd = event => {
+      if (!touchPointers.has(event.pointerId)) return;
+      touchPointers.delete(event.pointerId);
+      if (touchScale < 1.08) resetTouchZoom();
+      else {
+        paintTouchZoom();
+        beginTouchGesture();
+      }
     };
     const moveLens = event => {
       if (!magnifierEnabled || !viewedImage.src) return;
@@ -300,10 +420,14 @@
     viewer.querySelector('.case-lightbox__backdrop').addEventListener('click', closeViewer);
     previousButton.addEventListener('click', () => renderImage(activeIndex - 1));
     nextButton.addEventListener('click', () => renderImage(activeIndex + 1));
-    magnifierButton.addEventListener('click', () => setMagnifier(!magnifierEnabled));
+    magnifierButton.addEventListener('click', () => setMagnifier(coarsePointer.matches ? touchScale <= 1.001 : !magnifierEnabled));
     stage.addEventListener('pointermove', moveLens);
     stage.addEventListener('pointerdown', moveLens);
     stage.addEventListener('pointerleave', () => lens.classList.remove('is-visible'));
+    stage.addEventListener('pointerdown', touchPointerDown, { passive: false });
+    stage.addEventListener('pointermove', touchPointerMove, { passive: false });
+    stage.addEventListener('pointerup', touchPointerEnd);
+    stage.addEventListener('pointercancel', touchPointerEnd);
     viewer.addEventListener('keydown', event => {
       if (event.key === 'Escape') closeViewer();
       if (event.key === 'ArrowLeft') renderImage(activeIndex - 1);
