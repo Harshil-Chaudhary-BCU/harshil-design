@@ -5,7 +5,19 @@
   const railSections = railLinks.map(link => document.getElementById(link.dataset.railTarget)).filter(Boolean);
   const journeyCurve = document.querySelector('.journey-story__curve');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let updateFrame = 0;
+  let activeRailTarget = '';
+  let railPositions = [];
+  const documentTop = element => {
+    let top = 0;
+    for (let node = element; node; node = node.offsetParent) top += node.offsetTop;
+    return top;
+  };
+  const measureRailSections = () => {
+    railPositions = railSections.map(section => ({ section, top: documentTop(section) }));
+  };
   const update = () => {
+    updateFrame = 0;
     const max = document.documentElement.scrollHeight - innerHeight;
     const progress = max > 0 ? scrollY / max : 0;
     bar.style.transform = `scaleX(${Math.max(0, Math.min(1, progress))})`;
@@ -13,15 +25,37 @@
     let active = railSections[0];
     let nearestTop = -Infinity;
     // Navigation order may differ from page order; select by actual position.
-    railSections.forEach(section => {
-      const top = section.getBoundingClientRect().top;
+    railPositions.forEach(({ section, top: documentOffset }) => {
+      const top = documentOffset - scrollY;
       if (top <= marker && top > nearestTop) { active = section; nearestTop = top; }
     });
-    railLinks.forEach(link => link.classList.toggle('is-active', link.dataset.railTarget === active?.id));
+    if (active?.id !== activeRailTarget) {
+      activeRailTarget = active?.id || '';
+      railLinks.forEach(link => link.classList.toggle('is-active', link.dataset.railTarget === activeRailTarget));
+    }
   };
-  addEventListener('scroll', update, { passive: true });
-  addEventListener('resize', update, { passive: true });
+  const scheduleUpdate = () => {
+    if (!updateFrame) updateFrame = requestAnimationFrame(update);
+  };
+  const handleResize = () => {
+    measureRailSections();
+    scheduleUpdate();
+  };
+  addEventListener('scroll', scheduleUpdate, { passive: true });
+  addEventListener('resize', handleResize, { passive: true });
+  addEventListener('load', handleResize, { once: true });
+  measureRailSections();
   update();
+
+  // Chrome keeps CSS animations ticking on long off-screen sections more
+  // aggressively than Safari. Pause decorative loops until they are visible.
+  const ambientMotion = [...document.querySelectorAll('.research-avatars, .problem-orbit')];
+  if (ambientMotion.length && !reduced) {
+    const ambientObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => entry.target.classList.toggle('is-motion-visible', entry.isIntersecting));
+    }, { rootMargin: '18% 0px' });
+    ambientMotion.forEach(element => ambientObserver.observe(element));
+  }
   const processTrack = document.querySelector('.process-track');
   const processSlider = document.querySelector('#process-slider-control');
   const processOutput = document.querySelector('.process-slider output');
