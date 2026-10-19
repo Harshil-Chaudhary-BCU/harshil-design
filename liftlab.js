@@ -486,7 +486,7 @@
 
     const render = index => {
       if (!slides.length) return;
-      active = (index + slides.length) % slides.length;
+      active = Math.max(0, Math.min(index, slides.length - 1));
       slides.forEach((slide, slideIndex) => {
         resetSlidePosition(slide);
         const isActive = slideIndex === active;
@@ -504,9 +504,8 @@
       total.textContent = String(slides.length);
       if (screenTitle) screenTitle.textContent = slides[active].dataset.title || '';
       if (screenDescription) screenDescription.textContent = slides[active].dataset.description || '';
-      const hasMultipleScreens = slides.length > 1;
-      previous.disabled = !hasMultipleScreens;
-      next.disabled = !hasMultipleScreens;
+      previous.disabled = active === 0;
+      next.disabled = active === slides.length - 1;
     };
 
     previous.addEventListener('click', () => render(active - 1));
