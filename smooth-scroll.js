@@ -1,6 +1,7 @@
 /* Native scroll positions with optional eased wheel input and anchor journeys. */
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduceMotion = () => reduced.matches;
   let anchorFrame = 0;
   let contentFrame = 0;
   let contentTarget = scrollY;
@@ -38,7 +39,7 @@
   };
   const wheel = event => {
     stopAnchor();
-    if (!smoothContent || reduced.matches || event.defaultPrevented || event.ctrlKey ||
+    if (!smoothContent || reduceMotion() || event.defaultPrevented || event.ctrlKey ||
         !event.deltaY || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
     const nested = event.composedPath().some(node => {
       if (!(node instanceof HTMLElement) || node === document.body || node === document.documentElement) return false;
@@ -89,7 +90,7 @@
     const distance = finish - start;
 
     if (href?.startsWith('#')) history.pushState(null, '', href);
-    if (reduced.matches || Math.abs(distance) < 1) {
+    if (reduceMotion() || Math.abs(distance) < 1) {
       scrollTo({ top: finish, behavior: 'instant' });
       return;
     }

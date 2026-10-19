@@ -1,6 +1,7 @@
 (() => {
   const media=matchMedia('(hover:hover) and (pointer:fine)');
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const reduceMotion=()=>reduced.matches;
   const cursor=document.createElement('div');
   cursor.className='hc-pointer';
   cursor.setAttribute('aria-hidden','true');
@@ -36,7 +37,7 @@
       clearTimeout(rayTimer);
       rayTimer=setTimeout(()=>{delete cursor.dataset.burst},1000);
     }
-    if(reduced.matches)return;
+    if(reduceMotion())return;
     const mark=document.createElement('div');
     mark.className='hc-pointer-burst';
     mark.setAttribute('aria-hidden','true');
@@ -50,7 +51,7 @@
   function draw(){cursor.style.transform=`translate3d(${x}px,${y}px,0)`}
   function tick(now){
     const dt=Math.min(40,now-last);last=now;
-    const ease=reduced.matches?1:1-Math.exp(-dt/22);
+    const ease=reduceMotion()?1:1-Math.exp(-dt/22);
     x+=(targetX-x)*ease;y+=(targetY-y)*ease;
     if(Math.hypot(targetX-x,targetY-y)<.1){x=targetX;y=targetY;frame=0}else frame=requestAnimationFrame(tick);
     draw();
@@ -60,7 +61,7 @@
     if(!media.matches||event.pointerType!=='mouse'){hide();return}
     cursor.dataset.mode=event.target.closest('.magnetic-work')&&!event.target.closest('a,button')?'drag':event.target.closest('a,button,input,textarea,select,[role="button"],[tabindex]:not([tabindex="-1"])')?'interactive':'default';
     targetX=event.clientX;targetY=event.clientY;
-    if(!visible||reduced.matches){x=targetX;y=targetY;draw()}
+    if(!visible||reduceMotion()){x=targetX;y=targetY;draw()}
     visible=true;
     if(!frame){last=performance.now();frame=requestAnimationFrame(tick)}
     document.documentElement.classList.add('hc-pointer-active');

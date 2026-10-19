@@ -4,7 +4,19 @@
   const railLinks = [...document.querySelectorAll('[data-rail-target]')];
   const railSections = railLinks.map(link => document.getElementById(link.dataset.railTarget)).filter(Boolean);
   const journeyCurve = document.querySelector('.journey-story__curve');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const susChart = document.querySelector('.sus-chart');
+  const motionMedia = matchMedia('(prefers-reduced-motion: reduce)');
+  let reduced = motionMedia.matches;
+  const applyMotionPreference = () => {
+    reduced = motionMedia.matches;
+    document.documentElement.classList.toggle('reduce-motion', reduced);
+    if (reduced) {
+      reveals.forEach(element => element.classList.add('is-visible'));
+      susChart?.classList.add('is-chart-visible');
+    }
+  };
+  applyMotionPreference();
+  motionMedia.addEventListener('change', applyMotionPreference);
   let updateFrame = 0;
   let activeRailTarget = '';
   let railPositions = [];
@@ -98,6 +110,17 @@
     }, { rootMargin: '0px 0px -10% 0px', threshold: .01 });
     reveals.forEach(el => observer.observe(el));
   }
+  if (susChart) {
+    if (reduced) susChart.classList.add('is-chart-visible');
+    else {
+      const chartObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('is-chart-visible', reduced || entry.isIntersecting);
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: .18 });
+      chartObserver.observe(susChart);
+    }
+  }
   if (journeyCurve && !reduced) {
     const journeyDuration = 3.2;
     const setJourneyPathLength = () => {
@@ -177,6 +200,7 @@
     let clearImageTimer = 0;
     let revealPanelTimer = 0;
     let hideViewerTimer = 0;
+    let imageRequestId = 0;
     const coarsePointer = matchMedia('(pointer: coarse)');
     const touchPointers = new Map();
     let touchScale = 1;
@@ -210,12 +234,29 @@
     const renderImage = index => {
       activeIndex = (index + galleryImages.length) % galleryImages.length;
       const source = galleryImages[activeIndex];
-      viewedImage.src = source.currentSrc || source.src;
+      const previewSource = source.currentSrc || source.src;
+      const fullSource = source.dataset.fullSrc ? new URL(source.dataset.fullSrc, document.baseURI).href : previewSource;
+      const requestId = ++imageRequestId;
+      const setLensSource = imageSource => {
+        lens.style.backgroundImage = `url("${imageSource.replace(/"/g, '%22')}")`;
+      };
+      viewedImage.src = previewSource;
       viewedImage.alt = source.alt || imageTitle(source);
       context.textContent = imageContext(source);
       title.textContent = imageTitle(source);
       count.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${String(galleryImages.length).padStart(2, '0')}`;
-      lens.style.backgroundImage = `url("${viewedImage.src.replace(/"/g, '%22')}")`;
+      setLensSource(previewSource);
+      if (fullSource !== previewSource) {
+        const fullImage = new Image();
+        fullImage.decoding = 'async';
+        fullImage.onload = () => {
+          if (requestId !== imageRequestId || !viewer.classList.contains('is-open')) return;
+          viewedImage.src = fullSource;
+          setLensSource(fullSource);
+          if (touchScale > 1.001) paintTouchZoom();
+        };
+        fullImage.src = fullSource;
+      }
       lens.classList.remove('is-visible');
       resetTouchZoom();
     };
@@ -227,6 +268,7 @@
       clearTimeout(clearImageTimer);
       clearTimeout(revealPanelTimer);
       clearTimeout(hideViewerTimer);
+      imageRequestId += 1;
       renderImage(index);
       viewer.classList.remove('is-ready');
       viewer.classList.add('is-open');
@@ -238,6 +280,7 @@
       }, 90);
     };
     const closeViewer = () => {
+      imageRequestId += 1;
       clearTimeout(revealPanelTimer);
       clearTimeout(hideViewerTimer);
       viewer.classList.remove('is-ready');
