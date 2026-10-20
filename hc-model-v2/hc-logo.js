@@ -39,7 +39,8 @@ export async function mountHCLogo(container, {
   // A body-level viewport layer escapes clipping/overflow on the mount element.
   canvas.style.cssText=`position:fixed;left:0;top:0;display:block;background:transparent;pointer-events:none;z-index:${zIndex};`;
   canvas.setAttribute('role','img');
-  canvas.setAttribute('aria-label',`${rotationMode === 'sway' ? 'Gently swaying' : 'Automatically rotating'} HC logo with gently flowing particles and soft light.${interactive?' Hold the left mouse button and drag through the letters to distort them. Release to let the particles return.':''}`);
+  canvas.setAttribute('aria-label','Harshil Chaudhary’s 3D HC monogram');
+  if(interactive)canvas.setAttribute('aria-description','Hold the left mouse button and drag through the letters to move the particles. Release to let them return.');
   container.appendChild(canvas);
   canvas.style.position='absolute';
   const glass=glassEffect?createGlass(renderer):null;

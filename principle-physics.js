@@ -2,6 +2,10 @@
 (() => {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const fine = matchMedia('(hover:hover) and (pointer:fine)');
+  const iconObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => entry.target.classList.toggle('is-icon-visible', entry.isIntersecting));
+  });
+  document.querySelectorAll('.principle-icon--network,.principle-icon--checkpoints').forEach(icon => iconObserver.observe(icon));
   document.querySelectorAll('.landing-about .principle-card').forEach(card => {
     const position = [0,0,0,0], velocity = [0,0,0,0];
     const target = [0,0,0,0], following = [0,0,0,0];

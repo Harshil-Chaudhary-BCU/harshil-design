@@ -1,3 +1,4 @@
+(() => {
 const sequence=document.querySelector('.landing-sequence');
 const reveal=document.querySelector('.beyond-sticky');
 const hero=sequence.querySelector('.hero');
@@ -82,6 +83,20 @@ let returnLocked=false;
 let descentLocked=false;
 const magneticThreshold=.35;
 let contentScrollFrame=0,contentScrollTarget=scrollY,contentScrollPrevious=0;
+let anchorJourney=false;
+addEventListener('portfolio-anchor-start',()=>{
+  anchorJourney=true;
+  cancelMagnet();
+  if(openingScrollFrame)cancelAnimationFrame(openingScrollFrame);
+  openingScrollFrame=0;
+  magneticInteracted=false;
+});
+addEventListener('portfolio-anchor-end',()=>{
+  anchorJourney=false;
+  openingScrollTarget=scrollY;
+  lastOpeningScrollY=scrollY;
+  if(scrollY>=contentBoundary()-1)finishOpeningScroll();
+});
 function stopContentScroll(){
   if(contentScrollFrame)cancelAnimationFrame(contentScrollFrame);
   contentScrollFrame=0;
@@ -196,7 +211,7 @@ function snapOpening(destination,lockReturn=false){
 }
 function settleOpening(){
   clearTimeout(magneticIdle);
-  if(reduced.matches||magneticFrame||touchActive||!magneticInteracted)return;
+  if(anchorJourney||reduced.matches||magneticFrame||touchActive||!magneticInteracted)return;
   magneticIdle=setTimeout(()=>{
     const start=scrollY+sequence.getBoundingClientRect().top;
     const travel=Math.max(1,sequence.offsetHeight-heroViewportHeight);
@@ -220,6 +235,7 @@ function animateOpeningScroll(){
   openingScrollFrame=requestAnimationFrame(animateOpeningScroll);
 }
 function smoothOpeningWheel(event){
+  if(anchorJourney)return;
   if(event.ctrlKey)return;
   // Once the return starts, wheel velocity and momentum cannot shorten or
   // interrupt its 1.85-second timeline (including opposite-direction input).
@@ -268,6 +284,7 @@ addEventListener('touchstart',()=>{touchActive=true;magneticInteracted=true;if(!
 let openingTouchY=0;
 addEventListener('touchstart',event=>{openingTouchY=event.touches[0]?.clientY||0},{passive:true});
 addEventListener('touchmove',event=>{
+  if(anchorJourney)return;
   if(returnLocked||descentLocked){event.preventDefault();return}
   const y=event.touches[0]?.clientY;
   const start=scrollY+sequence.getBoundingClientRect().top;
@@ -292,7 +309,7 @@ addEventListener('scroll',()=>{
   const current=scrollY;
   const start=current+sequence.getBoundingClientRect().top;
   const end=start+Math.max(1,sequence.offsetHeight-heroViewportHeight);
-  if(!returnLocked&&!magneticFrame&&openingScrollComplete&&!reduced.matches&&
+  if(!anchorJourney&&!returnLocked&&!magneticFrame&&openingScrollComplete&&!reduced.matches&&
      magneticInteracted&&current<lastOpeningScrollY&&lastOpeningScrollY>=end-1&&current<end){
     cancelMagnet();
     scrollTo({top:end,behavior:'instant'});
@@ -321,7 +338,7 @@ function update(){
   progress=reduced.matches?0:Math.max(0,Math.min(1,-sequenceRect.top/Math.max(1,travel)));
   if(!openingScrollComplete&&progress>=.999)finishOpeningScroll();
   if(progress<.002&&!magneticFrame)magneticArmed=true;
-  if(magneticInteracted&&magneticArmed&&!magneticFrame&&!touchActive&&progress>=magneticThreshold&&progress<.998){
+  if(!anchorJourney&&magneticInteracted&&magneticArmed&&!magneticFrame&&!touchActive&&progress>=magneticThreshold&&progress<.998){
     snapOpening(scrollY+sequenceRect.top+travel);
   }
   // The magnetic scroll already eases time. A second ease on the lens size
@@ -427,8 +444,8 @@ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',sch
 const staticLogo=document.createElement('div');
 staticLogo.className='hc-static-logo';
 staticLogo.setAttribute('role','img');
-staticLogo.setAttribute('aria-label','HC logo with a wavy glass finish');
-const staticAsset=new URL('./assets/hc-text-logo.svg',import.meta.url).href;
+staticLogo.setAttribute('aria-label','Harshil Chaudhary’s HC monogram');
+const staticAsset=new URL('./assets/hc-text-logo.svg',document.baseURI).href;
 staticLogo.innerHTML=`<svg class="hc-static-art" viewBox="0 0 1700 717" aria-hidden="true">
   <defs><filter id="hc-static-ripple" x="-3%" y="-5%" width="106%" height="110%">
     <feTurbulence type="fractalNoise" baseFrequency=".008 .055" numOctaves="1" seed="8" result="ripple"/>
@@ -451,7 +468,7 @@ async function setupHeroLogo(){
   }
   let logoHost;
   try{
-    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=stable-touch-viewport-14');
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=concise-image-description-15');
     logoHost=document.createElement('div');
     logoHost.className='hc-monogram-canvas hc-model-canvas';
     logoHost.style.transform='none';
@@ -465,3 +482,4 @@ async function setupHeroLogo(){
   }
 }
 setupHeroLogo();
+})();

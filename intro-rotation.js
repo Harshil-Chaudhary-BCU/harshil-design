@@ -5,7 +5,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0;
   let visible = false;
-  let ready = !document.documentElement.classList.contains('preloader-active');
+  let ready = false;
   let timer = 0;
   let cleanup = 0;
 
@@ -37,7 +37,14 @@
     preloadObserver.disconnect();
     sync();
   });
-  if (!ready) preloadObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  preloadObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  const afterStartup = () => {
+    ready = !document.documentElement.classList.contains('preloader-active');
+    if (ready) preloadObserver.disconnect();
+    sync();
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', afterStartup, { once: true });
+  else afterStartup();
   new IntersectionObserver(entries => {
     visible = entries[0].isIntersecting && entries[0].intersectionRatio >= .25;
     sync();

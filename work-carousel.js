@@ -25,6 +25,7 @@
       card.style.setProperty('--card-rotation',`${angle*180/Math.PI}deg`);
       card.style.zIndex=String(10-Math.round(edge*4));
       card.style.opacity=String(edge<=1?1:Math.max(0,1-(edge-1)*2));
+      card.style.filter=`brightness(${1-Math.min(1,edge)*.12})`;
       const link=card.querySelector('a');
       if(link)link.tabIndex=Math.abs(slot)<.1?0:-1;
     });
@@ -146,10 +147,32 @@
     settle(Math.round(target)+delta);
   }));
   stage.addEventListener('keydown',event=>{
-    if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();settle(target+(event.key==='ArrowRight'?1:-1));}
     if(event.key==='Home'){event.preventDefault();settle(0);}
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.defaultPrevented||event.altKey||event.ctrlKey||event.metaKey||
+       !['ArrowLeft','ArrowRight'].includes(event.key)||!section.classList.contains('is-carousel-ready'))return;
+    if(event.target instanceof Element&&event.target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"]),[role="textbox"],[role="slider"],[role="listbox"],[role="dialog"],[role="menu"]'))return;
+    if(document.querySelector('.compact-menu.is-open'))return;
+    const bounds=section.getBoundingClientRect();
+    const viewportMiddle=innerHeight*.5;
+    const workInView=bounds.top<=viewportMiddle&&bounds.bottom>viewportMiddle;
+    const focusInWork=section.contains(document.activeElement)&&bounds.bottom>0&&bounds.top<innerHeight;
+    if(!workInView&&!focusInWork)return;
+    event.preventDefault();
+    settle(target+(event.key==='ArrowRight'?1:-1));
   });
   addEventListener('resize',measure);
   reduced.addEventListener('change',()=>settle(target));
-  measure();announce();
+  // Switch from the readable static layout only once all controls are installed.
+  try {
+    section.classList.add('is-carousel-ready');
+    measure();announce();
+    stage.tabIndex=0;
+    stage.setAttribute('aria-roledescription','carousel');
+    stage.setAttribute('aria-label','Selected projects. Drag, swipe, or use the arrow keys to move cards.');
+  } catch {
+    section.classList.remove('is-carousel-ready');
+    cards.forEach(card=>card.querySelector('a')?.removeAttribute('tabindex'));
+  }
 })();

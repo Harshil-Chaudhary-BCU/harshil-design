@@ -5,15 +5,15 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 const files = new Set();
-const pending = ['index.html', '404.html'];
+const pending = ['index.html', '404.html', 'favicon.ico', 'apple-touch-icon.png', 'assets/hc-share-v3.png'];
 const localPath = (file, reference) => {
   const clean = reference.split(/[?#]/)[0];
   if (!clean || clean==='/' || /^[a-z]+:/i.test(clean)) return null;
   return path.normalize(clean.startsWith('/') ? clean.slice(1) : path.join(path.dirname(file), clean));
 };
 
-// Follow only runtime dependencies. Case studies, exports, and QA images are
-// intentionally not part of the publicly deployed artifact.
+// Follow public runtime dependencies, including linked case studies.
+// Disconnected drafts, exports and QA images stay outside the deployment.
 while (pending.length) {
   const file = pending.pop();
   if (files.has(file)) continue;
@@ -50,4 +50,4 @@ for (const file of files) {
 const errorPage = path.join(output, '404.html');
 fs.writeFileSync(errorPage, fs.readFileSync(errorPage, 'utf8').replace('<base href="/">', `<base href="${base}">`));
 fs.writeFileSync(path.join(output, '.nojekyll'), '');
-console.log(`Packaged ${files.size} runtime files for ${base}; case studies and local review files excluded.`);
+console.log(`Packaged ${files.size} runtime files for ${base}; disconnected drafts and local review files excluded.`);

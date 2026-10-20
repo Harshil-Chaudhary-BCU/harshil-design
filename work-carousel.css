@@ -38,3 +38,10 @@
   .work-carousel-stage{height:clamp(360px,82svh,460px)}
 }
 @media(prefers-reduced-motion:reduce){.work-card{will-change:auto}}
+/* Static cards are the default until the carousel successfully initialises. */
+.magnetic-work:not(.is-carousel-ready) .work-project-selectors{display:none}
+.magnetic-work:not(.is-carousel-ready) .work-carousel-stage{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch;gap:24px;height:auto!important;padding:24px 0;cursor:auto;user-select:auto}
+.magnetic-work:not(.is-carousel-ready) .work-card{position:relative;left:auto;top:auto;width:100%;height:auto;min-height:440px;transform:none!important;opacity:1!important;will-change:auto}
+.magnetic-work:not(.is-carousel-ready) .work-card-art{min-height:180px;max-height:240px}
+.magnetic-work:not(.is-carousel-ready) .work-carousel-arc{display:none}
+@media(max-width:700px){.magnetic-work:not(.is-carousel-ready) .work-carousel-stage{grid-template-columns:1fr;max-width:440px}}

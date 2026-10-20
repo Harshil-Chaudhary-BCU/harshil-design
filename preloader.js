@@ -6,7 +6,9 @@
     return;
   }
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  if (reduced.matches) {
+  // Once content has been available for a while, do not cover it with a late loader.
+  const alreadyInteracting = scrollY > 0 || document.activeElement?.matches('a,button,input,select,textarea');
+  if (reduced.matches || performance.now() > 1500 || alreadyInteracting) {
     overlay.remove();
     return;
   }

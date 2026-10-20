@@ -3,6 +3,7 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const reduceMotion = () => reduced.matches;
   let anchorFrame = 0;
+  let anchorRunning = false;
   let contentFrame = 0;
   let contentTarget = scrollY;
   let previousTime = 0;
@@ -13,6 +14,10 @@
   const stopAnchor = () => {
     if (anchorFrame) cancelAnimationFrame(anchorFrame);
     anchorFrame = 0;
+    if (anchorRunning) {
+      anchorRunning = false;
+      dispatchEvent(new Event('portfolio-anchor-end'));
+    }
   };
   const stop = () => {
     stopAnchor();
@@ -86,7 +91,12 @@
     const isChapterLink = control.closest('.case-rail') || control.closest('.process-track h3');
     const anchor = isChapterLink ? destination.closest('.chapter') || destination : destination;
     const inset = parseFloat(getComputedStyle(anchor).scrollMarginTop) || 0;
-    const finish = Math.max(0, Math.min(documentTop(anchor) - inset, document.documentElement.scrollHeight - innerHeight));
+    const aboutHeading = targetId === 'about' ? destination.querySelector('.about-introduction h2') : null;
+    // Frame the opening About heading and introduction beneath the navigation.
+    const targetTop = aboutHeading
+      ? documentTop(aboutHeading) - Math.max(100, innerHeight * (innerWidth > 1100 ? .28 : .18))
+      : documentTop(anchor) - inset;
+    const finish = Math.max(0, Math.min(targetTop, document.documentElement.scrollHeight - innerHeight));
     const distance = finish - start;
 
     if (href?.startsWith('#')) history.pushState(null, '', href);
@@ -95,14 +105,49 @@
       return;
     }
 
-    const duration = Math.min(4200, Math.max(1400, 1200 + Math.sqrt(Math.abs(distance)) * 30));
+    anchorRunning = true;
+    dispatchEvent(new Event('portfolio-anchor-start'));
+    const smooth = value => value * value * value * (10 + value * (-15 + 6 * value));
+    const stages = [];
+    const addStage = (from, to, duration) => {
+      if (Math.abs(to - from) > 1) stages.push({ from, to, duration });
+    };
+    const sequence = document.querySelector('.landing-sequence');
+    let remainderStart = start;
+    if (sequence) {
+      const portalStart = documentTop(sequence);
+      const portalTravel = Math.max(1, sequence.offsetHeight - (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hero-viewport-height')) || innerHeight));
+      const portalEnd = portalStart + portalTravel;
+      const loweredTag = portalStart + portalTravel * .35;
+      // Give the tag descent and portal reveal their own time instead of
+      // rushing through them at the midpoint of a long document scroll.
+      if (start < portalEnd && finish >= portalEnd) {
+        if (start < loweredTag) addStage(start, loweredTag, 1000);
+        addStage(Math.max(start, loweredTag), portalEnd, 1750);
+        remainderStart = portalEnd;
+      } else if (start >= portalEnd && finish < portalEnd) {
+        addStage(start, portalEnd, Math.min(3200, 1200 + Math.sqrt(start - portalEnd) * 24));
+        addStage(portalEnd, Math.max(finish, loweredTag), 1750);
+        if (finish < loweredTag) addStage(loweredTag, finish, 1000);
+        remainderStart = finish;
+      }
+    }
+    addStage(remainderStart, finish, Math.min(4200, Math.max(1400, 1200 + Math.sqrt(Math.abs(finish - remainderStart)) * 30)));
+    const duration = stages.reduce((total, stage) => total + stage.duration, 0);
     const began = performance.now();
     const travel = now => {
-      const t = Math.min(1, (now - began) / duration);
-      const eased = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-      scrollTo({ top: start + distance * eased, behavior: 'instant' });
-      if (t < 1) anchorFrame = requestAnimationFrame(travel);
-      else anchorFrame = 0;
+      let elapsed = now - began;
+      let position = finish;
+      for (const stage of stages) {
+        if (elapsed < stage.duration) {
+          position = stage.from + (stage.to - stage.from) * smooth(Math.max(0, elapsed / stage.duration));
+          break;
+        }
+        elapsed -= stage.duration;
+      }
+      scrollTo({ top: position, behavior: 'instant' });
+      if (now - began < duration) anchorFrame = requestAnimationFrame(travel);
+      else stopAnchor();
     };
     anchorFrame = requestAnimationFrame(travel);
   });

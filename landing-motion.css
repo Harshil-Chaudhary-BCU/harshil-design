@@ -97,8 +97,7 @@
 @media(min-width:901px){.principle-card{min-height:190px;padding:22px}.principle-card h3{font-size:22px;line-height:1.1}.principle-content p{font-size:16px;line-height:1.35;margin-top:12px}}
 .principle-icon{position:relative;width:90px;height:90px;background:transparent;overflow:visible}
 .principle-icon::before,.principle-icon::after,.principle-icon i{content:'';position:absolute;display:block}
-.principle-system .principle-icon::before{width:28px;height:28px;border-radius:50%;left:31px;top:13px;background:var(--accent);box-shadow:0 0 24px #ff6b3540;animation:system-head 3.6s ease-in-out infinite}
-.principle-system .principle-icon::after{width:28px;height:40px;border-radius:18px 18px 4px 4px;left:31px;top:47px;background:#e7e3db70;animation:system-body 3.6s ease-in-out infinite}
+.principle-system .principle-icon::before,.principle-system .principle-icon::after{display:none}
 .principle-prototype .principle-icon::before,.principle-prototype .principle-icon::after{display:none}
 .prototype-phone{position:absolute;left:22px;top:4px;width:46px;height:82px;border:2px solid var(--accent);border-radius:11px;background:#191b1b;box-shadow:0 0 18px #ff6b3515;box-sizing:border-box}
 .prototype-phone::after{content:'';position:absolute;bottom:2px;left:50%;width:7px;height:2px;border-radius:2px;background:#e7e3db8c;transform:translateX(-50%)}
@@ -111,15 +110,27 @@
 .prototype-page i:nth-of-type(2){width:73%}
 .prototype-page em{height:16px;margin:6px 0 5px;background:#e7e3db38}
 .prototype-page i:last-child{width:58%}
-.principle-outcome .principle-icon::before{width:50px;height:36px;left:10px;top:27px;border-radius:30px 5px 5px 30px;background:#e7e3db70;animation:outcome-base 3.8s ease-in-out infinite}
-.principle-outcome .principle-icon::after{width:17px;height:17px;right:17px;top:37px;border-radius:50%;background:var(--accent);box-shadow:13px 0 0 #ff6b3590;animation:outcome-points 3.8s ease-in-out infinite}
+.principle-outcome .principle-icon::before,.principle-outcome .principle-icon::after{display:none}
+.principle-icon--network svg,.principle-icon--checkpoints svg{display:block;width:100%;height:100%;overflow:visible}
+.network-track,.outcome-track{fill:none;stroke:#e7e3db55;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.network-pulse{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-dasharray:.16 .84;animation:network-signal 4.8s linear infinite}
+.network-node{fill:#767570;stroke:#151515;stroke-width:2}
+.network-hub{fill:var(--accent);stroke:#ff6b3538;stroke-width:6}
+.outcome-progress{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:outcome-route 5.4s ease-in-out infinite}
+.outcome-step{fill:#777570;animation:outcome-checkpoint 5.4s ease-in-out infinite}
+.outcome-step--two{animation-delay:.65s}.outcome-step--three{animation-delay:1.3s}
+.outcome-finish{fill:#111;stroke:var(--accent);stroke-width:2}
+.outcome-check{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:outcome-complete 5.4s ease-in-out infinite}
+.principle-icon--network *,.principle-icon--checkpoints *{animation-play-state:paused}
+.principle-icon.is-icon-visible *{animation-play-state:running}
+@keyframes network-signal{from{stroke-dashoffset:.16}to{stroke-dashoffset:-1}}
+@keyframes outcome-route{0%,8%{stroke-dashoffset:1}58%,86%{stroke-dashoffset:0}100%{stroke-dashoffset:1}}
+@keyframes outcome-checkpoint{0%,8%,100%{fill:#777570}18%,74%{fill:var(--accent)}}
+@keyframes outcome-complete{0%,55%{stroke-dashoffset:1;opacity:0}68%,86%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@media(prefers-reduced-motion:reduce){.principle-icon--network *,.principle-icon--checkpoints *{animation:none!important}.network-pulse{stroke-dasharray:none}.outcome-progress,.outcome-check{stroke-dashoffset:0;opacity:1}.outcome-step{fill:var(--accent)}}
 .principle-beyond .principle-icon::before{left:12px;top:44px;width:26px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--accent));transform-origin:right center;animation:beyond-trail 3.6s ease-in-out infinite}
 .principle-beyond .principle-icon::after{left:36px;top:29px;border-left:27px solid var(--accent);border-top:16px solid transparent;border-bottom:16px solid transparent;filter:drop-shadow(0 0 12px #ff6b3545);transform-origin:35% 50%;animation:beyond-arrow 3.6s cubic-bezier(.45,0,.25,1) infinite}
-@keyframes system-head{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(-8px) scale(1.04)}60%{transform:translateY(-8px) scale(1.04)}}
-@keyframes system-body{0%,100%{transform:scaleY(1);opacity:.7}45%,60%{transform:scaleY(.9);opacity:.92}}
 @keyframes prototype-scroll{to{transform:translateY(-50%)}}
-@keyframes outcome-base{0%,100%{transform:scaleX(.86);transform-origin:left center;opacity:.62}48%,62%{transform:scaleX(1);transform-origin:left center;opacity:.9}}
-@keyframes outcome-points{0%,100%{transform:translateX(-12px);opacity:.55}48%,62%{transform:translateX(5px);opacity:1}}
 @keyframes beyond-arrow{0%,18%{transform:translateX(-6px) scale(.94);opacity:.72}48%,62%{transform:translateX(12px) scale(1);opacity:1}78%{transform:translateX(20px) scale(.95);opacity:0}79%{transform:translateX(-10px) scale(.94);opacity:0}100%{transform:translateX(-6px) scale(.94);opacity:.72}}
 @keyframes beyond-trail{0%,18%,100%{transform:scaleX(0);opacity:0}42%,58%{transform:scaleX(1);opacity:.8}76%{transform:scaleX(.35);opacity:0}}
 @media(max-width:1100px){.principles-grid{gap:24px}.principle-card{padding:14px 18px;grid-template-columns:82px minmax(0,1fr);gap:14px}}
