@@ -46,6 +46,9 @@
     stopAnchor();
     if (!smoothContent || reduceMotion() || event.defaultPrevented || event.ctrlKey ||
         !event.deltaY || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+    // Keep modal/lightbox scroll locks intact instead of moving the page behind them.
+    if ([document.documentElement, document.body].some(element =>
+      /hidden|clip/.test(getComputedStyle(element).overflowY))) return;
     const nested = event.composedPath().some(node => {
       if (!(node instanceof HTMLElement) || node === document.body || node === document.documentElement) return false;
       if (node.matches('input,textarea,select,[contenteditable="true"]')) return true;

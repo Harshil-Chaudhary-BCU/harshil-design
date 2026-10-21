@@ -25,6 +25,31 @@
   <meta name="twitter:description" content="Harshil Chaudhary is a product designer across digital, automotive and spatial experiences.">
   <meta name="twitter:image" content="https://www.harshil.design/assets/hc-share-v3.png">
   <meta name="twitter:image:alt" content="Harshil Chaudhary’s HC monogram in orange and off-white on a dark background.">
+  <script>
+    // Warm the exact assets used by setupHeroLogo while the opening animation runs.
+    // Hints only: do not execute the model early or delay the page/preloader.
+    if (/^https?:$/.test(location.protocol) && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      for (const href of [
+        './hc-model-v2/hc-logo.js?v=concise-image-description-15',
+        './hc-model-v2/vendor/three.module.js',
+        './hc-model-v2/vendor/GLTFLoader.js',
+        './hc-model-v2/vendor/BufferGeometryUtils.js',
+        './hc-model-v2/glass.js?v=true-black-polish-7',
+        './hc-model-v2/particle-life.js?v=wake1'
+      ]) {
+        const hint = document.createElement('link');
+        hint.rel = 'modulepreload';
+        hint.href = href;
+        document.head.append(hint);
+      }
+      const model = document.createElement('link');
+      model.rel = 'preload';
+      model.as = 'fetch';
+      model.crossOrigin = 'anonymous';
+      model.href = './hc-model-v2/assets/HC-Particles-Animated.glb?v=slow1';
+      document.head.append(model);
+    }
+  </script>
   <script defer src="./portfolio-return.js?v=1"></script>
   <style>html.portfolio-restoring body{visibility:hidden}</style>
   <link rel="icon" type="image/png" sizes="16x16" href="./assets/hc-icon-16-v3.png">
