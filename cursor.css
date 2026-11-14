@@ -6,6 +6,8 @@
 .hc-drag-cursor::before,.hc-drag-cursor::after{content:'';position:absolute;width:4.8px;height:4.8px;border-radius:50%;background:#777;top:calc(50% - 2.4px)}
 .hc-drag-cursor::before{left:-16.8px}.hc-drag-cursor::after{right:-16.8px}
 .hc-pointer[data-mode="drag"] .hc-pointer-shape{display:none}
+.hc-cursor-hint{position:absolute;left:16px;top:22px;padding:6px 10px;border-radius:7px;background:#2a2a2aeb;color:#f4f2ed;font:400 12px/1.2 'Geist',sans-serif;letter-spacing:.01em;white-space:nowrap;box-shadow:0 2px 10px #0006;opacity:0;transform:translateY(3px);transition:opacity 180ms ease,transform 180ms ease}
+.hc-pointer[data-hint="model"] .hc-cursor-hint{opacity:1;transform:none}
 .hc-pointer[data-mode="drag"] .hc-drag-cursor{display:flex}
 .hc-pointer-rays{transition:opacity 120ms ease;filter:drop-shadow(0 0 1.5px #000) drop-shadow(0 0 2px #fff)}
 .hc-pointer[data-burst="true"] .hc-pointer-rays{opacity:0}

@@ -30,7 +30,7 @@
   font-family:'Geist',sans-serif;font-size:var(--type-paragraph);font-weight:400;font-style:normal;line-height:1.35;letter-spacing:normal;
 }
 .about-services span,.project-title span,.connect-number{font-size:var(--type-label-small)}
-.principles-kicker,.resume-kicker,.resume-entry-head time,.resume-actions button,.resume-guide,.project-type,.project-link,.connect-label,.connect-meta,.connect-meta a{font-size:var(--type-label)}
+.principles-kicker,.resume-kicker,.resume-entry-head time,.resume-actions button,.resume-actions a,.resume-guide,.project-type,.project-link,.connect-label,.connect-meta,.connect-meta a{font-size:var(--type-label)}
 .principles-heading{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .principles-kicker{max-width:100%;width:fit-content;font-family:'Geist',sans-serif}
 .principle-card{min-height:180px}

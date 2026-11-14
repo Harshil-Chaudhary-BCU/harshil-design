@@ -17,7 +17,7 @@
       <path fill="#d9d8e5" d="M572 322c5 132-91 241-233 240 28 29 66 46 106 46 88 0 159-71 159-159v-86c0-24-15-40-32-41z"/>
       <path fill="none" stroke="#111218" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" d="M332 425V199c0-46 68-46 68 0v166-44c0-46 68-46 68 7v52-35c0-54 68-54 68 6v47-35c0-55 68-55 68 0v86c0 88-71 159-159 159-49 0-94-22-125-64l-76-103c-29-39 15-77 47-49z"/>
     </g>
-  </svg><div class="hc-drag-cursor"><span>Drag</span></div>`;
+  </svg><div class="hc-drag-cursor"><span>Drag</span></div><div class="hc-cursor-hint">Move to distort</div>`;
   document.body.append(cursor);
   let x=0,y=0,targetX=0,targetY=0,frame=0,last=0,visible=false;
   let rayTimer=0;
@@ -60,6 +60,9 @@
   function update(event){
     if(!media.matches||event.pointerType!=='mouse'){hide();return}
     cursor.dataset.mode=event.target.closest('.magnetic-work')&&!event.target.closest('a,button')?'drag':event.target.closest('a,button,input,textarea,select,[role="button"],[tabindex]:not([tabindex="-1"])')?'interactive':'default';
+    // Hero hint: only while the interactive 3D HC model is mounted and the pointer is over the hero.
+    const overModel=cursor.dataset.mode==='default'&&event.target.closest('.hero')&&document.querySelector('canvas[aria-label="Harshil Chaudhary’s 3D HC monogram"]');
+    if(overModel)cursor.dataset.hint='model';else delete cursor.dataset.hint;
     targetX=event.clientX;targetY=event.clientY;
     if(!visible||reduceMotion()){x=targetX;y=targetY;draw()}
     visible=true;

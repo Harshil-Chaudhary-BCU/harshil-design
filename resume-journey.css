@@ -3,7 +3,8 @@
 .resume-kicker{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#a9a8a3;margin:0 0 12px}
 .resume-heading h2{font-size:clamp(38px,5vw,72px);font-weight:400;font-style:italic;line-height:1.08;letter-spacing:-.04em;margin:0}
 .resume-actions{display:flex;gap:10px;flex-wrap:wrap}
-.resume-actions button{font:400 12px/1.4 'Geist',sans-serif;padding:12px 18px;border:1px solid #f4f2ed45;border-radius:30px;background:transparent;color:#c9c7c2}
+.resume-actions button,.resume-actions a{font:400 12px/1.4 'Geist',sans-serif;padding:12px 18px;border:1px solid #f4f2ed45;border-radius:30px;background:transparent;color:#c9c7c2;text-decoration:none;transition:border-color .25s,color .25s}
+.resume-actions a:hover,.resume-actions a:focus-visible{border-color:#f4f2edaa;color:#f4f2ed}
 .resume-actions button:disabled{opacity:.6;cursor:not-allowed}
 .resume-entry{min-width:0;position:relative}
 .resume-entry-head h3{font-size:clamp(26px,2.6vw,40px);font-weight:400;letter-spacing:-.04em;line-height:1.12;margin:0 0 14px}
@@ -42,7 +43,7 @@
 .is-animated .resume-guide{display:flex;position:absolute;bottom:24px;left:20px;right:20px;justify-content:space-between;gap:20px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#a9a8a3}
 .resume-chapter{color:var(--accent)}
 @media(min-width:701px){.resume-journey:not(.is-animated) .resume-row{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:700px){.resume-journey{padding:100px 20px 50px}.resume-heading{align-items:flex-start;flex-direction:column;gap:22px}.resume-heading h2{font-size:42px}.resume-entry-head h3{font-size:30px}.resume-row{padding-left:20px;border-left:1px solid var(--accent)}.resume-node{position:absolute;left:-26px;top:5px}.resume-actions button{padding:10px 15px}.resume-entry ul{margin-top:5px}}
+@media(max-width:700px){.resume-journey{padding:100px 20px 50px}.resume-heading{align-items:flex-start;flex-direction:column;gap:22px}.resume-heading h2{font-size:42px}.resume-entry-head h3{font-size:30px}.resume-row{padding-left:20px;border-left:1px solid var(--accent)}.resume-node{position:absolute;left:-26px;top:5px}.resume-actions button,.resume-actions a{padding:10px 15px}.resume-entry ul{margin-top:5px}}
 @media(prefers-reduced-motion:reduce){.resume-entry{transition:none!important}}
 @media(max-width:700px){
   .resume-journey.is-animated{padding:0}

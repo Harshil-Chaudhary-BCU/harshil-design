@@ -49,7 +49,16 @@ lettering.append(letteringText);
 function fitBeyond(){
   const context=document.createElement('canvas').getContext('2d');
   context.font="700 100px 'The Nautigal'";
-  const ink=context.measureText('Beyond');
+  const measured=context.measureText('Beyond');
+  // Safari/iPadOS can under-report the script's ink bounds (the d's flourish
+  // runs past its advance width), which clipped the letter. Never let the
+  // box shrink below the known ink extents of 'Beyond' at 100px.
+  const ink={
+    actualBoundingBoxLeft:Math.max(measured.actualBoundingBoxLeft||0,2),
+    actualBoundingBoxRight:Math.max(measured.actualBoundingBoxRight||0,254),
+    actualBoundingBoxAscent:Math.max(measured.actualBoundingBoxAscent||0,68),
+    actualBoundingBoxDescent:Math.max(measured.actualBoundingBoxDescent||0,34)
+  };
   const w=ink.actualBoundingBoxLeft+ink.actualBoundingBoxRight;
   const h=ink.actualBoundingBoxAscent+ink.actualBoundingBoxDescent;
   const pad=30;
@@ -468,7 +477,7 @@ async function setupHeroLogo(){
   }
   let logoHost;
   try{
-    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=concise-image-description-15');
+    const {mountHCLogo}=await import('./hc-model-v2/hc-logo.js?v=quantized-16');
     logoHost=document.createElement('div');
     logoHost.className='hc-monogram-canvas hc-model-canvas';
     logoHost.style.transform='none';

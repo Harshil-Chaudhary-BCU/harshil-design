@@ -5,7 +5,7 @@ import { createParticleLife, updateLiquid, updateInnerLight } from './particle-l
 
 /** Full-viewport, transparent HC sculpture with movement-driven particle physics. */
 export async function mountHCLogo(container, {
-  modelURL = new URL('./assets/HC-Particles-Animated.glb?v=slow1', import.meta.url).href,
+  modelURL = new URL('./assets/HC-Particles-Animated-q.glb?v=quantized1', import.meta.url).href,
   rotationSeconds = 30,
   rotationMode = 'turn',
   glassEffect = true,
@@ -65,6 +65,17 @@ export async function mountHCLogo(container, {
   const parts=[];
   gltf.scene.traverse(mesh=>{
     if(!mesh.isInstancedMesh)return;
+    // The GLB stores bead transforms as normalized integers (KHR_mesh_quantization)
+    // to halve the download; restore their real translation and scale here.
+    const dequantize=mesh.userData.hcDequantize;
+    if(dequantize){
+      const matrix=mesh.instanceMatrix.array;
+      for(let o=0;o<mesh.count*16;o+=16){
+        for(const c of [0,1,2,4,5,6,8,9,10])matrix[o+c]*=dequantize.scale;
+        matrix[o+12]*=dequantize.translation;matrix[o+13]*=dequantize.translation;matrix[o+14]*=dequantize.translation;
+      }
+      mesh.instanceMatrix.needsUpdate=true;
+    }
     // Touch keeps the original letter shape/motion with half the rendered beads.
     const stride=Math.max(1,Math.floor(particleStride));
     if(stride>1){
