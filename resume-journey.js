@@ -155,7 +155,9 @@
     // Locate chapter boundaries on the actual curve, not an approximate dash ratio.
     topLength=0;turnLength=0;
     for(let at=0;at<=length;at+=2){const p=draw.getPointAtLength(at);if(!topLength&&p.y>baseline+.5)topLength=at;if(topLength&&p.y>=bottom-.5){turnLength=at-topLength;break;}}
-    maxX=Math.max(0,totalWidth-contentWidth);endX=Math.max(0,last-pad);
+    // The education chapter only ever travels back to the left (or holds still when
+    // every education entry is already in frame); it never drifts to the right.
+    maxX=Math.max(0,totalWidth-contentWidth);endX=Math.min(maxX,Math.max(0,last-pad));
     section.style.setProperty('--resume-travel',`${stage.offsetHeight+Math.max(3200,maxX+rowHeight+(maxX-endX))*1.35}px`);
     update();
   }
