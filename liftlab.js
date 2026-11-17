@@ -556,3 +556,49 @@
     render(0);
   });
 })();
+
+// Hero phone: play the app walkthrough only while it is on screen, and keep the
+// still poster for visitors who prefer reduced motion.
+(() => {
+  const video = document.querySelector('.device__screen');
+  if (!video) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  let visible = false;
+  const sync = () => {
+    if (visible && !reduce.matches) video.play().catch(() => {});
+    else video.pause();
+  };
+  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: 0.2 }).observe(video);
+  reduce.addEventListener('change', sync);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) video.pause(); else sync(); });
+})();
+
+// "Try the interactive prototype": open the Figma prototype in an overlay. The iframe is
+// only created on open (no Figma load or cookie banner for visitors who don't ask for it)
+// and removed on close. Modified clicks keep the normal new-tab link behaviour.
+(() => {
+  const trigger = document.querySelector('[data-proto-embed]');
+  const dialog = document.querySelector('.proto-dialog');
+  if (!trigger || !dialog || typeof dialog.showModal !== 'function') return;
+  const stage = dialog.querySelector('.proto-dialog__stage');
+  const close = () => dialog.close();
+  trigger.addEventListener('click', (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    const frame = document.createElement('iframe');
+    frame.src = trigger.dataset.protoEmbed;
+    frame.title = 'LiftLab interactive prototype in Figma';
+    frame.allow = 'fullscreen';
+    frame.allowFullscreen = true;
+    stage.append(frame);
+    document.documentElement.classList.add('proto-open');
+    dialog.showModal();
+  });
+  dialog.querySelector('.proto-dialog__close').addEventListener('click', close);
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  dialog.addEventListener('close', () => {
+    stage.querySelector('iframe')?.remove();
+    document.documentElement.classList.remove('proto-open');
+    trigger.focus();
+  });
+})();

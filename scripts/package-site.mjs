@@ -25,7 +25,7 @@ while (pending.length) {
   if (!/\.(html|css|js)$/.test(file) || file.includes('/vendor/')) continue;
   const source = fs.readFileSync(absolute, 'utf8');
   const patterns = [
-    /(?:src|href)=["']([^"']+)["']/g,
+    /(?:src|href|poster)=["']([^"']+)["']/g,
     /url\(["']?([^)'"\s]+)["']?\)/g,
     /^import\s+.+?\s+from\s*["']([^"']+)["']/gm,
     /import\(["']([^"']+)["']/g,

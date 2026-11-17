@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="./cursor.css?v=instant-click-rays-9">
   <link rel="stylesheet" href="./charcoal.css?v=unified-1">
   <link rel="stylesheet" href="./design-system.css?v=shared-1">
-  <link rel="stylesheet" href="./case-system.css?v=meta-six-93">
+  <link rel="stylesheet" href="./case-system.css?v=proto-dialog-97">
 </head>
 <body data-smooth-scroll-content>
   <div class="case-progress" aria-hidden="true"><span></span></div>
@@ -61,20 +61,27 @@
         <h1>LiftLab Case Study</h1>
         <p class="hero__dek">A research-led mobile experience for powerlifting, recovery and progression.</p>
       </div>
-      <div class="hero__demo reveal">
-        <img src="./assets/liftlab/previews/artifacts/final-interface.webp" data-full-src="./assets/liftlab/artifacts/final-interface.webp" alt="LiftLab final interface overview" width="1404" height="993" decoding="async">
-        <div class="hero__demo-label"><span>Product demo</span><span>Video coming next</span></div>
-      </div>
-    </section>
-
-    <section class="project-meta-band" aria-label="Project overview">
-      <div class="hero__meta hero__meta--six reveal">
-        <div><span>Timeline</span><strong>Jan — Apr 2024</strong></div>
-        <div><span>Team</span><strong>4-person MSc team</strong></div>
-        <div><span>My role</span><strong>UX · Interaction · UI Designer</strong></div>
-        <div><span>Research</span><strong>23-response survey · interviews</strong></div>
-        <div><span>Testing</span><strong>7 participants · SUS 71.8</strong></div>
-        <div><span>Output</span><strong>Interactive mobile prototype</strong></div>
+      <div class="hero__showcase reveal">
+        <div class="hero__device">
+          <figure class="device">
+            <div class="device__glow" aria-hidden="true"></div>
+            <div class="device__frame">
+              <video class="device__screen" muted loop playsinline preload="metadata" poster="./assets/liftlab/video/liftlab-flow-poster.jpg" aria-label="A walkthrough of the LiftLab app: onboarding, sign-up, injury selection, the home screen, a recovery session, accessibility colours and community groups">
+                <source src="./assets/liftlab/video/liftlab-flow.mp4" type="video/mp4">
+              </video>
+              <span class="device__island" aria-hidden="true"></span>
+            </div>
+          </figure>
+          <a class="device__cta" href="https://www.figma.com/proto/AqFtNnLqblYSdlim4KenSD/Lift-Lab--Team-project-?node-id=709-13374&amp;starting-point-node-id=709%3A13374&amp;page-id=0%3A1&amp;scaling=scale-down&amp;content-scaling=fixed" target="_blank" rel="noopener noreferrer" aria-haspopup="dialog" data-proto-embed="https://embed.figma.com/proto/AqFtNnLqblYSdlim4KenSD/Lift-Lab--Team-project-?node-id=709-13374&amp;viewport=4819%2C-14935%2C0.6&amp;scaling=scale-down&amp;content-scaling=fixed&amp;starting-point-node-id=709%3A13374&amp;page-id=0%3A1&amp;embed-host=share"><span class="device__cta-play" aria-hidden="true"></span>Try the interactive prototype</a>
+        </div>
+        <dl class="hero__facts" aria-label="Project overview">
+          <div><dt>Timeline</dt><dd>Jan — Apr 2024</dd></div>
+          <div><dt>Team</dt><dd>4-person MSc team</dd></div>
+          <div><dt>My role</dt><dd>UX · Interaction · UI Designer</dd></div>
+          <div><dt>Research</dt><dd>23-response survey · interviews</dd></div>
+          <div><dt>Testing</dt><dd>7 participants · SUS 71.8</dd></div>
+          <div><dt>Output</dt><dd>Interactive mobile prototype</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -586,8 +593,17 @@
       </nav>
     </section>
   </main>
+
+  <dialog class="proto-dialog" aria-labelledby="proto-dialog-title">
+    <div class="proto-dialog__bar">
+      <p id="proto-dialog-title">LiftLab <span>· interactive prototype</span></p>
+      <a class="proto-dialog__open" href="https://www.figma.com/proto/AqFtNnLqblYSdlim4KenSD/Lift-Lab--Team-project-?node-id=709-13374&amp;starting-point-node-id=709%3A13374&amp;page-id=0%3A1&amp;scaling=scale-down&amp;content-scaling=fixed" target="_blank" rel="noopener noreferrer">Open in Figma <span aria-hidden="true">↗</span></a>
+      <button class="proto-dialog__close" type="button" aria-label="Close the prototype">✕</button>
+    </div>
+    <div class="proto-dialog__stage"><p class="proto-dialog__loading">Loading the prototype…</p></div>
+  </dialog>
   <script src="./smooth-scroll.js?v=landing-matched-content-6"></script>
-  <script src="./liftlab.js?v=device-motion-78"></script>
+  <script src="./liftlab.js?v=proto-dialog-80"></script>
   <script src="./cursor.js?v=motion-preference-11"></script>
 </body>
 </html>

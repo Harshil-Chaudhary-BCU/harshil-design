@@ -329,3 +329,53 @@ body{font-size:var(--type-paragraph)}
 .ideation-evidence p{color:#aa9782;opacity:1}
 @media(max-width:900px){.ideation-block__intro{grid-template-columns:1fr}.ideation-block__intro .eyebrow,.ideation-block__intro h3,.ideation-block__intro>p:last-child{grid-column:1}.ideation-block__intro .eyebrow{grid-row:auto}.ideation-bridge__needs{grid-template-columns:1fr auto 1fr}.ideation-bridge__needs i:nth-of-type(2){display:none}.ideation-bridge__needs span:nth-of-type(3){grid-column:1}.architecture-gallery{grid-template-columns:repeat(2,minmax(0,1fr));width:min(88%,760px)}.ideation-evidence{width:92%;margin-inline:4%}.fidelity-stage__intro{grid-template-columns:1fr}.fidelity-stage__intro .eyebrow{grid-row:auto}.sketch-gallery,.lofi-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}.sketch-gallery{width:min(88%,700px)}.lofi-gallery{width:min(88%,620px)}.lofi-gallery.lofi-gallery--remaining{grid-template-columns:repeat(3,minmax(0,1fr));width:min(88%,620px)}.sketch-iterations article{grid-template-columns:1fr}.sketch-iteration__copy{max-width:620px}.sketch-iteration__visual img{height:clamp(240px,48vw,380px)}}
 @media(max-width:600px){.ideation-bridge__needs{grid-template-columns:1fr}.ideation-bridge__needs i{transform:rotate(90deg)}.ideation-bridge__needs i:nth-of-type(2){display:block}.ideation-bridge__needs span:nth-of-type(3){grid-column:1}.architecture-gallery{grid-template-columns:1fr;width:min(86%,460px)}.architecture-gallery figure,.architecture-gallery figure:not(:last-child){width:100%;border-radius:18px}.sketch-gallery,.lofi-gallery{grid-template-columns:1fr}.sketch-gallery{width:min(82%,280px)}.sketch-column:nth-child(3) figure:nth-child(3),.sketch-column:nth-child(3) figure:nth-child(4){width:100%}.lofi-gallery{width:min(88%,320px)}.lofi-gallery.lofi-gallery--remaining{grid-template-columns:1fr;width:min(82%,280px)}.sketch-iterations article{padding:22px}.sketch-iteration__visual{grid-template-columns:1fr}.sketch-iteration__visual i{justify-self:center;transform:rotate(90deg)}.sketch-iteration__visual img{height:auto}}
+/* LiftLab hero: phone mockup (left) with the app walkthrough video, project facts (right). */
+.hero:has(.hero__showcase){height:auto;min-height:0;display:block;overflow:hidden;overflow:clip;padding-bottom:clamp(60px,8vw,120px)}
+.hero__showcase{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(40px,7vw,120px);width:100%;max-width:1100px;margin:clamp(48px,7vw,96px) auto 0}
+.hero__device{justify-self:end;display:flex;flex-direction:column;align-items:center;gap:clamp(32px,4vw,48px)}
+.device{position:relative;width:clamp(240px,26vw,340px);margin:0;animation:device-float 9s ease-in-out infinite}
+.device__glow{position:absolute;inset:4% -55% -6%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,107,53,.62),rgba(255,107,53,.2) 50%,transparent 78%);filter:blur(46px);pointer-events:none}
+.device__frame{position:relative;aspect-ratio:375/812;padding:3.4%;border-radius:15% / 7%;background:linear-gradient(145deg,#2a2a2a,#0d0d0d 45%,#1c1c1c);box-shadow:0 0 0 1.5px #ffffff26 inset,0 40px 90px #000c,0 0 0 1px #00000080}
+.device__frame::before,.device__frame::after{content:'';position:absolute;width:3px;border-radius:2px;background:#2a2a2a}
+.device__frame::before{right:-3px;top:24%;height:11%}
+.device__frame::after{left:-3px;top:20%;height:14%;box-shadow:0 -14% 0 #2a2a2a}
+.device__screen{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:12.5% / 5.8%;background:#fff}
+.device__island{position:absolute;top:5.2%;left:50%;width:30%;height:3.6%;border-radius:999px;background:#050505;transform:translateX(-50%)}
+@keyframes device-float{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-14px) rotate(1deg)}}
+.hero__facts{margin:0;display:flex;flex-direction:column;max-width:420px}
+.hero__facts div{display:flex;flex-direction:column;gap:8px;padding:18px 0;border-top:1px solid var(--line)}
+.hero__facts div:last-child{border-bottom:1px solid var(--line)}
+.hero__facts dt{font-size:var(--type-label-small);text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.hero__facts dd{margin:0;font-size:clamp(17px,1.5vw,21px);line-height:1.3;color:var(--white)}
+@media(max-width:760px){
+  .hero__showcase{grid-template-columns:1fr;gap:48px}
+  .device{justify-self:center;width:min(66vw,300px)}
+  .hero__facts{max-width:none}
+  .hero:has(.hero__showcase) .hero__halo{display:none}
+}
+@media(prefers-reduced-motion:reduce){.device{animation:none}}
+.device__cta{position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border:1px solid #ffffff38;border-radius:999px;background:#0d0d0dcc;color:var(--white);font-size:15px;line-height:1;transition:border-color .2s ease,background-color .2s ease,color .2s ease}
+.device__cta:hover{border-color:var(--orange);color:var(--orange)}
+.device__cta:focus-visible{outline:2px solid var(--orange);outline-offset:4px}
+@media(max-width:760px){.hero__device{justify-self:center}}
+/* Interactive Figma prototype overlay, loaded only when opened. */
+.device__cta-play{width:0;height:0;border-style:solid;border-width:5px 0 5px 8px;border-color:transparent transparent transparent currentColor}
+.proto-dialog{width:min(94vw,1180px);height:min(90vh,940px);max-width:none;max-height:none;padding:0;border:1px solid #ffffff24;border-radius:22px;background:#0b0b0b;color:var(--white);overflow:hidden}
+.proto-dialog[open]{display:flex;flex-direction:column}
+.proto-dialog::backdrop{background:#000000c4;backdrop-filter:blur(6px)}
+.proto-dialog__bar{display:flex;align-items:center;gap:18px;padding:14px 18px 14px 24px;border-bottom:1px solid #ffffff1a}
+.proto-dialog__bar p{flex:1;margin:0;font-size:15px}
+.proto-dialog__bar p span{color:var(--muted)}
+.proto-dialog__open{font-size:14px;color:var(--muted);transition:color .2s ease}
+.proto-dialog__open:hover,.proto-dialog__open:focus-visible{color:var(--orange)}
+.proto-dialog__close{width:38px;height:38px;border:1px solid #ffffff2e;border-radius:50%;background:transparent;color:var(--white);font-size:15px;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+.proto-dialog__close:hover,.proto-dialog__close:focus-visible{border-color:var(--orange);color:var(--orange);outline:none}
+.proto-dialog__stage{position:relative;flex:1;min-height:0}
+.proto-dialog__stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.proto-dialog__loading{position:absolute;inset:0;display:grid;place-items:center;margin:0;color:var(--muted);font-size:14px}
+html.proto-open{overflow:hidden}
+@media(max-width:760px){
+  .proto-dialog{width:100vw;height:100dvh;border:0;border-radius:0}
+  .proto-dialog__bar{padding:10px 12px 10px 18px;gap:12px}
+  .proto-dialog__bar p span{display:none}
+}
