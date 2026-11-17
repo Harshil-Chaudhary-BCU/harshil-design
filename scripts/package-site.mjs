@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 const files = new Set();
-const pending = ['index.html', '404.html', 'favicon.ico', 'apple-touch-icon.png', 'assets/hc-share-v3.png'];
+// Search-engine files are not linked from any page, so they are listed here explicitly.
+const pending = ['index.html', '404.html', 'favicon.ico', 'apple-touch-icon.png', 'assets/hc-share-v3.png', 'robots.txt', 'sitemap.xml'];
 const localPath = (file, reference) => {
   const clean = reference.split(/[?#]/)[0];
   if (!clean || clean==='/' || /^[a-z]+:/i.test(clean)) return null;
