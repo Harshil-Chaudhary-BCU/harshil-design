@@ -564,6 +564,13 @@
   if (!video) return;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   let visible = false;
+  // The MP4 is a standard fast-start file, so the native loop attribute does the work.
+  // Backup: if a browser ever stops at the end instead, restart (and reload if needed).
+  video.addEventListener('ended', () => {
+    video.currentTime = 0;
+    video.play().catch(() => {});
+    setTimeout(() => { if (visible && !reduce.matches && (video.paused || video.currentTime < 0.05)) { video.load(); video.play().catch(() => {}); } }, 700);
+  });
   const sync = () => {
     if (visible && !reduce.matches) video.play().catch(() => {});
     else video.pause();
