@@ -6,6 +6,7 @@
   const status=section.querySelector('.work-carousel-status');
   const selectors=[...section.querySelectorAll('[data-work-project]')];
   const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+  const backdropWord=section.querySelector('.work-backdrop-word span');
   const arc=document.createElementNS('http://www.w3.org/2000/svg','svg');
   arc.setAttribute('preserveAspectRatio','xMidYMid meet');
   arc.setAttribute('aria-hidden','true');
@@ -26,13 +27,20 @@
       card.style.zIndex=String(10-Math.round(edge*4));
       card.style.opacity=String(edge<=1?1:Math.max(0,1-(edge-1)*2));
       card.style.filter=`brightness(${1-Math.min(1,edge)*.12})`;
-      const link=card.querySelector('a');
-      if(link)link.tabIndex=Math.abs(slot)<.1?0:-1;
+      card.querySelectorAll('a').forEach(link=>{link.tabIndex=Math.abs(slot)<.1?0:-1;});
     });
   }
   function announce(){
     const index=mod(Math.round(target),cards.length);
-    status.textContent=`0${index+1} / 03 · ${cards[index].querySelector('h3').textContent}`;
+    const name=cards[index].querySelector('h3').textContent;
+    status.textContent=`0${index+1} / 03 · ${name}`;
+    // Background: the active project's name, and the video glow only for projects with a walkthrough.
+    if(backdropWord&&backdropWord.textContent!==name){
+      backdropWord.classList.add('is-changing');
+      clearTimeout(announce.timer);
+      announce.timer=setTimeout(()=>{backdropWord.textContent=name;backdropWord.classList.remove('is-changing');},180);
+    }
+    section.classList.toggle('has-backdrop-video',Boolean(cards[index].querySelector('.work-card-phone video')));
     selectors.forEach(button=>button.setAttribute('aria-pressed',String(Number(button.dataset.workProject)===index)));
   }
   function tick(time){
@@ -130,7 +138,7 @@
   stage.addEventListener('click',event=>{
     if(suppressClick){event.preventDefault();event.stopPropagation();suppressClick=false;return;}
     const action=event.target.closest('a[href]');
-    if(action&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
+    if(action&&action.target!=='_blank'&&!event.metaKey&&!event.ctrlKey&&!event.shiftKey&&!event.altKey){
       event.preventDefault();
       location.assign(action.href);
       return;
@@ -173,6 +181,20 @@
     stage.setAttribute('aria-label','Selected projects. Drag, swipe, or use the arrow keys to move cards.');
   } catch {
     section.classList.remove('is-carousel-ready');
-    cards.forEach(card=>card.querySelector('a')?.removeAttribute('tabindex'));
+    cards.forEach(card=>card.querySelectorAll('a').forEach(link=>link.removeAttribute('tabindex')));
   }
+})();
+/* Card walkthrough videos play only while on screen; reduced motion keeps the poster. */
+(() => {
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+  document.querySelectorAll('.work-card-phone video,.work-backdrop-glow video').forEach(video=>{
+    let visible=false;
+    const sync=()=>{
+      if(visible&&!reduced.matches&&!document.hidden){video.play().catch(()=>{});}
+      else video.pause();
+    };
+    new IntersectionObserver(records=>{visible=records[0].isIntersecting;sync();},{rootMargin:'200px 0px'}).observe(video);
+    reduced.addEventListener('change',sync);
+    document.addEventListener('visibilitychange',sync);
+  });
 })();

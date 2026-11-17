@@ -61,7 +61,7 @@
   <link rel="stylesheet" href="./preloader.css?v=charcoal-090909-1">
   <link rel="stylesheet" href="./editorial.css?v=cleanup-2">
   <link rel="stylesheet" href="./cursor.css?v=drag-hint-13">
-  <link rel="stylesheet" href="./landing-motion.css?v=inward-network-pulses-13">
+  <link rel="stylesheet" href="./landing-motion.css?v=inward-network-pulses-14">
   <link rel="stylesheet" href="./about-reveal.css?v=card-entrance-2">
   <link rel="stylesheet" href="./typography.css?v=geist-site-1">
   <link rel="stylesheet" href="./connect-footer.css?v=social-links-3">
@@ -70,8 +70,8 @@
   <link rel="stylesheet" href="./charcoal.css?v=opaque-beyond-4">
   <link rel="stylesheet" href="./resume-journey.css?v=resume-pdf-11">
   <link rel="stylesheet" href="./design-system.css?v=shared-1">
-  <link rel="stylesheet" href="./landing-system.css?v=resume-pdf-33">
-  <link rel="stylesheet" href="./work-carousel.css?v=static-fallback-13">
+  <link rel="stylesheet" href="./landing-system.css?v=resume-pdf-34">
+  <link rel="stylesheet" href="./work-carousel.css?v=sketch-fill-1">
 </head>
 <body data-smooth-scroll-scale="0.60">
   <div class="portfolio-preloader" aria-hidden="true">
@@ -228,23 +228,36 @@
           </div>
         </header>
         <div class="work-carousel-stage" role="group" aria-label="Selected projects">
+          <div class="work-backdrop" aria-hidden="true">
+            <div class="work-backdrop-glow"><video src="./assets/liftlab/video/liftlab-flow.mp4?v=hq-2" poster="./assets/liftlab/video/liftlab-flow-poster.jpg?v=hq-2" muted loop playsinline preload="none" tabindex="-1"></video></div>
+            <div class="work-backdrop-word"><span>LiftLab</span></div>
+          </div>
           <article class="work-card work-card-liftlab" id="project-01" aria-label="LiftLab project">
-            <p class="work-card-number">Product design</p><h3>LiftLab</h3>
-            <p class="work-card-description">Product thinking<br>Interaction design</p>
-            <div class="work-card-art"><img src="./assets/hello-sketch.png" alt="Sketched keyboard keys spelling HELLO" loading="lazy" decoding="async" draggable="false"></div>
-            <a class="work-card-link project-link" href="./liftlab.html" aria-label="View the LiftLab case study">View case study</a>
+            <div class="work-card-floor" aria-hidden="true"></div>
+            <div class="work-card-head">
+              <p class="work-card-number">Product design</p><h3>LiftLab</h3>
+              <div class="work-card-actions">
+                <a class="work-card-link project-link" href="./liftlab.html" aria-label="View the LiftLab case study">Case study</a>
+                <a class="work-card-chev" href="https://www.figma.com/proto/AqFtNnLqblYSdlim4KenSD/Lift-Lab--Team-project-?node-id=709-13374&amp;starting-point-node-id=709%3A13374&amp;page-id=0%3A1&amp;scaling=scale-down&amp;content-scaling=fixed" target="_blank" rel="noopener noreferrer" aria-label="Open the LiftLab prototype in Figma (new tab)">Prototype</a>
+              </div>
+            </div>
+            <div class="work-card-phone" aria-hidden="true"><video src="./assets/liftlab/video/liftlab-flow.mp4?v=hq-2" poster="./assets/liftlab/video/liftlab-flow-poster.jpg?v=hq-2" muted loop playsinline preload="none" tabindex="-1"></video></div>
           </article>
           <article class="work-card work-card-otverse" id="project-02" aria-label="OTVerse project">
-            <p class="work-card-number">Spatial experiences</p><h3>OTVerse</h3>
-            <p class="work-card-description">Spatial systems<br>Experience design</p>
-            <div class="work-card-art"><img src="./assets/design-sketch.png" alt="Sketch of a pencil, pen nib and vector handles" loading="lazy" decoding="async" draggable="false"></div>
-            <span class="work-card-link work-card-pending">Case study coming soon</span>
+            <div class="work-card-floor" aria-hidden="true"></div>
+            <div class="work-card-head">
+              <p class="work-card-number">Spatial experiences</p><h3>OTVerse</h3>
+              <div class="work-card-actions"><span class="work-card-link work-card-pending">Case study coming soon</span></div>
+            </div>
+            <div class="work-card-art"><img src="./assets/otverse-sketch.svg?v=1" alt="Sketch of a medical student in a lab coat wearing a VR headset and holding surgical tools" loading="lazy" decoding="async" draggable="false"></div>
           </article>
           <article class="work-card work-card-offroad" id="project-03" aria-label="OffRoad Vision project">
-            <p class="work-card-number">Automotive HMI</p><h3>OffRoad Vision</h3>
-            <p class="work-card-description">Automotive HMI<br>Information architecture</p>
-            <div class="work-card-art"><img src="./assets/car-sketch-transparent.png" alt="Line sketch of a car’s side profile" loading="lazy" decoding="async" draggable="false"></div>
-            <span class="work-card-link work-card-pending">Case study coming soon</span>
+            <div class="work-card-floor" aria-hidden="true"></div>
+            <div class="work-card-head">
+              <p class="work-card-number">Automotive HMI</p><h3>OffRoad Vision</h3>
+              <div class="work-card-actions"><span class="work-card-link work-card-pending">Case study coming soon</span></div>
+            </div>
+            <div class="work-card-art"><img src="./assets/offroad-sketch.svg?v=1" alt="Sketch from inside an off-road car: mountains through a tilted windscreen and a tyre up on rocks in the side mirror" loading="lazy" decoding="async" draggable="false"></div>
           </article>
         </div>
         <p class="work-carousel-status" aria-live="polite" aria-atomic="true">01 / 03 · LiftLab</p>
@@ -308,15 +321,15 @@
   <script src="./editorial.js?v=compact-journey-contact-tracker-7"></script>
   <script src="./resume-journey.js?v=edu-live-2"></script>
   <script defer src="./landing-motion.js?v=quantized-model-43"></script>
-  <script src="./work-carousel.js?v=inactive-card-hierarchy-22"></script>
-  <script src="./work-card-physics.js?v=tag-springs-1"></script>
+  <script src="./work-carousel.js?v=backdrop-1"></script>
+  <script src="./card-magnet.js?v=delay-1"></script>
   <script src="./smooth-scroll.js?v=coordinated-navigation-3"></script>
   <script src="./cursor.js?v=drag-hint-11"></script>
   <script src="./about-reveal.js?v=mobile-divider-anchors-5"></script>
   <script src="./link-roll.js"></script>
   <script src="./intro-rotation.js?v=preloader-startup-4"></script>
   <script src="./studio-tag.js?v=bouncier-spring-4"></script>
-  <script src="./principle-physics.js?v=visible-icon-motion-2"></script>
+  <script src="./principle-physics.js?v=icons-only-3"></script>
   <script src="./compact-menu.js?v=compact-hc-logo-2"></script>
   <script src="./connect-motion.js?v=circular-baseline-5"></script>
 </body>
